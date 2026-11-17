@@ -162,6 +162,50 @@ table.st th{color:var(--mt);font-weight:400;font-size:14px;text-align:right;padd
 table.st td{padding:3px 4px;text-align:right;border-top:1px dotted rgba(255,255,255,.25)}
 table.st td:first-child{text-align:left;color:var(--mt)}
 .lock{opacity:.45}
+
+.autob{position:absolute;right:6px;top:6px;z-index:7}.autob.on,.btn.sm.on{background:var(--gd);color:#000;border-color:var(--gd)}
+#chips button{margin-left:8px;font-size:18px}
+.fld.quake{animation:sh .35s steps(5)}
+.cutin{position:absolute;left:0;right:0;top:8px;z-index:6;display:flex;justify-content:center;align-items:center;gap:10px;pointer-events:none;animation:cin .95s steps(12) forwards}
+.cutin span{background:#000;border:2px solid var(--gd);color:var(--gd);padding:2px 16px;font-size:19px;text-shadow:2px 2px 0 #000}
+.cutin.big{top:auto;bottom:4px;padding:4px 0;background:linear-gradient(90deg,transparent,rgba(0,0,0,.92) 18%,rgba(0,0,0,.92) 82%,transparent);border-top:2px solid var(--gd);border-bottom:2px solid var(--gd)}
+.cutin.big span{border:none;background:none;font-size:24px;letter-spacing:.1em}
+.cutin .art.av{width:60px;height:60px}
+@keyframes cin{0%{transform:translateX(-100%);opacity:0}14%{transform:none;opacity:1}82%{opacity:1}100%{opacity:0}}
+.fxv{position:absolute;inset:-6%;pointer-events:none;z-index:4}
+.fxv:before,.fxv:after{content:"";position:absolute}
+.fx-slash:before,.fx-cross:before,.fx-cross:after,.fx-claw:before{left:-8%;right:-8%;top:47%;height:7px;background:linear-gradient(90deg,transparent,#fff 25%,#fff 75%,transparent);--r:-38deg;transform:rotate(var(--r)) scaleX(0);animation:fxl .34s steps(7) forwards}
+.fx-cross:after{--r:38deg;animation-delay:.13s}
+.fx-claw:before{background:linear-gradient(90deg,transparent,#ff5d5d 25%,#ff5d5d 75%,transparent);height:5px;box-shadow:0 -15px 0 #ff5d5d,0 15px 0 #ff5d5d;--r:-55deg}
+@keyframes fxl{0%{transform:rotate(var(--r)) scaleX(0);opacity:1}45%{transform:rotate(var(--r)) scaleX(1);opacity:1}100%{transform:rotate(var(--r)) scaleX(1);opacity:0}}
+.fx-impact:before,.fx-spark:before,.fx-arrow:after,.fx-star:after{left:20%;right:20%;top:20%;bottom:20%;background:radial-gradient(circle,#fff 0,var(--c,#ffd84a) 45%,transparent 70%);clip-path:polygon(50% 0,60% 35%,98% 20%,70% 50%,100% 80%,62% 66%,50% 100%,38% 66%,0 80%,30% 50%,2% 20%,40% 35%);transform:scale(.2);animation:fxi .36s steps(6) forwards}
+.fx-spark:before{--c:#c58bff}
+@keyframes fxi{0%{transform:scale(.2);opacity:1}55%{transform:scale(1.25);opacity:1}100%{transform:scale(1.4);opacity:0}}
+.fx-fire:before{left:12%;right:12%;top:8%;bottom:6%;background:radial-gradient(circle at 50% 72%,#fff 0,#ffd84a 22%,#ff7a1a 46%,#c81e1e 66%,transparent 72%);clip-path:polygon(50% 0,64% 30%,86% 18%,80% 55%,100% 70%,76% 100%,24% 100%,0 70%,20% 55%,14% 18%,36% 30%);transform-origin:50% 100%;animation:fxf .55s steps(7) forwards}
+@keyframes fxf{0%{transform:scaleY(.2);opacity:1}35%{transform:scaleY(1.15)}60%{transform:scaleY(.9) scaleX(1.1)}80%{transform:scaleY(1.1);opacity:1}100%{transform:scaleY(1.2);opacity:0}}
+.fx-ice:before{left:10%;right:10%;top:10%;bottom:10%;background:linear-gradient(#fff,#9fd8ff 45%,#3a8fe0);clip-path:polygon(50% 0,58% 35%,90% 15%,68% 48%,100% 60%,66% 62%,75% 100%,50% 70%,25% 100%,34% 62%,0 60%,32% 48%,10% 15%,42% 35%);animation:fxc .55s steps(6) forwards}
+@keyframes fxc{0%{transform:scale(.2) rotate(-20deg);opacity:1}40%{transform:scale(1.05);opacity:1}75%{transform:scale(1);opacity:1}100%{transform:scale(1.15);opacity:0}}
+.fx-arrow:before{width:55%;height:4px;top:49%;left:45%;background:linear-gradient(90deg,#fff 0,#fff 20%,#c9a15a 20%);animation:fxa .22s steps(5) forwards}
+@keyframes fxa{0%{transform:translateX(160%);opacity:1}100%{transform:translateX(-40%);opacity:0}}
+.fx-arrow:after{left:30%;right:30%;top:30%;bottom:30%;animation-delay:.18s;opacity:0;--c:#fff}
+.fx-arrows:before{width:4px;height:42%;left:50%;top:-10%;background:linear-gradient(#c9a15a 0,#c9a15a 70%,#fff 70%);box-shadow:-34px -20px 0 #c9a15a,30px -34px 0 #c9a15a,-14px -52px 0 #c9a15a,48px -8px 0 #c9a15a;transform:rotate(18deg);animation:fxr .42s steps(6) forwards}
+@keyframes fxr{0%{transform:rotate(18deg) translateY(-90%);opacity:1}70%{transform:rotate(18deg) translateY(90%);opacity:1}100%{transform:rotate(18deg) translateY(110%);opacity:0}}
+.fx-poison:before{width:12px;height:12px;border-radius:50%;left:48%;top:62%;background:#b05cff;box-shadow:22px 10px 0 3px #8a2be2,-20px 20px 0 1px #b05cff,8px 32px 0 4px #8a2be2,-32px -2px 0 0 #d39bff,34px -14px 0 1px #d39bff;animation:fxu .65s steps(8) forwards}
+.fx-smoke:before{width:26px;height:26px;border-radius:50%;left:42%;top:48%;background:#9aa0b0;box-shadow:26px 6px 0 6px #7c8292,-26px 10px 0 4px #b3b8c6,4px -22px 0 8px #8a90a0;animation:fxi .6s steps(7) forwards;transform:scale(.3)}
+@keyframes fxu{0%{transform:translateY(10px);opacity:0}20%{opacity:1}100%{transform:translateY(-46px);opacity:0}}
+.fx-heal:before,.fx-buff:before,.fx-debuff:before{left:0;right:0;top:52%;text-align:center;font-size:24px;letter-spacing:.3em;text-shadow:2px 2px 0 #000;animation:fxu .7s steps(8) forwards}
+.fx-heal:before{content:"✚ ✚ ✚";color:#6ee7a0}
+.fx-buff:before{content:"▲ ▲ ▲";color:#ffd84a}
+.fx-debuff:before{content:"▼ ▼ ▼";color:#6fa8ff;animation-name:fxd}
+@keyframes fxd{0%{transform:translateY(-30px);opacity:0}20%{opacity:1}100%{transform:translateY(20px);opacity:0}}
+.fx-guard:before{left:18%;right:18%;top:10%;bottom:10%;border:5px solid #9fd0ff;border-radius:14% 14% 50% 50%;background:rgba(159,208,255,.18);animation:fxi .6s steps(7) forwards;transform:scale(.6)}
+.fx-holy:before{left:30%;right:30%;top:-30%;bottom:0;background:linear-gradient(90deg,transparent,#fff3b0 25%,#fff 50%,#fff3b0 75%,transparent);animation:fxh .6s steps(7) forwards}
+@keyframes fxh{0%{transform:scaleX(0);opacity:1}35%{transform:scaleX(1.2);opacity:1}70%{transform:scaleX(.8);opacity:1}100%{transform:scaleX(0);opacity:0}}
+.fx-star:before{width:14px;height:14px;left:50%;top:40%;background:#fff;box-shadow:10px -10px 0 -2px #ffd84a,20px -20px 0 -4px #ff9a3a,30px -30px 0 -5px #ff6a2a;animation:fxs .3s steps(6) forwards}
+@keyframes fxs{0%{transform:translate(120px,-120px);opacity:1}100%{transform:none;opacity:0}}
+.fx-star:after{animation-delay:.26s;opacity:0;--c:#ff9a3a;left:5%;right:5%;top:5%;bottom:5%}
+.fx-dark:before{left:8%;right:8%;top:8%;bottom:8%;border:7px solid #a05cff;border-radius:50%;box-shadow:0 0 0 4px #3a1a6a inset;animation:fxk .5s steps(7) forwards}
+@keyframes fxk{0%{transform:scale(1.5);opacity:0}30%{opacity:1}100%{transform:scale(.1);opacity:0}}
 </style>
 </head>
 <body>
@@ -244,6 +288,59 @@ const SK={
  b_noa:{n:'星矢・穿雲',mp:10,ty:'phys',pow:2.5,tg:'e1',cr:4,d:'羈絆技：貫穿一切的一箭'},
  b_hiyo:{n:'奧義・緋夜櫻',mp:15,ty:'phys',pow:1.85,tg:'ea',d:'羈絆技：全體斬擊'}
 };
+const FXM={slash:'slash',gbreak:'impact',whirl:'cross',fire:'fire',frost:'ice',meteor:'fire',aim:'arrow',parrow:'arrow',rain:'arrows',heal:'heal',bless:'buff',sanct:'heal',bash:'impact',wall:'guard',judge:'impact',stab:'slash',fang:'poison',smoke:'smoke',iai:'slash',focus:'buff',moon:'cross',combo:'impact',breath:'heal',kick:'impact',a_holy:'holy',a_verdict:'heal',a_void:'cross',a_wheel:'cross',a_blaze:'fire',a_starfall:'star',a_coffin:'ice',a_sanct:'heal',a_pierce:'arrow',a_arrowrain:'arrows',a_mark:'arrow',a_venom:'poison',a_crush:'impact',a_hundred:'impact',a_force:'impact',a_spring:'heal',a_smite:'holy',a_iron:'guard',a_hammer:'impact',a_shadow:'dark',a_mist:'poison',a_kasumi:'slash',a_moon:'cross',b_friend:'heal',b_vel:'guard',b_koro:'cross',b_sain:'star',b_noa:'arrow',b_hiyo:'cross'};
+for(const k in FXM){SK[k].fx=FXM[k];if(k[1]==='_')SK[k].big=1}
+const ATKFX={sword:'slash',mage:'spark',ranger:'arrow',monk:'impact',healer:'spark',knight:'impact',thief:'slash',samurai:'slash'};
+const FXS={slash:'slash',cross:'slash',claw:'slash',fire:'fire',ice:'ice',spark:'magic',dark:'magic',holy:'magic',star:'fire',arrow:'arrow',arrows:'arrow',impact:'hit',poison:'poison',heal:'heal',buff:'buff',guard:'buff',debuff:'debuff',smoke:'debuff'};
+/* ============ 音效 / 音樂 ============ */
+let AC=null,MUTE=false,BG={name:null,tm:null,step:0,next:0};
+try{MUTE=localStorage.getItem('ea_mute')==='1'}catch(e){}
+const NF={};(()=>{const n=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];for(let o=1;o<7;o++)n.forEach((x,i)=>NF[x+o]=440*Math.pow(2,(i-9)/12+(o-4)))})();
+function tone(f,t,d,type,vol,slide){const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.03)}
+function noise(t,d,vol,hp){const b=AC.createBuffer(1,Math.max(1,Math.floor(AC.sampleRate*d)),AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;const s=AC.createBufferSource(),g=AC.createGain(),fl=AC.createBiquadFilter();fl.type='highpass';fl.frequency.value=hp||800;s.buffer=b;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl);fl.connect(g);g.connect(AC.destination);s.start(t)}
+function seq(ns,t,d,type,vol){ns.forEach((n,i)=>tone(NF[n],t+i*d,d*1.6,type,vol))}
+function sfx(k){if(MUTE||!AC||AC.state!=='running')return;const t=AC.currentTime+.01;try{(({
+ click:()=>tone(720,t,.04,'square',.018),
+ hit:()=>{noise(t,.09,.06,600);tone(170,t,.1,'square',.04,80)},
+ slash:()=>{noise(t,.12,.05,3200);tone(900,t,.08,'triangle',.02,300)},
+ crit:()=>{noise(t,.14,.07,500);tone(880,t+.02,.14,'square',.03,1320)},
+ miss:()=>tone(320,t,.13,'triangle',.035,150),
+ fire:()=>{noise(t,.28,.05,400);tone(240,t,.22,'sawtooth',.02,90)},
+ ice:()=>{tone(1400,t,.16,'triangle',.035,2200);tone(1900,t+.09,.14,'triangle',.03)},
+ magic:()=>tone(480,t,.24,'square',.022,1300),
+ arrow:()=>{noise(t,.06,.04,4200);tone(1200,t,.08,'triangle',.025,500)},
+ poison:()=>{tone(210,t,.2,'sawtooth',.02,140);noise(t+.05,.12,.02,1500)},
+ heal:()=>seq(['C5','E5','G5','C6'],t,.07,'triangle',.04),
+ buff:()=>seq(['A4','E5'],t,.09,'square',.025),
+ debuff:()=>seq(['A4','D4'],t,.1,'square',.025),
+ coin:()=>seq(['B5','E6'],t,.06,'square',.022),
+ dice:()=>{for(let i=0;i<3;i++)tone(500+i*90,t+i*.06,.04,'square',.02)},
+ lvup:()=>seq(['C5','E5','G5','C6','E6'],t,.08,'square',.03),
+ win:()=>seq(['G4','C5','E5','G5','E5','G5','C6'],t,.11,'square',.03),
+ lose:()=>seq(['E4','D4','C4','B3','A3'],t,.2,'triangle',.04)
+ })[k]||(()=>{}))()}catch(e){}}
+const TR={
+ title:{bpm:100,l:"E4 _ B4 _ A4 G4 F#4 _ G4 _ E4 _ D4 _ E4 _ C4 _ G4 _ F#4 E4 D4 _ E4 _ _ _ B3 _ - -",b:"E2 - B2 - E2 - B2 - C3 - G2 - D3 - A2 - C3 - G2 - D3 - A2 - E2 - B2 - E2 - - -"},
+ town:{bpm:88,w:'triangle',v:.045,l:"E4 G4 C5 _ B4 G4 E4 _ F4 A4 C5 _ A4 F4 D4 _ E4 G4 C5 _ D5 C5 B4 _ A4 G4 F4 D4 C4 _ _ -",b:"C3 - G3 - C3 - G3 - F2 - C3 - F2 - C3 - C3 - G3 - G2 - D3 - F2 - G2 - C3 - - -"},
+ tavern:{bpm:104,l:"G4 B4 D5 B4 G4 B4 D5 _ C5 E5 C5 A4 F#4 A4 D5 _ G4 B4 D5 G5 F#5 D5 B4 _ C5 A4 F#4 A4 G4 _ _ -",b:"G2 - D3 - G2 - D3 - C3 - C3 - D3 - D3 - G2 - D3 - B2 - B2 - C3 - D3 - G2 - - -"},
+ story:{bpm:72,w:'triangle',v:.04,l:"A4 _ _ E4 _ _ C5 _ B4 _ _ G4 _ _ E4 _ F4 _ _ A4 _ _ C5 _ B4 _ _ _ E4 _ _ -",b:"A2 _ _ _ _ _ _ _ E2 _ _ _ _ _ _ _ F2 _ _ _ _ _ _ _ E2 _ _ _ _ _ _ _"},
+ d1:{bpm:104,l:"A3 C4 E4 _ D4 C4 B3 _ A3 C4 E4 G4 F4 _ E4 _ D4 F4 A4 _ G4 F4 E4 _ D4 C4 B3 C4 A3 _ _ -",b:"A2 - - A2 E2 - - E2 A2 - - A2 F2 - - F2 D2 - - D2 G2 - - G2 E2 - - E2 A2 - - -"},
+ d2:{bpm:80,w:'triangle',v:.045,l:"D4 _ A4 _ F4 _ E4 _ D4 _ C5 _ B4 _ A4 _ G4 _ B4 _ D5 _ C5 _ A4 _ F4 _ E4 _ D4 -",b:"D2 _ _ _ A2 _ _ _ D2 _ _ _ F2 _ _ _ G2 _ _ _ D3 _ _ _ A2 _ _ _ D2 _ _ -"},
+ d3:{bpm:126,l:"E4 E4 F4 E4 G4 _ F4 E4 D4 D4 E4 D4 F4 _ E4 D4 E4 E4 F4 E4 A4 _ G4 F4 E4 _ D4 _ E4 _ _ -",b:"E2 E2 - E2 E2 - E2 - D2 D2 - D2 D2 - D2 - E2 E2 - E2 F2 - F2 - E2 - D2 - E2 - - -"},
+ d4:{bpm:76,w:'triangle',v:.045,l:"F#4 _ _ C#5 _ _ A4 _ G#4 _ _ E4 _ _ C#4 _ D4 _ _ A4 _ _ F#4 _ E4 _ G#4 _ C#4 _ _ -",b:"F#2 _ _ _ _ _ _ _ C#2 _ _ _ _ _ _ _ D2 _ _ _ _ _ _ _ C#2 _ _ _ _ _ _ _"},
+ d5:{bpm:110,l:"C4 _ G4 _ D#4 _ D4 C4 A#3 _ F4 _ D4 _ C4 A#3 G#3 _ D#4 _ C4 _ G#3 _ G3 _ B3 _ D4 _ G4 -",b:"C2 - C3 - C2 - C3 - A#1 - A#2 - A#1 - A#2 - G#1 - G#2 - G#1 - G#2 - G1 - G2 - G1 - G2 -"},
+ abyss:{bpm:90,l:"E4 _ D#4 _ E4 _ B3 _ C4 _ B3 _ A#3 _ B3 _ E4 _ F4 _ E4 _ D#4 _ B3 _ _ _ - - - -",b:"E2 - - - B1 - - - C2 - - - B1 - - - E2 - - - F2 - - - B1 - - - E2 - - -"},
+ battle:{bpm:152,l:"A4 A4 C5 A4 E5 _ D5 C5 B4 B4 D5 B4 G5 _ F5 E5 A4 A4 C5 E5 A5 _ G5 E5 F5 E5 D5 C5 B4 _ E5 _",b:"A2 A2 A2 A2 A2 A2 A2 A2 G2 G2 G2 G2 G2 G2 G2 G2 F2 F2 F2 F2 F2 F2 F2 F2 E2 E2 E2 E2 E2 E2 E2 E2"},
+ boss:{bpm:164,l:"D5 _ A4 D5 F5 _ E5 D5 C5 _ G4 C5 E5 _ D5 C5 A#4 _ F4 A#4 D5 _ C5 A#4 A4 _ C#5 _ E5 _ A5 _",b:"D2 D2 D3 D2 D2 D2 D3 D2 C2 C2 C3 C2 C2 C2 C3 C2 A#1 A#1 A#2 A#1 A#1 A#1 A#2 A#1 A1 A1 A2 A1 A1 A1 A2 A1"}
+};
+function trParse(x){const a=x.trim().split(/\s+/),o=[];for(let i=0;i<a.length;i++){if(a[i]==='-'||a[i]==='_'){o.push(null);continue}let d=1;while(a[i+d]==='_')d++;o.push([NF[a[i]],d])}return o}
+function bgmStop(){if(BG.tm){clearInterval(BG.tm);BG.tm=null}BG.name=null}
+function bgm(name){if(!AC||MUTE){return}if(BG.name===name&&BG.tm)return;bgmStop();const T=TR[name];if(!T)return;BG.name=name;if(!T.p)T.p={l:trParse(T.l),b:trParse(T.b)};BG.step=0;BG.next=AC.currentTime+.1;const sd=30/T.bpm;
+ BG.tm=setInterval(()=>{if(AC.state!=='running')return;if(BG.next<AC.currentTime)BG.next=AC.currentTime+.05;while(BG.next<AC.currentTime+.25){const i=BG.step,l=T.p.l[i%T.p.l.length],b=T.p.b[i%T.p.b.length];if(l)tone(l[0],BG.next,sd*l[1]*.95,T.w||'square',T.v||.022);if(b)tone(b[0],BG.next,sd*b[1]*.9,'triangle',.045);BG.step++;BG.next+=sd}},60)}
+function updBgm(){const s=S.scr;let n='town';if(s==='title'||s==='create')n='title';else if(s==='story'||s==='regist')n='story';else if(s==='battle')n=B&&B.o.boss?'boss':'battle';else if(s==='dungeon'&&G&&G.run)n=runD().id;else if(s==='tavern'||s==='npc')n='tavern';bgm(n)}
+function toggleMute(){MUTE=!MUTE;try{localStorage.setItem('ea_mute',MUTE?'1':'0')}catch(e){}if(MUTE)bgmStop();render()}
+document.addEventListener('pointerdown',e=>{if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(x){return}}if(AC.state==='suspended')AC.resume().then(updBgm);else updBgm();if(e.target.closest&&e.target.closest('button'))sfx('click')},true);
+document.addEventListener('visibilitychange',()=>{if(!AC)return;if(document.hidden)AC.suspend();else if(!MUTE)AC.resume()});
 const CLS={
  sword:{n:'劍士',d:'攻守均衡的前衛',long:'站在最前面，用劍替同伴開路。生命與防禦高，容易上手。',b:{mhp:48,mmp:14,atk:11,mag:3,def:8,spd:7,luk:5},g:{mhp:9,mmp:2,atk:3,mag:.5,def:2.1,spd:1.2,luk:.6},sk:['slash','gbreak','whirl']},
  mage:{n:'魔法師',d:'高火力但脆弱',long:'以魔力換取毀滅性的火力。身體脆弱，需要同伴保護。',b:{mhp:38,mmp:28,atk:4,mag:13,def:5,spd:6,luk:5},g:{mhp:6,mmp:5,atk:.6,mag:3.2,def:1.2,spd:1,luk:.6},sk:['fire','frost','meteor']},
@@ -417,7 +514,7 @@ function apAdd(id,a,n){n=Math.min(n,apLeft(id));if(n<=0)return;G.chars[id].ap[a]
 function apAuto(id,quiet){const c=G.chars[id],w=APW[clsOf(id)];let left=apLeft(id);while(left-->0){const tot=Object.values(c.ap).reduce((a,b)=>a+b,0)+1;let best=null,bd=-9;for(const a in w){const d=w[a]-c.ap[a]/tot;if(d>bd){bd=d;best=a}}c.ap[best]++}refit(id);if(!quiet){save();render()}}
 function apReset(id){const c=G.chars[id];for(const a in c.ap)c.ap[a]=0;refit(id);save();render()}
 function newChar(){return{lv:1,exp:0,hp:0,mp:0,eq:{},ap:{str:0,int:0,vit:0,agi:0,luk:0}}}
-function migrate(){G.seen=G.seen||{};G.flags=G.flags||{};for(const id in G.chars){const c=G.chars[id];c.ap=c.ap||{str:0,int:0,vit:0,agi:0,luk:0}}G.gear.forEach(g=>g.plus=g.plus||0);if(G.flags.reg==null)G.flags.reg=1}
+function migrate(){if(G.auto==null)G.auto=false;G.seen=G.seen||{};G.flags=G.flags||{};for(const id in G.chars){const c=G.chars[id];c.ap=c.ap||{str:0,int:0,vit:0,agi:0,luk:0}}G.gear.forEach(g=>g.plus=g.plus||0);if(G.flags.reg==null)G.flags.reg=1}
 function upCost(g){return Math.round((30+g.t*10)*RM[g.r]*Math.pow(1.35,g.plus||0))}
 function skillsOf(id){const c=G.chars[id],k=CLS[clsOf(id)].sk,r=[k[0]];if(c.lv>=4)r.push(k[1]);if(c.lv>=9)r.push(k[2]);if(c.adv){r.push(ADV[c.adv].sk[0]);if(c.lv>=ADV_LV2)r.push(ADV[c.adv].sk[1])}if(id!=='hero'&&G.aff[id]>=50)r.push(NPC[id].bsk);return r}
 function needExp(lv){return Math.round(30*Math.pow(lv,1.8))}
@@ -719,11 +816,11 @@ function render(){
  $('#right').classList.toggle('hide',!G||S.scr==='title'||S.scr==='create'||S.scr==='story'||S.scr==='regist');
  const nb=(arr)=>arr.map(n=>`<button class="${S.scr===n[0]?'on':''}" onclick="go('${n[0]}')"><i>${n[2]}</i>${n[1]}</button>`).join('');
  $('#nav').innerHTML=nb(NAV.slice(0,5));$('#side').innerHTML=nb(NAV);
- if(G){$('#chips').innerHTML=`第 <b>${G.day}</b> 日　金幣 <b>${G.gold}</b>`;$('#right').innerHTML=vRight()}
+ if(G){$('#chips').innerHTML=`第 <b>${G.day}</b> 日　金幣 <b>${G.gold}</b><button onclick="toggleMute()">${MUTE?'🔇':'🔊'}</button>`;$('#right').innerHTML=vRight()}
  const V={regist:vRegist,log:vLog,title:vTitle,create:vCreate,story:vStory,town:vTown,tavern:vTavern,npc:vNpc,guild:vGuild,party:vParty,chr:vChar,bag:vBag,shop:vShop,dungeon:vDungeon,battle:vBattle};
  $('#main').innerHTML=V[S.scr]();
  $('#main').style.padding=(S.scr==='title')?'0':'';
- if(S.scr==='battle')afterBattleRender();if(S.scr==='story')storyType();
+ if(S.scr==='battle')afterBattleRender();if(S.scr==='story')storyType();updBgm();
 }
 function pbar(cls,v,m){return `<div class="bar ${cls}"><i style="width:${clamp(v/m*100,0,100)}%"></i></div>`}
 function vRight(){
@@ -731,8 +828,8 @@ function vRight(){
  +`<div class="ttl" style="margin-top:18px">羊皮紙地圖</div><div class="sub">已踏破 ${cleared()} / 5 座迷宮</div><div class="map">${DG.slice(0,5).map(d=>`<i class="${G.clear[d.id]?'ok':''}"></i>`).join('')}</div>${G.best?`<div class="sub" style="margin-top:8px">無盡迴廊最深：第 ${G.best} 層</div>`:''}`}
 
 /* ============ 標題 / 建立 ============ */
-function vTitle(){return `<div class="title">${art('kv_title','🗺️','kv')}<h1>無盡冒險</h1><div class="en">ENDLESS ADVENTURE</div><div class="bx">${hasSave()?`<button class="btn gd" onclick="cont()">繼續冒險</button>`:''}<button class="btn ${hasSave()?'':'gd'}" onclick="go('create')">開始新的冒險</button><div class="ps">— PRESS START —</div><div class="sub">單人冒險 TRPG　每一次探索都獨一無二</div></div></div>`}
-function cont(){G=load();migrate();if(!G.flags.reg)return go('regist');if(G.run){S.scr='dungeon';DV={m:'choose'};render()}else go('town')}
+function vTitle(){return `<div class="title">${art('kv_title','🗺️','kv')}<h1>無盡冒險</h1><div class="en">ENDLESS ADVENTURE</div><div class="bx">${hasSave()?`<button class="btn gd" onclick="cont()">繼續冒險</button>`:''}<button class="btn ${hasSave()?'':'gd'}" onclick="go('create')">開始新的冒險</button><button class="btn sm" onclick="toggleMute()">音樂與音效：${MUTE?'關':'開'}</button><div class="ps">— PRESS START —</div><div class="sub">單人冒險 TRPG　每一次探索都獨一無二</div></div></div>`}
+function cont(){G=load();migrate();if(!G.flags.reg)return go('regist');if(G.run){dchoose()}else go('town')}
 function vCreate(){
  const hc=g=>g==='m'?'#7fa8f0':'#f09ac0',hh=g=>g==='m'?'#3b4a7a':'#b0527a';
  return `<div style="max-width:560px;margin:0 auto"><div class="pn gold"><div class="ttl">你是誰？</div>
@@ -819,7 +916,7 @@ function equipMenu(id,sl){
  const list=G.gear.filter(g=>g.slot===sl&&(!equipped(g.id)||equipped(g.id)===id)).sort((a,b)=>(b.id===cur)-(a.id===cur)||b.v*(1+.08*b.plus)-a.v*(1+.08*a.plus));
  const diff=g=>{if(g.id===cur)return '';const ks=[...new Set([...Object.keys(g.st),...(cg?Object.keys(cg.st):[])])];return ks.map(k=>{const d=gstat(g,k)-(cg?gstat(cg,k):0);return d?`<span class="${d>0?'r1':'rdtx'}">${d>0?'▲':'▼'}${STN[k]}${d>0?'+':''}${d}</span>`:''}).join(' ')};
  modal(`<div class="ttl">${nameOf(id)}　${slotN(sl)}　<span class="sub">持有 ${G.gold} 金</span></div>${list.length?`<div class="list">${list.map(g=>{const mx=(g.plus||0)>=10,co=upCost(g);return `<div class="row"><div class="gr"><span class="r${g.r}">${gName(g)}</span>${g.id===cur?' <span class="tag gdtx">裝備中</span>':''}<div class="sub">${gearTxt(g)}</div><div class="sub">${diff(g)}</div></div><div style="display:flex;flex-direction:column;gap:4px">${g.id===cur?`<button class="btn sm" onclick="doEquip('${id}','${sl}','')">卸下</button>`:`<button class="btn sm gd" onclick="doEquip('${id}','${sl}','${g.id}')">裝備</button>`}<button class="btn sm" ${mx||G.gold<co?'disabled':''} onclick="doUp('${id}','${sl}','${g.id}')">${mx?'強化已滿':'強化 '+co+'金'}</button></div></div>`}).join('')}</div><div class="sub" style="margin-top:8px">強化每級提升 8% 數值，最高 +10，必定成功。</div>`:'<div class="sub">沒有可用的裝備。到迷宮或商店找找吧。</div>'}`)}
-function doUp(id,sl,gid){const g=gearOf(gid),co=upCost(g);if(G.gold<co||g.plus>=10)return;G.gold-=co;g.plus++;const e=equipped(gid);if(e)refit(e);save();render();equipMenu(id,sl);toast(`${g.n} 強化至 +${g.plus}`)}
+function doUp(id,sl,gid){const g=gearOf(gid),co=upCost(g);if(G.gold<co||g.plus>=10)return;sfx('buff');G.gold-=co;g.plus++;const e=equipped(gid);if(e)refit(e);save();render();equipMenu(id,sl);toast(`${g.n} 強化至 +${g.plus}`)}
 function doEquip(id,sl,gid){const c=G.chars[id];if(gid)c.eq[sl]=gid;else delete c.eq[sl];refit(id);closeModal();save();render()}
 
 /* ============ 背包 ============ */
@@ -859,7 +956,7 @@ function enterDungeon(i){
  const d=DG[i];
  maybe('in_'+d.id,()=>{save();dmsg(`${d.ic} ${d.n}`,`<p>${d.d}</p><div class="dice">本次異變：<b>${mod.n}</b><br>${mod.d}</div>${partyQuip()}`,()=>dchoose())})}
 function partyQuip(){const ns=G.party.filter(x=>x!=='hero');if(!ns.length)return '';const id=pick(ns);return `<div class="row" style="margin-top:8px">${face(id,'av')}<div class="gr"><b style="color:${NPC[id].c}">${NPC[id].n}</b><br>${pick(NPC[id].quip)}</div></div>`}
-function dmsg(t,h,next,btn){DV={m:'msg',t,h,next,btn};S.scr='dungeon';render()}
+function dmsg(t,h,next,btn){DV={m:'msg',t,h,next,btn};S.scr='dungeon';render();autoKick()}
 function dchoose(){
  const r=G.run;
  if(!r.opts){
@@ -868,10 +965,10 @@ function dchoose(){
    while(o.length<n){let t=R(1,Object.values(w).reduce((a,b)=>a+b,0)),k;for(k in w){t-=w[k];if(t<=0)break}if(o.find(x=>x.ty===k)&&k!=='battle')continue;o.push({ty:k,hid:r.mod==='fog'||Math.random()<.22})}
    r.opts=o}
   save()}
- DV={m:'choose'};S.scr='dungeon';render()}
+ DV={m:'choose'};S.scr='dungeon';render();autoKick()}
 function vDungeon(){
  const r=G.run,d=runD();
- const head=`<div class="pn gold" style="padding:10px 14px"><div class="row"><div class="gr"><b class="sf gdtx">${d.ic} ${d.n}</b>　第 ${r.fl}${d.fl===Infinity?'':' / '+d.fl} 層<div class="sub">異變：${MOD.find(m=>m.k===r.mod).n}　・　本次收穫 ${r.gold} 金</div></div><button class="btn sm" onclick="dBag()">🎒</button></div>${pbar('x',r.rm,r.rooms)}</div>
+ const head=`<div class="pn gold" style="padding:10px 14px"><div class="row"><div class="gr"><b class="sf gdtx">${d.ic} ${d.n}</b>　第 ${r.fl}${d.fl===Infinity?'':' / '+d.fl} 層<div class="sub">異變：${MOD.find(m=>m.k===r.mod).n}　・　本次收穫 ${r.gold} 金</div></div>${autoBtn()}<button class="btn sm" onclick="dBag()">🎒</button></div>${pbar('x',r.rm,r.rooms)}</div>
  <div class="als" style="margin-bottom:12px">${G.party.map(id=>{const c=G.chars[id],s=statOf(id);return `<div class="al"><div class="nm">${nameOf(id)} <small>Lv.${c.lv}</small></div>${pbar('h',c.hp,s.mhp)}${pbar('m',c.mp,s.mmp)}<small>${c.hp}/${s.mhp}</small></div>`}).join('')}</div>`;
  if(DV.m==='msg')return head+art('bg_'+d.id,d.ic,'sc')+`<div class="pn"><div class="ttl">${DV.t}</div>${DV.h}<button class="btn gd wd" style="margin-top:12px" onclick="DV.next()">${DV.btn||'繼續'}</button></div>`;
  if(DV.m==='event')return head+art('bg_'+d.id,d.ic,'sc')+`<div class="pn"><div class="ttl">${DV.ev.t}</div><p>${DV.ev.d}</p>${partyQuip()}<div style="margin-top:12px">${DV.ev.o.map((o,i)=>`<button class="door" onclick="evPick(${i})"><div class="gr"><b>${o.l}</b>${o.s?`<div class="sub">${o.s}</div>`:''}</div></button>`).join('')}</div></div>`;
@@ -899,7 +996,7 @@ function giveGold(n){n=Math.round(n*gMul());G.gold+=n;G.run.gold+=n;return n}
 function giveGear(b,minR){const L=runL();let r=rollR((b||0)+(G.run.mod==='fog'||G.run.mod==='horde'?.1:0));if(minR)r=Math.max(r,minR);const g=genGear(L+R(0,2),r);G.gear.push(g);return g}
 function healAll(p){G.party.forEach(id=>{const c=G.chars[id],s=statOf(id);c.hp=Math.min(s.mhp,c.hp+Math.round(s.mhp*p));c.mp=Math.min(s.mmp,c.mp+Math.round(s.mmp*p))})}
 function hurtAll(p){G.party.forEach(id=>{const c=G.chars[id],s=statOf(id);c.hp=Math.max(1,c.hp-Math.round(s.mhp*p))})}
-function check(stat,dc){
+function check(stat,dc){sfx('dice');
  const L=runL(),best=Math.max(...G.party.map(id=>statOf(id)[stat])),ex={atk:8+3*L,mag:8+3*L,def:6+2.2*L,spd:6+1.3*L,luk:5+.8*L}[stat];
  const mod=clamp(Math.round((best-ex)/ex*10),-6,6)+5+(G.run.mod==='luck'?2:0),r=d20(),ok=r===20||(r!==1&&r+mod>=dc);
  return{ok,txt:`<div class="dice">🎲 ${STN[stat]}檢定　d20〔${r}〕${mod>=0?'+':''}${mod} ＝ ${r+mod}　／　難度 ${dc}　→　<b class="${ok?'':'rdtx'}">${r===20?'大成功':r===1?'大失敗':ok?'成功':'失敗'}</b></div>`}}
@@ -953,7 +1050,39 @@ function rEvent(){
   {l:'靜靜祈禱',s:'幸運檢定・難度 12',f:()=>{const c=check('luk',12);if(c.ok){G.party.forEach(id=>{G.chars[id].mp=statOf(id).mmp});return c.txt+'<p>溫暖的光包圍了你們。全員魔力完全回復。</p>'}return c.txt+'<p>什麼也沒發生。也許神明正在午睡。</p>'}},
   {l:'獻上鮮血',s:'全員失去 20% 生命，換取寶物',f:()=>{hurtAll(.2);const g=giveGear(.35,1);return `<p>祭壇吸收了你們的血，緩緩升起一件物品。</p><p>獲得 <b class="r${g.r}">${g.n}</b> <span class="sub">${gearTxt(g)}</span></p>`}}]})
  ];
- DV={m:'event',ev:pick(EV)()};render()}
+ DV={m:'event',ev:pick(EV)()};render();autoKick()}
+
+/* ============ 自動模式 ============ */
+let AT=null;
+function autoStep(fn,ms){clearTimeout(AT);if(!G||!G.auto)return;AT=setTimeout(()=>{AT=null;if(G&&G.auto&&G.run)fn()},window.FAST?1:ms)}
+function hpRatio(){return G.party.reduce((s,id)=>s+G.chars[id].hp/statOf(id).mhp,0)/G.party.length}
+function autoHeal(){for(const id of G.party){const c=G.chars[id],s=statOf(id);while(c.hp<s.mhp*.5){const k=G.inv.potion>0?'potion':G.inv.hipotion>0?'hipotion':null;if(!k)break;c.hp=Math.min(s.mhp,c.hp+Math.round(s.mhp*ITEM[k].v));G.inv[k]--}}}
+function autoRoom(){if(S.scr!=='dungeon'||!DV||DV.m!=='choose')return;autoHeal();const r=G.run,hr=hpRatio();
+ if(hr<.35&&!r.opts.some(o=>o.ty==='rest'&&!o.hid)){G.auto=false;save();toast('生命過低，自動模式已暫停');render();return}
+ const sc=o=>o.ty==='boss'?9:o.hid?3:o.ty==='rest'?(hr<.65?8:1):o.ty==='treasure'?6:o.ty==='elite'?(hr>.75?5:0):o.ty==='event'?4:o.ty==='merchant'?1:3.5;
+ let bi=0;r.opts.forEach((o,i)=>{if(sc(o)>sc(r.opts[bi]))bi=i});roomPick(bi)}
+function autoEvent(){if(S.scr!=='dungeon'||!DV||DV.m!=='event')return;const i=DV.ev.o.findIndex(o=>!/賭|鮮血/.test(o.l));evPick(i<0?DV.ev.o.length-1:i)}
+function autoKick(){if(!G||!G.auto||!G.run)return;
+ if(S.scr==='battle'&&B){if(B.menu==='main')allyAuto(B.cur);else if(B.menu==='end'&&B.won)autoStep(()=>{if(B&&B.won){B=null;advance()}},1300)}
+ else if(S.scr==='dungeon'&&DV){if(DV.m==='choose')autoStep(autoRoom,800);else if(DV.m==='msg')autoStep(()=>{if(S.scr==='dungeon'&&DV.m==='msg')DV.next()},1400);else if(DV.m==='event')autoStep(autoEvent,1600)}}
+function toggleAuto(){G.auto=!G.auto;save();clearTimeout(AT);toast('自動模式'+(G.auto?'開啟':'關閉'));render();autoKick()}
+function autoBtn(cls){return `<button class="btn sm ${cls||''} ${G.auto?'on':''}" onclick="event.stopPropagation();toggleAuto()">自動 ${G.auto?'開':'關'}</button>`}
+function allyAuto(u){if(!B||B.cur!==u||!alive(u)||B.menu==='end')return;const al=B.al.filter(alive),en=B.en.filter(alive);if(!en.length)return;
+ const can=k=>u.mp>=SK[k].mp,low=al.filter(a=>a.hp<a.mhp*.45).sort((a,b)=>a.hp/a.mhp-b.hp/b.mhp),dead=B.al.filter(a=>!alive(a));
+ const rv=u.sk.find(k=>SK[k].rev&&can(k));if(dead.length&&rv)return exec(u,SK[rv],null);
+ if(dead.length&&G.inv.feather>0){B.pend={item:'feather'};B.menu='tgD';return tgt(dead[0].uid)}
+ if(low.length){const ha=u.sk.find(k=>SK[k].ty==='heal'&&SK[k].tg==='aa'&&can(k)),h1=u.sk.find(k=>SK[k].ty==='heal'&&SK[k].tg==='a1'&&can(k)),hs=u.sk.find(k=>SK[k].ty==='heal'&&SK[k].tg==='self'&&can(k));
+  if(low.length>=2&&ha)return exec(u,SK[ha],null);if(h1)return exec(u,SK[h1],low[0]);if(ha)return exec(u,SK[ha],null);
+  if(low.includes(u)&&hs)return exec(u,SK[hs],null);
+  const w=low[0];if(w.hp<w.mhp*.3){const k=G.inv.potion>0?'potion':G.inv.hipotion>0?'hipotion':null;if(k){B.pend={item:k};B.menu='tgA';return tgt(w.uid)}}}
+ const tough=B.o.boss||B.o.elite;B.used=B.used||{};
+ if(tough&&B.rd<=2){const bf=u.sk.find(k=>SK[k].ty==='buff'&&can(k)&&!B.used[u.uid+k]);if(bf){B.used[u.uid+bf]=1;return exec(u,SK[bf],null)}}
+ const tg=en.slice().sort((a,b)=>a.hp-b.hp)[0],atk=u.sk.filter(k=>(SK[k].ty==='phys'||SK[k].ty==='mag')&&can(k));
+ const aoe=atk.filter(k=>SK[k].tg==='ea').sort((a,b)=>SK[b].pow-SK[a].pow)[0],one=atk.filter(k=>SK[k].tg==='e1').sort((a,b)=>SK[b].pow-SK[a].pow)[0];
+ const thrift=!tough&&u.mp<u.mmp*.3;
+ if(en.length>=2&&aoe&&!thrift)return exec(u,SK[aoe],null);
+ if(one&&!thrift&&(tough||tg.hp>u.atk*.8||Math.random()<.5))return exec(u,SK[one],tg);
+ exec(u,SK.atk,tg)}
 
 /* ============ 戰鬥 ============ */
 function mkAlly(id){const c=G.chars[id],s=statOf(id);return{id,n:nameOf(id),ally:true,mhp:s.mhp,hp:Math.min(c.hp,s.mhp),mmp:s.mmp,mp:Math.min(c.mp,s.mmp),atk:s.atk,mag:s.mag,def:s.def,spd:s.spd,luk:s.luk,st:{},sk:skillsOf(id)}}
@@ -974,7 +1103,7 @@ function nextTurn(){
  u.guard=false;B.cur=u;
  if(u.st.poison>0){const d=Math.max(1,Math.round(u.mhp*.06));u.hp=Math.max(0,u.hp-d);u.st.poison--;B.fx.push({uid:u.uid,t:'毒 -'+d,c:'d'});blog(`${u.n} 受到毒的侵蝕，失去 ${d} 生命`);if(!alive(u)){blog(`${u.n} 倒下了`);render();return setTimeout(nextTurn,600)}}
  if(u.st.stun>0){u.st.stun--;blog(`${u.n} 動彈不得！`);B.menu='wait';render();return setTimeout(nextTurn,650)}
- if(u.ally){B.menu='main';render()}else{B.menu='wait';render();setTimeout(()=>enemyAct(u),550)}}
+ if(u.ally){if(G.auto){B.menu='wait';render();setTimeout(()=>{if(B&&B.cur===u&&B.menu==='wait')allyAuto(u)},window.FAST?1:380)}else{B.menu='main';render()}}else{B.menu='wait';render();setTimeout(()=>enemyAct(u),window.FAST?1:(G.auto?380:550))}}
 function tick(u){for(const k of['atkUp','defUp','defDn','atkDn'])if(u.st[k]>0)u.st[k]--}
 function enemyAct(u){
  if(!B)return;const ts=B.al.filter(alive);if(!ts.length)return nextTurn();
@@ -982,33 +1111,36 @@ function enemyAct(u){
  if(s)exec(u,{n:s.n,ty:'phys',pow:s.pow,tg:s.all?'ea':'e1',eff:s.eff,mp:0},pick(ts));else exec(u,SK.atk,pick(ts))}
 function exec(u,sk,t,item){
  B.menu='wait';if(sk.mp)u.mp-=sk.mp;
+ const fxk=item?(sk.ty==='heal'?'heal':'buff'):sk.fx||(sk===SK.atk?(u.ally?ATKFX[clsOf(u.id)]:'claw'):sk.ty==='heal'?'heal':sk.ty==='buff'?'buff':'claw');let snd=FXS[fxk]||'hit',anyCrit=false,anyHit=false;
+ if(sk!==SK.atk&&!item&&sk.n)B.cut={t:sk.n,id:u.ally&&sk.big?u.id:null,big:!!sk.big};
  const foes=u.ally?B.en:B.al,pals=u.ally?B.al:B.en;
  const tg=sk.tg==='e1'?[t]:sk.tg==='ea'?foes.filter(alive):sk.tg==='a1'?[t]:sk.tg==='aa'?(sk.rev?pals:pals.filter(alive)):[u];
  blog(item?`${u.n} 使用了 ${item}`:sk===SK.atk?`${u.n} 的攻擊！`:`${u.n} 使出「${sk.n}」！`);
  for(const x of tg){
   if(sk.ty==='phys'||sk.ty==='mag'){
    const roll=d20();
-   if(roll===1){B.fx.push({uid:x.uid,t:'MISS',c:'s'});blog(`🎲${roll}　沒有命中 ${x.n}`);continue}
+   if(roll===1){B.fx.push({uid:x.uid,t:'MISS',c:'s'});snd='miss';blog(`🎲${roll}　沒有命中 ${x.n}`);continue}
    const crit=roll>=20-Math.min(6,Math.floor(u.luk/10))-(sk.cr||0);
    const a=(sk.ty==='mag'?u.mag:u.atk)*(u.st.atkUp>0?1.3:1)*(u.st.atkDn>0?.75:1);
    const d=x.def*(x.st.defUp>0?1.4:1)*(x.st.defDn>0?.6:1)*(sk.ty==='mag'?.7:1);
    let dm=(a*sk.pow-d*.5)*(.9+Math.random()*.2);
    if(u.ally&&sk.mp&&G.run&&G.run.mod==='mana')dm*=1.2;
    if(crit)dm*=1.7;if(x.guard)dm*=.5;dm=Math.max(1,Math.round(dm));
-   x.hp=Math.max(0,x.hp-dm);B.fx.push({uid:x.uid,t:(crit?'爆擊 ':'')+dm,c:crit?'c':'d',sh:1});
+   x.hp=Math.max(0,x.hp-dm);anyHit=true;if(crit)anyCrit=true;B.fx.push({uid:x.uid,fx:fxk});B.fx.push({uid:x.uid,t:(crit?'爆擊 ':'')+dm,c:crit?'c':'d',sh:1});
    blog(`🎲${roll}　${crit?'爆擊！':''}${x.n} 受到 ${dm} 傷害${x.hp<=0?'，倒下了！':''}`);
    if(sk.steal&&u.ally){const g=giveGold(10+runL()*3);blog(`順手摸走了 ${g} 金`)}
   }else if(sk.ty==='heal'){
    if(!alive(x)&&!sk.rev)continue;
    const h=Math.round((sk.fix?x.mhp*sk.fix:u.mag*sk.pow+x.mhp*.08)*(.95+Math.random()*.1));
-   x.hp=Math.min(x.mhp,x.hp+h);B.fx.push({uid:x.uid,t:'+'+h,c:'h'});
+   x.hp=Math.min(x.mhp,x.hp+h);B.fx.push({uid:x.uid,fx:'heal'});B.fx.push({uid:x.uid,t:'+'+h,c:'h'});
   }else if(sk.ty==='mpheal'){const h=Math.round(x.mmp*sk.fix);x.mp=Math.min(x.mmp,x.mp+h);B.fx.push({uid:x.uid,t:'魔力 +'+h,c:'s'})}
   if(sk.eff&&alive(x)&&Math.random()<sk.eff.ch&&!(x.boss&&sk.eff.k==='stun'&&Math.random()<.6)){
-   x.st[sk.eff.k]=Math.max(x.st[sk.eff.k]||0,sk.eff.t+(x===u?1:0));
+   x.st[sk.eff.k]=Math.max(x.st[sk.eff.k]||0,sk.eff.t+(x===u?1:0));if(sk.ty==='buff')B.fx.push({uid:x.uid,fx:/Up/.test(sk.eff.k)?(fxk==='guard'?'guard':'buff'):(fxk==='smoke'?'smoke':'debuff')});
    B.fx.push({uid:x.uid,t:{stun:'暈眩',poison:'中毒',atkUp:'攻擊↑',defUp:'防禦↑',defDn:'防禦↓',atkDn:'攻擊↓'}[sk.eff.k],c:'s'})}
  }
  if(sk.ty==='heal')blog(`生命回復了`);
- tick(u);render();setTimeout(nextTurn,window.FAST?1:820)}
+ if(anyHit&&(anyCrit||sk.tg==='ea'||sk.big))B.quake=1;sfx(snd);if(anyHit&&snd!=='hit'&&snd!=='miss')setTimeout(()=>sfx(anyCrit?'crit':'hit'),130);else if(anyCrit)sfx('crit');
+ tick(u);render();setTimeout(nextTurn,window.FAST?1:(G.auto?(sk.big?900:560):(sk.big?1150:sk===SK.atk?780:920)))}
 function curU(){return B.cur}
 function cmdAtk(){B.pend={sk:SK.atk};needE()}
 function cmdSkill(){B.menu='skill';render()}
@@ -1036,30 +1168,34 @@ function vBattle(){
  else if(m==='item'){const ks=Object.keys(G.inv).filter(k=>G.inv[k]>0&&ITEM[k].use);cmd=`<div class="cmd two">${ks.map(k=>`<button class="btn" onclick="pickItem('${k}')"><span>${ITEM[k].ic} ${ITEM[k].n} ×${G.inv[k]}<small>${ITEM[k].d}</small></span></button>`).join('')||'<div class="sub">沒有可用的道具</div>'}<button class="btn" onclick="cmdBack()">返回</button></div>`}
  else if(m==='tgE'||m==='tgA'||m==='tgD')cmd=`<div class="sub gdtx" style="margin-bottom:4px">請點選目標</div><div class="cmd two"><button class="btn" onclick="cmdBack()">取消</button></div>`;
  else if(m==='end')cmd=B.endHtml;
- else cmd='<div class="sub" style="text-align:center;padding:14px">……</div>';
- return `<div class="bt"><div class="fld">${art('bg_'+d.id,'','bg')}${B.en.map(e=>`<div class="en ${alive(e)?'':'dead'} ${m==='tgE'&&alive(e)?'tg':''}" data-u="${e.uid}" onclick="tgt(${e.uid})">${art(e.key,e.e,'')}<div class="nm">${e.n} ${stTxt(e)}</div>${pbar('h',e.hp,e.mhp)}</div>`).join('')}</div>
+ else cmd=`<div class="sub" style="text-align:center;padding:14px">${G.auto?'自動戰鬥中……':'……'}</div>`;
+ return `<div class="bt"><div class="fld">${art('bg_'+d.id,'','bg')}${m==='end'?'':autoBtn('autob')}${B.en.map(e=>`<div class="en ${alive(e)?'':'dead'} ${m==='tgE'&&alive(e)?'tg':''}" data-u="${e.uid}" onclick="tgt(${e.uid})">${art(e.key,e.e,'')}<div class="nm">${e.n} ${stTxt(e)}</div>${pbar('h',e.hp,e.mhp)}</div>`).join('')}</div>
  <div class="blog">${B.log.slice(-3).map(l=>`<div>${l}</div>`).join('')}</div>
  <div class="als">${B.al.map(a=>`<div class="al ${a===u&&m!=='wait'&&m!=='end'?'cur':''} ${alive(a)?'':'dead'} ${(m==='tgA'&&alive(a))||(m==='tgD'&&!alive(a))?'tg':''}" data-u="${a.uid}" onclick="tgt(${a.uid})"><div class="nm">${a.n}</div>${pbar('h',a.hp,a.mhp)}${pbar('m',a.mp,a.mmp)}<small>${a.hp}/${a.mhp}　${a.mp}/${a.mmp}</small><div>${stTxt(a)}</div></div>`).join('')}</div>
  <div>${cmd}</div></div>`}
 function afterBattleRender(){
- if(!B)return;const fx=B.fx;B.fx=[];const cnt={};
- fx.forEach(f=>{const el=document.querySelector(`[data-u="${f.uid}"]`);if(!el)return;const p=document.createElement('div');p.className='pop '+f.c;p.textContent=f.t;cnt[f.uid]=(cnt[f.uid]||0)+1;p.style.top=(10+cnt[f.uid]*16)+'%';el.appendChild(p);setTimeout(()=>p.remove(),900);if(f.sh){el.classList.add('shake','flash')}})}
+ if(!B)return;const fx=B.fx;B.fx=[];const cnt={},fld=document.querySelector('.fld');
+ if(B.cut&&fld){const c=document.createElement('div');c.className='cutin'+(B.cut.big?' big':'');c.innerHTML=(B.cut.id?face(B.cut.id,'av'):'')+`<span>${B.cut.t}</span>`;fld.appendChild(c);setTimeout(()=>c.remove(),950);B.cut=null}
+ if(B.quake&&fld){fld.classList.add('quake');B.quake=0}
+ fx.forEach(f=>{const el=document.querySelector(`[data-u="${f.uid}"]`);if(!el)return;
+  if(f.fx){const v=document.createElement('div');v.className='fxv fx-'+f.fx;el.appendChild(v);setTimeout(()=>v.remove(),750);return}
+  const p=document.createElement('div');p.className='pop '+f.c;p.textContent=f.t;cnt[f.uid]=(cnt[f.uid]||0)+1;p.style.top=(10+cnt[f.uid]*16)+'%';el.appendChild(p);setTimeout(()=>p.remove(),900);if(f.sh){el.classList.add('shake','flash')}})}
 function syncBack(){B.al.forEach(a=>{const c=G.chars[a.id];c.hp=Math.max(1,a.hp);c.mp=a.mp})}
 function win(){
  syncBack();const r=G.run,o=B.o;let exp=B.en.reduce((s,e)=>s+e.exp,0),gold=B.en.reduce((s,e)=>s+e.gold,0);
  if(r.mod==='rage')exp=Math.round(exp*1.3);gold=giveGold(gold);
  let h=`<div class="pn gold"><div class="ttl">勝利</div><div>經驗 +${exp}　金幣 +${gold}</div>`;
- G.party.forEach(id=>{const up=gainExp(id,exp);if(up)h+=`<div class="gdtx">⬆ ${nameOf(id)} 升到 Lv.${G.chars[id].lv}！</div>`});
+ let lv=0;G.party.forEach(id=>{const up=gainExp(id,exp);if(up)lv=1;if(up)h+=`<div class="gdtx">⬆ ${nameOf(id)} 升到 Lv.${G.chars[id].lv}！</div>`});
  const ch=o.boss?1:o.elite?.7:.2+(r.mod==='horde'?.1:0);
  if(Math.random()<ch){const g=giveGear(o.boss?.4:o.elite?.2:0,o.boss?2:o.elite?1:0);h+=`<div>獲得 <b class="r${g.r}">${g.n}</b> <span class="sub">${gearTxt(g)}</span></div>`}
  if(Math.random()<.25){const k=pick(['potion','potion','ether','hipotion']);addItem(k);h+=`<div>獲得 ${ITEM[k].ic} ${ITEM[k].n}</div>`}
  
  h+=`<button class="btn gd wd" style="margin-top:10px" onclick="B=null;advance()">繼續前進</button></div>`;
- B.endHtml=h;B.menu='end';save();render()}
+ B.endHtml=h;B.menu='end';B.won=true;save();sfx('win');if(lv)setTimeout(()=>sfx('lvup'),900);render();autoKick()}
 function lose(){
  const lost=Math.floor(G.run.gold/2);G.gold=Math.max(0,G.gold-lost);
  B.endHtml=`<div class="pn"><div class="ttl">全員倒下……</div><div>你們被其他冒險者救回了城鎮。遺失了本次收穫的一半（${lost} 金）。經驗與裝備保留。</div><button class="btn gd wd" style="margin-top:10px" onclick="B=null;backTown('好好休息，再次挑戰吧。')">回到城鎮</button></div>`;
- B.menu='end';render()}
+ B.menu='end';G.auto=false;sfx('lose');render()}
 
 /* ============ 啟動 ============ */
 fetch('assets/manifest.json').then(r=>r.ok?r.json():{}).then(j=>{ART=j||{};render()}).catch(()=>{});
