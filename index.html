@@ -61,6 +61,14 @@ b{font-weight:400}
 .bar.h>i{background:var(--hp)}.bar.m>i{background:var(--mp)}.bar.a>i{background:var(--pk)}.bar.x>i{background:var(--gd)}
 .art{position:relative;overflow:hidden;background:#000;border:2px solid #fff;flex-shrink:0;image-rendering:auto}
 .art img{width:100%;height:100%;object-fit:cover;display:block}
+.art.av img,.art.pt img,.opt .art img{object-position:50% 0}
+.art.av img{transform:scale(1.9);transform-origin:50% 8%}
+.vn .stage .art{border:none;background:transparent}
+.en{min-width:120px}.cmd .btn{flex-direction:column;gap:0}
+.vn .stage .art img{object-fit:contain;object-position:bottom}
+.vn .stage .art.wide{aspect-ratio:16/9;height:auto;width:100%;max-width:680px;border:3px solid #fff;align-self:center}
+.vn .stage .art.wide img{object-fit:cover}
+.vn .stage .art.cgp{border:3px solid #fff}.vn .stage .art.cgp img{object-fit:cover}
 .art .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .art .ph svg{width:100%;height:100%}
 .art.av{width:52px;height:52px}
@@ -677,7 +685,8 @@ const SC={
   '瑪爾塔|「每五層有一個守門的。打不過就回來，沒人會笑你。」',
   '|這裡沒有地圖。也許，永遠都畫不完。']}
 };
-function play(id,then){G.seen[id]=1;story(SC[id].f(),then)}
+function scCg(id){if(id==='pro1'||id==='pro2')return 'cg_prologue_'+G.hero.g;const m=id.match(/_(d\d|abyss)$/);if(!m)return null;return /^end_/.test(id)?'bg_guild':'bg_'+m[1]}
+function play(id,then){G.seen[id]=1;story(SC[id].f(),then,scCg(id))}
 function maybe(id,then){if(SC[id]&&!G.seen[id])play(id,then);else then()}
 function story(lines,then,cg){S.story={lines,i:0,then,cg,done:false};S.scr='story';render()}
 function storyNext(){const s=S.story;if(!s)return;
@@ -690,14 +699,14 @@ function vStory(){
  if(ln[0]==='#'){s.done=true;return `<div class="vn" onclick="storyNext()"><div class="chap">${ln.slice(1)}</div><div class="nx" style="position:static;text-align:center;padding:20px">▼</div></div>`}
  const p=ln.indexOf('|'),w=ln.slice(0,p),t=ln.slice(p+1);let pic='';
  if(w){if(w===G.hero.name)pic=face('hero','');else{const id=Object.keys(NPC).find(k=>NPC[k].n===w&&G.chars[k]);if(id)pic=face(id,'');else if(CAST[w])pic=art(CAST[w].k,bust(CAST[w].c,CAST[w].h),'')}}
- else if(s.cg&&ART[s.cg])pic=art(s.cg,'','');
+ else if(s.cg&&ART[s.cg])pic=art(s.cg,'',s.cg.startsWith('cg_')?'cgp':'wide');
  const paper=/手記|字跡/.test(w);s.full=t;
  return `<div class="vn" onclick="storyNext()"><button class="btn sm skip" onclick="event.stopPropagation();storyEnd()">略過</button><div class="stage">${pic}</div><div class="box ${paper?'paper':''}">${w?`<div class="who">${w}</div>`:''}<div id="vtxt" class="${w?'':'nar'}"></div><div class="nx">▼</div></div></div>`}
 function storyType(){const s=S.story;if(!s||s.done)return;if(s.tm)clearInterval(s.tm);let n=0;const e=$('#vtxt');if(!e)return;
  s.tm=setInterval(()=>{n+=1;e.textContent=s.full.slice(0,n);if(n>=s.full.length){clearInterval(s.tm);s.tm=null;s.done=true}},24)}
 function vLog(){
  const ks=Object.keys(SC).filter(k=>G.seen[k]);
- return `<div class="pn gold"><div class="ttl">冒險手記</div><div class="sub">經歷過的故事可以在這裡重新閱讀。（${ks.length} / ${Object.keys(SC).length}）</div><div class="list">${Object.keys(SC).map(k=>G.seen[k]?`<div class="row"><div class="gr">${SC[k].t}</div><button class="btn sm" onclick="story(SC['${k}'].f(),()=>go('log'))">閱讀</button></div>`:`<div class="row lock"><div class="gr">？？？</div></div>`).join('')}</div></div>
+ return `<div class="pn gold"><div class="ttl">冒險手記</div><div class="sub">經歷過的故事可以在這裡重新閱讀。（${ks.length} / ${Object.keys(SC).length}）</div><div class="list">${Object.keys(SC).map(k=>G.seen[k]?`<div class="row"><div class="gr">${SC[k].t}</div><button class="btn sm" onclick="story(SC['${k}'].f(),()=>go('log'),scCg('${k}'))">閱讀</button></div>`:`<div class="row lock"><div class="gr">？？？</div></div>`).join('')}</div></div>
  <div class="pn"><div class="ttl">羈絆故事</div><div class="list">${npcList().map(id=>[0,1].map(i=>G.flags['b'+(i+1)+id]?`<div class="row"><div class="gr">${NPC[id].n}　羈絆 ${i?'二':'一'}</div><button class="btn sm" onclick="story(NPC['${id}'].bond[${i}],()=>go('log'))">閱讀</button></div>`:`<div class="row lock"><div class="gr">${NPC[id].n}　羈絆 ${i?'二':'一'}　<span class="sub">好感 ${i?80:50}</span></div></div>`).join('')).join('')}</div></div>`}
 
 /* ============ 畫面切換 ============ */
