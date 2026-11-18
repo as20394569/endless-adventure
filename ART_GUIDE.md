@@ -48,6 +48,7 @@
 ## 第二部（背面的地圖）
 - 風簷棧道 `bg_d6`：`swift` 崖燕、`moth` 霧蛾、`vine` 纏板藤、`weather` 風化石俑、`gnaw` 啃樑獸（精英）、`boss6` 裂風鵰。新角色 `npc_sui` 穗（補板人）。規格見下方待畫清單。
 - 鹽階 `bg_d7`：`crust` 鹽殼蜥、`mirage` 蜃影、`slug` 鹵沼蛞蝓、`egret` 鹽田白鷺、`pillar` 鹽柱巨人（精英）、`boss7` 鹽魟。新角色 `npc_ro` 蘆（量鹽人）、`npc_sui_gp` 穗的阿公。
+- 石林牧道 `bg_d9`：`goat` 鹽角羊、`vulture` 啄骨鷲、`scorp` 石縫蠍、`rime` 霜燐、`bull` 孤角野牛（精英）、`boss9` 蔽星梟。新角色 `npc_di` 荻（牧人）。
 - 乾河床 `bg_d8`：`sandfish` 砂鰍、`jackal` 河床胡狼、`dust` 塵旋、`wheel` 棄轍、`camel` 迷途鹽駝（精英）、`boss8` 伏流蛇王。新角色 `npc_zao` 棗（守驛人）。
 
 ## 審圖標準（製作人指定，共 6 條，不合格一律退回 Codex 重畫，合格才換進遊戲）
@@ -105,6 +106,16 @@
 
 | `enemy_mimic` | 1:1　512×512 | 寶箱怪：普通木製寶箱（鐵包角、舊鎖頭），蓋子張開成一張大嘴，裡面是一圈白牙和一條長舌，箱底伸出四條短短的木腳。面向左。透明背景 | 各迷宮寶箱房偶爾出現（Lv.4 以上） |
 
+| `bg_d9` | 16:9　1280×720 | 石林牧道，無人物：灰白色風蝕石柱林立的高原（石柱比城牆高、上粗下細），石柱間有被羊蹄踩出的細路；中景一汪淺泉，泉邊岩石結著白色岩鹽。黃昏轉夜，天空一半橘一半深藍、已經看得到幾顆低低的星 | 迷宮畫面上方、第四章劇情背景 |
+| `npc_di` | 3:4　768×1024 | 荻：石林的牧人，三十出頭的男人。曬得很黑，臉用土色長布包住、只露出眼睛（布可以拉下一半露出下巴的短鬍渣）。羊毛氈外袍、皮綁腿，手持一根比人高的牧杖，腰間掛著投石索與一串木鈴。眼神安靜、警覺。半身、臉在上半部中央 | 劇情「數羊」「人，不要畫」立繪 |
+| `enemy_goat` | 1:1　512×512 | 鹽角羊：灰白長毛的野山羊，兩隻角捲成大圈、角上結著鹽，低頭準備衝撞。面向左。透明背景 | 石林牧道一般魔物 |
+| `enemy_vulture` | 1:1　512×512 | 啄骨鷲：禿頭、皺皮頸的大型鷲，黑褐羽毛，翅膀半張、鉤嘴張開。面向左。透明背景 | 石林牧道一般魔物 |
+| `enemy_scorp` | 1:1　512×512 | 石縫蠍：中型犬大小、灰色像石頭的蠍子，甲殼有風蝕紋路，尾針高舉。面向左。透明背景 | 石林牧道一般魔物 |
+| `enemy_rime` | 1:1　512×512 | 霜燐：夜裡飄浮的一團淡藍白色冷火，火焰裡有一張模糊、像在打哈欠的臉，邊緣結著細小的霜晶（本體就是冷火，不要另加光暈或背景） 。面向左。透明背景 | 石林牧道一般魔物 |
+| `enemy_bull` | 1:1　512×512 | 孤角野牛：巨大、肩高過人的黑褐野牛，另一隻角斷了、只剩額頭正中一根粗長的角，鼻孔噴氣、前蹄刨地。面向左。透明背景 | 石林牧道精英 |
+| `enemy_boss9` | 1:1　512×512 | 蔽星梟：翼展極寬的巨大貓頭鷹，羽毛是深藍近黑、帶細小銀白斑點（像夜空），兩隻金色大眼；爪子抓著一根烙了印的舊木樁；雙翼張開。面向左。透明背景 | 石林牧道迷宮之主 |
+| `cg_p2_d9` | 3:4　768×1024 | 天亮後的石林泉邊。荻蹲著，用沾了鹽的手指在攤開的地圖角落抹上一點白（主角視角，地圖在畫面下方，泉邊那一塊特意留白）；身後羊群低頭喝水，遠處石柱頂上排著一排舊木樁 | 「人，不要畫」結尾 |
+
 ## 戰鬥立繪（側面舞台用，2026-11-19 追加）
 側面視角、**全身、面向右**（魔物在右邊），透明背景，600×800，腳底對齊畫面下緣。長相、服裝與一般立繪完全一致。
 每個角色 4 張：`bt_<鍵>`（待機，武器備戰）、`bt_<鍵>_atk`（攻擊揮出／射出）、`bt_<鍵>_cast`（施法／舉手）、`bt_<鍵>_hurt`（受傷後仰）。
@@ -113,4 +124,4 @@
 
 ## 魔物攻擊圖（2026-11-19 追加）
 每隻魔物一張 `enemy_<鍵>_atk`：與 `enemy_<鍵>` 同一隻、同配色同比例，**面向左**、攻擊瞬間（撲咬、揮擊、噴吐、施法），動作幅度大、輪廓清楚。1:1 512×512 透明背景，身體位置與待機圖大致對齊（遊戲會直接換圖）。可選：`enemy_<鍵>_hurt`（受擊後仰）。
-鍵：slime bat shroom snake golem boss1 ghost crab fish frog croc boss2 lizard goblin spark beetle forge boss3 tome wolf ink bknight banshee boss4 puppet eye meteor astro twins boss5 swift vine moth weather gnaw boss6 crust mirage slug egret pillar boss7 sandfish jackal dust wheel camel boss8 mimic
+鍵：slime bat shroom snake golem boss1 ghost crab fish frog croc boss2 lizard goblin spark beetle forge boss3 tome wolf ink bknight banshee boss4 puppet eye meteor astro twins boss5 swift vine moth weather gnaw boss6 crust mirage slug egret pillar boss7 sandfish jackal dust wheel camel boss8 mimic goat vulture scorp rime bull boss9
