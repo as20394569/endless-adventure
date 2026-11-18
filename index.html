@@ -246,6 +246,34 @@ table.st td:first-child{text-align:left;color:var(--mt)}
 .mats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:16px}
 @media(min-width:900px){.mats{grid-template-columns:1fr 1fr 1fr}}
 .card.lock{opacity:.5}
+/* 受擊反應・骰子・識別度 */
+.bar>i{position:relative;z-index:1}
+.bar>b{position:absolute;left:0;top:0;bottom:0;background:#fff;z-index:0}
+.bar.low>i{background:#ff5d6c}
+.en.ko .art{animation:koA 1.15s steps(12) var(--kd,0ms) both}
+.en.ko .nm,.en.ko .bar,.en.ko .hpn{visibility:hidden}
+@keyframes koA{0%{filter:none;transform:none;opacity:1}10%{filter:brightness(0) invert(1)}20%{filter:none}30%{filter:brightness(0) invert(1)}40%{filter:none;transform:none;opacity:1}100%{filter:grayscale(1) brightness(.35);transform:translateY(16%) scaleY(.8);opacity:0}}
+.en.dead{visibility:hidden}
+.al.low{border-color:#ff5d6c;animation:lowp 1s steps(2) infinite}
+@keyframes lowp{50%{box-shadow:inset 0 0 0 3px #ff5d6c}}
+.al.low small{color:#ffb0b8}
+.al.dead{opacity:1}.al.dead .art{filter:grayscale(1) brightness(.5)}.al.dead .gr{opacity:.45}
+.al.ko .art{animation:alko .4s steps(4) calc(var(--kd,0ms) + 450ms) both}.al.ko .gr{animation:alko2 .4s steps(4) calc(var(--kd,0ms) + 450ms) both}
+.al.ko:after{animation:stampIn .35s steps(4) calc(var(--kd,0ms) + 550ms) both}
+@keyframes alko{from{filter:none}to{filter:grayscale(1) brightness(.5)}}@keyframes alko2{from{opacity:1}to{opacity:.45}}
+@keyframes stampIn{0%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scale(2.4)}100%{opacity:1;transform:translate(-50%,-50%) rotate(-8deg) scale(1)}}
+.al.dead:after{content:"戰鬥不能";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg);border:2px solid #ff5d6c;color:#ff5d6c;background:rgba(0,0,0,.8);padding:0 8px;font-size:15px;white-space:nowrap;z-index:3}
+.dzw{position:absolute;left:2%;top:2%;z-index:9;pointer-events:none;filter:drop-shadow(2px 2px 0 #000) drop-shadow(-1px -1px 0 #000)}
+.dz{width:40px;height:44px;display:flex;align-items:center;justify-content:center;font-size:19px;color:#10184a;background:linear-gradient(160deg,#fff 0,#dfe5ff 55%,#aab4e8 100%);clip-path:polygon(50% 0,96% 25%,96% 75%,50% 100%,4% 75%,4% 25%)}
+.dz.c{background:linear-gradient(160deg,#fff7c8,#ffd84a 60%,#d99a1a);color:#4a2a00}
+.dz.m{background:linear-gradient(160deg,#ffd6d6,#ff5d6c 60%,#a01828);color:#fff}
+.al .dzw{left:-8px;top:-12px}.al .dz{width:32px;height:35px;font-size:16px}
+.diceb{position:absolute;left:6px;top:6px;z-index:7}
+.pop{font-size:30px;z-index:8;text-shadow:2px 0 0 #000,-2px 0 0 #000,0 2px 0 #000,0 -2px 0 #000,3px 3px 0 #000;animation-name:pp2}
+@keyframes pp2{0%{opacity:0;transform:translate(-50%,8px) scale(.4)}14%{opacity:1;transform:translate(-50%,-10px) scale(1.35)}28%{transform:translate(-50%,-4px) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-46px) scale(1)}}
+.pop.d{color:#fff}.pop.m{color:#e6ccff}.pop.w{color:#ffa040;font-size:36px}.pop.r{color:#a8b0c8;font-size:24px}.pop.c{color:var(--gd);font-size:42px}.pop.h{color:#7dffb0}.pop.s{color:#bfe0ff;font-size:18px}.pop.p{color:#d39bff}.pop.x{color:#c8ccd8;font-size:22px}
+.pop.lb{font-size:14px;color:#000;background:var(--gd);padding:0 6px;text-shadow:none;border:2px solid #000}
+.pop.lb.w{background:#ffa040}.pop.lb.r{background:#a8b0c8}.pop.lb.x{background:#c8ccd8}
 </style>
 </head>
 <body>
@@ -357,7 +385,9 @@ function sfx(k){if(MUTE||!AC||AC.state!=='running')return;const t=AC.currentTime
  dice:()=>{for(let i=0;i<3;i++)tone(500+i*90,t+i*.06,.04,'square',.02)},
  lvup:()=>seq(['C5','E5','G5','C6','E6'],t,.08,'square',.03),
  win:()=>seq(['G4','C5','E5','G5','E5','G5','C6'],t,.11,'square',.03),
- lose:()=>seq(['E4','D4','C4','B3','A3'],t,.2,'triangle',.04)
+ lose:()=>seq(['E4','D4','C4','B3','A3'],t,.2,'triangle',.04),
+ ko:()=>{noise(t,.3,.05,250);tone(420,t,.32,'square',.03,55)},
+ dodge:()=>{noise(t,.08,.03,5000);tone(700,t,.1,'triangle',.02,1100)}
  })[k]||(()=>{}))()}catch(e){}}
 const TR={
  title:{bpm:100,l:"E4 _ B4 _ A4 G4 F#4 _ G4 _ E4 _ D4 _ E4 _ C4 _ G4 _ F#4 E4 D4 _ E4 _ _ _ B3 _ - -",b:"E2 - B2 - E2 - B2 - C3 - G2 - D3 - A2 - C3 - G2 - D3 - A2 - E2 - B2 - E2 - - -"},
@@ -1613,7 +1643,7 @@ function render(){
  $('#main').style.padding=(S.scr==='title')?'0':'';
  if(S.scr==='battle')afterBattleRender();if(S.scr==='story')storyType();updBgm();
 }
-function pbar(cls,v,m){return `<div class="bar ${cls}"><i style="width:${clamp(v/m*100,0,100)}%"></i></div>`}
+function pbar(cls,v,m,g){const p=clamp(v/m*100,0,100);return `<div class="bar ${cls} ${cls==='h'&&v>0&&v<m*.3?'low':''}">${g!=null&&g>v?`<b style="width:${clamp(g/m*100,0,100)}%"></b>`:''}<i style="width:${p}%"></i></div>`}
 function vRight(){
  return `<div class="ttl">隊伍</div>`+G.party.map(id=>{const c=G.chars[id],s=statOf(id);return `<div class="row" style="margin-bottom:12px">${face(id,'av')}<div class="gr"><b>${nameOf(id)}</b> <span class="sub">Lv.${c.lv} ${clsName(id)}</span>${pbar('h',c.hp,s.mhp)}${pbar('m',c.mp,s.mmp)}<div class="sub">${c.hp}/${s.mhp}　${c.mp}/${s.mmp}</div></div></div>`}).join('')
  +`<div class="ttl" style="margin-top:18px">羊皮紙地圖</div><div class="sub">已踏破 ${cleared()} / 5 座迷宮</div><div class="map">${DG.slice(0,5).map(d=>`<i class="${G.clear[d.id]?'ok':''}"></i>`).join('')}</div>${G.best?`<div class="sub" style="margin-top:8px">無盡迴廊最深：第 ${G.best} 層</div>`:''}`}
@@ -2028,7 +2058,7 @@ function nextTurn(){
  if(!B.q.length){B.rd++;B.q=[...B.al,...B.en].filter(alive).map(u=>[u,u.spd+R(0,4)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0])}
  const u=B.q.shift();if(!alive(u))return nextTurn();
  u.guard=false;B.cur=u;
- if(u.st.poison>0){const d=Math.max(1,Math.round(u.mhp*.06));u.hp=Math.max(0,u.hp-d);u.st.poison--;B.fx.push({uid:u.uid,t:'毒 -'+d,c:'d'});blog(`${u.n} 受到毒的侵蝕，失去 ${d} 生命`);if(!alive(u)){blog(`${u.n} 倒下了`);render();return setTimeout(nextTurn,600)}}
+ if(u.st.poison>0){const d=Math.max(1,Math.round(u.mhp*.06));u.hp=Math.max(0,u.hp-d);u.st.poison--;B.fx.push({uid:u.uid,fx:'poison'});B.fx.push({uid:u.uid,t:'-'+d,c:'p',sh:1,r:.06,tint:'#c070ff'});if(u.hp<=0){u.koT=Date.now()+300;B.fx.push({uid:u.uid,ko:1})}blog(`${u.n} 受到毒的侵蝕，失去 ${d} 生命`);if(!alive(u)){blog(`${u.n} 倒下了`);render();return setTimeout(nextTurn,600)}}
  if(u.st.stun>0){u.st.stun--;blog(`${u.n} 動彈不得！`);B.menu='wait';render();return setTimeout(nextTurn,650)}
  if(u.ally){if(G.auto){B.menu='wait';render();setTimeout(()=>{if(B&&B.cur===u&&B.menu==='wait')allyAuto(u)},window.FAST?1:750)}else{B.menu='main';render()}}else{B.menu='wait';render();setTimeout(()=>enemyAct(u),window.FAST?1:600)}}
 function tick(u){for(const k of['atkUp','defUp','defDn','atkDn'])if(u.st[k]>0)u.st[k]--}
@@ -2039,39 +2069,54 @@ function enemyAct(u){
  if(s.ty==='heal')return exec(u,{n:s.n,ty:'heal',fix:s.pow,tg:'self',fx:'heal',mp:0},u);
  if(s.ty==='buff')return exec(u,{n:s.n,ty:'buff',tg:s.self?'self':'ea',eff:s.eff,fx:s.fx||(s.self?'guard':'roar'),mp:0},null);
  exec(u,{n:s.n,ty:s.ty,pow:s.pow,tg:s.all?'ea':'e1',eff:s.eff,fx:s.fx,el:s.el,drain:s.drain,mp:0},pick(ts))}
+/* ============ 骰子規則 ============ */
+function evaOf(u,x,sk){if(sk.ty==='mag'||x.st.stun>0)return 2;const r=(x.spd-u.spd)/Math.max(1,u.spd);return clamp(2+Math.round(r*5),2,6)+(x.guard?2:0)}
+function critLine(u,sk){return Math.max(14,20-Math.min(6,Math.floor(u.luk/10))-(sk.cr||0))}
+const TINT={fire:'#ff8a2a',flame:'#ff8a2a',ice:'#8fd8ff',frost:'#8fd8ff',poison:'#c070ff',spore:'#c0d870',spit:'#7ed957',holy:'#ffe680',dark:'#b070ff',beam:'#b070ff',gaze:'#c58bff',water:'#5ab0ff',ink:'#8890a0',star:'#ffb040'};
+function diceHelp(){modal(`<div class="ttl">🎲 戰鬥骰子規則</div><div class="list">
+<div class="row"><div class="gr">每次攻擊，<b class="gdtx">每個目標各擲一顆 d20</b>。骰子會出現在目標身上。</div></div>
+<div class="row"><div class="gr"><span class="rdtx">自然 1</span>：一定失手。<br><span class="gdtx">自然 20</span>：一定命中而且爆擊。</div></div>
+<div class="row"><div class="gr"><b>命中</b>：骰值 ≥ 目標的<b>閃避值</b>才打得中。閃避值 2～6，目標比攻擊者越快就越高；目標防禦中 +2。<br><span class="mt">魔法攻擊不會被閃避；暈眩中的目標無法閃避。</span></div></div>
+<div class="row"><div class="gr"><b>爆擊</b>：骰值 ≥ 爆擊線就爆擊（傷害 ×1.7）。爆擊線 = 20 − 幸運÷10 − 技能加成，最低 14。</div></div>
+<div class="row"><div class="gr"><b>傷害浮動</b>：骰值越高打越痛，1 點約 ×0.87，20 點約 ×1.15。</div></div>
+<div class="row"><div class="gr"><b>逃跑</b>：d20 + 敏捷÷6 ≥ 11 就成功。首領戰無法逃跑。</div></div>
+<div class="row"><div class="gr"><b>迷宮檢定</b>：d20 + 能力修正 ≥ 難度。自然 20 必定成功，自然 1 必定失敗。</div></div>
+</div><div class="sub" style="margin-top:8px">骰子顏色：<span class="gdtx">金＝爆擊</span>　白＝命中　<span class="rdtx">紅＝落空</span></div>`)}
+function koSt(u){if(alive(u)||!u.koT)return '';const e=Date.now()-u.koT;return e<1200?`--kd:${-e}ms`:''}
+function koCls(u){if(alive(u))return '';return u.koT&&Date.now()-u.koT<1200?'ko':'dead'}
 function exec(u,sk,t,item){
  B.menu='wait';if(sk.mp)u.mp-=sk.mp;
  const basic=sk===SK.atk||!!sk.basic;const fxk=item?(sk.ty==='heal'?'heal':'buff'):sk.fx||(basic?(u.ally?ATKFX[clsOf(u.id)]:'claw'):sk.ty==='heal'?'heal':sk.ty==='buff'?'buff':'claw');let snd=FXS[fxk]||'hit',anyCrit=false,anyHit=false;
- if(!basic&&!item&&sk.n)B.cut={t:sk.n,sub:u.n,foe:!u.ally,art:u.ally?artKey(u.id):u.key};
+ if(!basic&&!item&&sk.n)B.cut={t:sk.n,sub:u.n,foe:!u.ally,art:u.ally?artKey(u.id):u.key};B.act={uid:u.uid,ally:u.ally,hop:sk.ty==='phys'||sk.ty==='mag'};
  const foes=u.ally?B.en:B.al,pals=u.ally?B.al:B.en;
  const tg=sk.tg==='e1'?[t]:sk.tg==='ea'?foes.filter(alive):sk.tg==='a1'?[t]:sk.tg==='aa'?(sk.rev?pals:pals.filter(alive)):[u];
  blog(item?`${u.n} 使用了 ${item}`:basic?`${u.n} 的攻擊！`:`${u.n} 使出「${sk.n}」！`);
  for(const x of tg){
   if(sk.ty==='phys'||sk.ty==='mag'){
-   const roll=d20();
-   if(roll===1){B.fx.push({uid:x.uid,t:'MISS',c:'s'});snd='miss';blog(`🎲${roll}　沒有命中 ${x.n}`);continue}
-   const crit=roll>=20-Math.min(6,Math.floor(u.luk/10))-(sk.cr||0);
+   const roll=d20(),ev=evaOf(u,x,sk),ct=critLine(u,sk),hit=roll===20||(roll!==1&&roll>=ev),crit=hit&&(roll===20||roll>=ct);
+   B.fx.push({uid:x.uid,dz:roll,t:crit?'c':hit?'n':'m'});
+   if(!hit){B.fx.push({uid:x.uid,t:roll===1?'失手':'閃避',c:'x',miss:1});snd=roll===1?'miss':'dodge';blog(roll===1?`🎲1　大失手！沒打中 ${x.n}`:`🎲${roll}（閃避 ${ev}）　${x.n} 閃開了`);continue}
    const a=(sk.ty==='mag'?u.mag:u.atk)*(u.st.atkUp>0?1.3:1)*(u.st.atkDn>0?.75:1);
    const d=x.def*(x.st.defUp>0?1.4:1)*(x.st.defDn>0?.6:1)*(sk.ty==='mag'?.7:1);
-   let dm=(a*sk.pow-d*.5)*(.9+Math.random()*.2);
+   let dm=(a*sk.pow-d*.5)*(.85+roll*.015);
    if(u.ally&&sk.mp&&G.run&&G.run.mod==='mana')dm*=1.2;
    let em=0;if(sk.el&&x.wk&&x.wk.includes(sk.el)){dm*=1.5;em=1}else if(sk.el&&x.rs&&x.rs.includes(sk.el)){dm*=.6;em=-1}
    if(crit)dm*=1.7;if(x.guard)dm*=.5;dm=Math.max(1,Math.round(dm));
-   x.hp=Math.max(0,x.hp-dm);anyHit=true;if(crit)anyCrit=true;B.fx.push({uid:x.uid,fx:fxk,from:u.uid});if(em)B.fx.push({uid:x.uid,t:em>0?'弱點！':'抵抗',c:'s'});B.fx.push({uid:x.uid,t:dm+(crit?'!':''),c:crit?'c':'d',sh:1});if(sk.drain){const hh=Math.round(dm*.5);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
+   const was=x.hp;x.hp=Math.max(0,x.hp-dm);anyHit=true;if(crit)anyCrit=true;const tn=TINT[sk.el]||TINT[fxk]||'#fff';B.fx.push({uid:x.uid,fx:fxk,from:u.uid});if(crit)B.fx.push({uid:x.uid,t:'CRITICAL',c:'lb'});if(em)B.fx.push({uid:x.uid,t:em>0?'WEAK':'RESIST',c:'lb '+(em>0?'w':'r')});B.fx.push({uid:x.uid,t:String(dm),c:crit?'c':em>0?'w':em<0?'r':sk.ty==='mag'?'m':'d',sh:1,r:dm/x.mhp,crit,tint:tn});if(was>0&&x.hp<=0){x.koT=Date.now()+480;B.fx.push({uid:x.uid,ko:1})}if(sk.drain){const hh=Math.round(dm*.5);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
    blog(`🎲${roll}　${crit?'爆擊！':''}${em>0?'命中弱點！':em<0?'被抵抗了…':''}${x.n} 受到 ${dm} 傷害${x.hp<=0?'，倒下了！':''}`);
    if(sk.steal&&u.ally){const g=giveGold(10+runL()*3);blog(`順手摸走了 ${g} 金`)}
   }else if(sk.ty==='heal'){
    if(!alive(x)&&!sk.rev)continue;
    const h=Math.round((sk.fix?x.mhp*sk.fix:u.mag*sk.pow+x.mhp*.08)*(.95+Math.random()*.1));
-   x.hp=Math.min(x.mhp,x.hp+h);B.fx.push({uid:x.uid,fx:'heal',from:u.uid});B.fx.push({uid:x.uid,t:'+'+h,c:'h'});
+   if(x.hp<=0)x.koT=0;x.hp=Math.min(x.mhp,x.hp+h);B.fx.push({uid:x.uid,fx:'heal',from:u.uid});B.fx.push({uid:x.uid,t:'+'+h,c:'h'});
   }else if(sk.ty==='mpheal'){const h=Math.round(x.mmp*sk.fix);x.mp=Math.min(x.mmp,x.mp+h);B.fx.push({uid:x.uid,t:'魔力 +'+h,c:'s'})}
   if(sk.eff&&alive(x)&&Math.random()<sk.eff.ch&&!(x.boss&&sk.eff.k==='stun'&&Math.random()<.6)){
    x.st[sk.eff.k]=Math.max(x.st[sk.eff.k]||0,sk.eff.t+(x===u?1:0));if(sk.ty==='buff')B.fx.push({uid:x.uid,from:u.uid,fx:['buff','guard','smoke','debuff','roar','bell','wave'].includes(fxk)?fxk:/Up/.test(sk.eff.k)?'buff':'debuff'});
    B.fx.push({uid:x.uid,t:{stun:'暈眩',poison:'中毒',atkUp:'攻擊↑',defUp:'防禦↑',defDn:'防禦↓',atkDn:'攻擊↓'}[sk.eff.k],c:'s'})}
  }
  if(sk.ty==='heal')blog(`生命回復了`);
- if(anyHit&&(anyCrit||sk.tg==='ea'||sk.big))B.quake=1;sfx(snd);if(anyHit&&snd!=='hit'&&snd!=='miss')setTimeout(()=>sfx(anyCrit?'crit':'hit'),130);else if(anyCrit)sfx('crit');
- tick(u);render();setTimeout(nextTurn,window.FAST?1:(basic?950:1350))}
+ if(anyHit&&(anyCrit||sk.tg==='ea'||sk.big))B.quake=1;B.snd={s:snd,hit:anyHit,crit:anyCrit};
+ tick(u);render();setTimeout(nextTurn,window.FAST?1:(basic?1250:1650))}
 function curU(){return B.cur}
 function cmdAtk(){B.pend={sk:SK.atk};needE()}
 function cmdSkill(){B.menu='skill';render()}
@@ -2079,8 +2124,8 @@ function cmdItem(){B.menu='item';render()}
 function cmdGuard(){const u=curU();u.guard=true;u.mp=Math.min(u.mmp,u.mp+Math.round(u.mmp*.08));blog(`${u.n} 擺出防禦架式`);B.menu='wait';tick(u);render();setTimeout(nextTurn,500)}
 function cmdFlee(){
  if(B.o.boss){toast('無法從迷宮之主面前逃走！');return}
- const r=d20(),u=curU();blog(`🎲${r}　${u.n} 試圖逃跑……`);
- if(r+Math.floor(u.spd/6)>=11){syncBack();B=null;toast('成功逃脫');return advance()}
+ const r=d20(),u=curU(),ok=r!==1&&(r===20||r+Math.floor(u.spd/6)>=11);B.fx.push({uid:u.uid,dz:r,t:ok?'c':'m'});blog(`🎲${r}＋${Math.floor(u.spd/6)}（需 11）　${u.n} 試圖逃跑……`);
+ if(ok){B.menu='wait';blog('成功逃脫！');render();setTimeout(()=>{if(!B)return;syncBack();B=null;toast('成功逃脫');advance()},900);return}
  blog('逃跑失敗！');B.menu='wait';render();setTimeout(nextTurn,600)}
 function cmdBack(){B.menu='main';B.pend=null;render()}
 function pickSkill(k){const s=SK[k],u=curU();if(u.mp<s.mp)return;B.pend={sk:s};if(s.tg==='e1')needE();else if(s.tg==='a1'){B.menu='tgA';render()}else exec(u,s,null)}
@@ -2100,9 +2145,9 @@ function vBattle(){
  else if(m==='tgE'||m==='tgA'||m==='tgD')cmd=`<div class="sub gdtx" style="margin-bottom:4px">請點選目標</div><div class="cmd two"><button class="btn" onclick="cmdBack()">取消</button></div>`;
  else if(m==='end')cmd=B.endHtml;
  else cmd=`<div class="sub" style="text-align:center;padding:14px">${G.auto?'自動戰鬥中……':'……'}</div>`;
- return `<div class="bt"><div class="fld n${B.en.length}">${art('bg_'+d.id,'','bg')}${m==='end'?'':autoBtn('autob')}${B.en.map((e,i)=>`<div class="en e${i} ${e.boss?'bs':''} ${alive(e)?'':'dead'} ${m==='tgE'&&alive(e)?'tg':''}" data-u="${e.uid}" onclick="enemyTap(${e.uid})">${art(e.key,e.e,'')}<div class="nm">${e.n} <small>Lv.${e.lv}</small> ${stTxt(e)}</div>${pbar('h',e.hp,e.mhp)}<div class="hpn">${e.hp}/${e.mhp}</div></div>`).join('')}</div>
+ return `<div class="bt"><div class="fld n${B.en.length}">${art('bg_'+d.id,'','bg')}${m==='end'?'':autoBtn('autob')}<button class="btn sm diceb" onclick="event.stopPropagation();diceHelp()">🎲 規則</button>${B.en.map((e,i)=>`<div class="en e${i} ${e.boss?'bs':''} ${koCls(e)} ${m==='tgE'&&alive(e)?'tg':''}" style="${koSt(e)}" data-u="${e.uid}" onclick="enemyTap(${e.uid})">${art(e.key,e.e,'')}<div class="nm">${e.n} <small>Lv.${e.lv}</small> ${stTxt(e)}</div>${pbar('h',e.hp,e.mhp,e.gh)}<div class="hpn">${e.hp}/${e.mhp}</div></div>`).join('')}</div>
  <div class="blog">${B.log.slice(-3).map(l=>`<div>${l}</div>`).join('')}</div>
- <div class="als">${B.al.map(a=>`<div class="al ${a===u&&m!=='wait'&&m!=='end'?'cur':''} ${alive(a)?'':'dead'} ${(m==='tgA'&&alive(a))||(m==='tgD'&&!alive(a))?'tg':''}" data-u="${a.uid}" onclick="tgt(${a.uid})">${face(a.id,'av')}<div class="gr"><div class="nm">${a.n}</div>${pbar('h',a.hp,a.mhp)}${pbar('m',a.mp,a.mmp)}<small>${a.hp}/${a.mhp}　${a.mp}/${a.mmp}</small><div>${stTxt(a)}</div></div></div>`).join('')}</div>
+ <div class="als">${B.al.map(a=>`<div class="al ${a===u&&m!=='wait'&&m!=='end'?'cur':''} ${alive(a)?(a.hp<a.mhp*.3?'low':''):'dead '+koCls(a)} ${(m==='tgA'&&alive(a))||(m==='tgD'&&!alive(a))?'tg':''}" style="${koSt(a)}" data-u="${a.uid}" onclick="tgt(${a.uid})">${face(a.id,'av')}<div class="gr"><div class="nm">${a.n}</div>${pbar('h',a.hp,a.mhp,a.gh)}${pbar('m',a.mp,a.mmp)}<small>${a.hp}/${a.mhp}　${a.mp}/${a.mmp}</small><div>${stTxt(a)}</div></div></div>`).join('')}</div>
  <div>${cmd}</div></div>`}
 const rnd=(a,b)=>a+Math.random()*(b-a);
 function fxE(p,css){const d=document.createElement('div');d.style.cssText='position:absolute;pointer-events:none;z-index:5;'+css;p.appendChild(d);return d}
@@ -2168,13 +2213,42 @@ const W='#fff',FXR={
  gaze(p,c){fxProj(c.from,p,'width:60px;height:5px;margin:-2px -30px;background:linear-gradient(90deg,transparent,#c58bff,#fff)',160,0);FB.ring(p,'#c58bff',160,3,4);FB.ring(p,W,240,2,5);FB.flash(p,'rgba(160,90,255,.45)',160);return 160},
  beam(p,c){for(let i=0;i<3;i++)fxProj(c.from,p,'width:70px;height:7px;margin:-3px -35px;background:linear-gradient(90deg,transparent,#a05cff,#fff)',150,i*70);FB.star(p,'#a05cff',170,1.2);FB.burst(p,10,['#a05cff',W],56,6,190);return 170}
 };
+function fxWrap(el){const foe=el.classList.contains('en'),t=foe?(el.querySelector('.art')||el):el,w=t.offsetWidth||100,h=t.offsetHeight||100,k=clamp(Math.min(w,h)/115,1,2.8),d=document.createElement('div');
+ d.style.cssText=`position:absolute;left:50%;top:50%;width:${w/k}px;height:${h/k}px;margin:${-h/k/2}px 0 0 ${-w/k/2}px;transform:scale(${k});pointer-events:none;z-index:6;filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 3px rgba(0,0,0,.85))`;t.appendChild(d);setTimeout(()=>d.remove(),1800);return d}
+function lunge(a){const el=document.querySelector(`[data-u="${a.uid}"]`);if(!el)return;
+ if(a.ally)el.animate([{transform:'none'},{transform:'translateY(-14px) scale(1.04)',offset:.4},{transform:'none'}],{duration:280,easing:'steps(6)'});
+ else{const sp=el.querySelector('.art');sp&&sp.animate([{transform:'none',filter:'none'},{transform:'translate(-8px,-6px) scale(.96)',offset:.25},{transform:'translate(-22px,20px) scale(1.1)',filter:'brightness(1.4)',offset:.55},{transform:'none',filter:'none'}],{duration:340,easing:'steps(7)'})}}
+function dieRoll(el,v,t,dl){const w=document.createElement('div'),d=document.createElement('div');w.className='dzw';d.className='dz';d.textContent=R(1,20);w.appendChild(d);el.appendChild(w);const iv=setInterval(()=>{d.textContent=R(1,20)},45);
+ w.animate([{transform:'translateY(-26px) rotate(-200deg) scale(.4)',opacity:0},{transform:'translateY(5px) rotate(25deg) scale(1.1)',opacity:1,offset:.7},{transform:'none',opacity:1}],{duration:260,delay:dl,easing:'steps(6)',fill:'both'});
+ setTimeout(()=>{clearInterval(iv);d.textContent=v;d.classList.add(t);w.animate([{transform:'scale(1.4)'},{transform:'scale(1)'}],{duration:180,easing:'steps(3)'})},dl+260);setTimeout(()=>{clearInterval(iv);w.remove()},dl+1300)}
+function reactHit(el,f){const foe=el.classList.contains('en'),r=Math.min(1,f.r||0),kk=Math.min(32,(6+r*46)*(f.crit?1.6:1)),tn=f.tint||'#fff';
+ if(foe){const sp=el.querySelector('.art');if(!sp)return;
+  sp.animate([{transform:'none',filter:'none'},{transform:`translate(${kk*.7}px,${-kk*.45}px) scale(${1+kk/220},${1-kk/150})`,filter:'brightness(0) invert(1)',offset:.1},{transform:`translate(${kk}px,${-kk*.35}px) scale(1)`,filter:`drop-shadow(0 0 12px ${tn}) brightness(1.7)`,offset:.3},{transform:`translate(${-kk*.25}px,0)`,filter:`drop-shadow(0 0 6px ${tn})`,offset:.62},{transform:'none',filter:'none'}],{duration:f.crit?600:460,easing:'steps(9)'});
+  if(f.crit){const fld=document.querySelector('.fld');fld&&fxA(fxE(fld,'inset:0;background:#fff;z-index:6'),[{opacity:0},{opacity:.5,offset:.12},{opacity:0}],200,0)}}
+ else{el.animate([{transform:'none'},{transform:`translate(${-kk*.35}px,${kk*.5}px)`,offset:.12},{transform:`translate(${kk*.35}px,${kk*.2}px)`,offset:.3},{transform:`translate(${-kk*.18}px,0)`,offset:.55},{transform:'none'}],{duration:480,easing:'steps(8)'});
+  fxA(fxE(el,`inset:0;background:${tn==='#fff'?'#ff2a3a':tn};z-index:6;mix-blend-mode:screen`),[{opacity:0},{opacity:.7,offset:.12},{opacity:0}],420,0);
+  const av=el.querySelector('.art.av');av&&av.animate([{filter:'none',transform:'none'},{filter:'brightness(0) invert(1)',transform:'translate(-3px,2px) rotate(-8deg)',offset:.08},{filter:'sepia(1) saturate(6) hue-rotate(-35deg)',transform:'translate(-3px,2px) rotate(-7deg)',offset:.2},{filter:'sepia(1) saturate(4) hue-rotate(-35deg)',transform:'translate(-2px,1px) rotate(-4deg)',offset:.75},{filter:'none',transform:'none'}],{duration:760,easing:'steps(8)'});
+  if(r>.22||f.crit){const bt=document.querySelector('.bt');bt&&fxA(fxE(bt,'inset:0;z-index:9;box-shadow:inset 0 0 80px 26px rgba(255,30,40,.72)'),[{opacity:0},{opacity:1,offset:.18},{opacity:0}],560,0);const fld=document.querySelector('.fld');fld&&fld.animate([{transform:'none'},{transform:'translate(-6px,4px)',offset:.25},{transform:'translate(5px,-3px)',offset:.5},{transform:'none'}],{duration:320,easing:'steps(6)'})}}}
+function reactMiss(el){const foe=el.classList.contains('en'),t=foe?el.querySelector('.art'):el;t&&t.animate([{transform:'none',opacity:1},{transform:`translateX(${foe?28:-16}px)`,opacity:.55,offset:.35},{transform:`translateX(${foe?28:-16}px)`,opacity:.55,offset:.6},{transform:'none',opacity:1}],{duration:440,easing:'steps(6)'})}
+function reactKO(el){const w=fxWrap(el);FB.burst(w,16,['#fff','#c8ccd8','#6a6f80','#ffd84a'],70,8,0,20);FB.ring(w,'#fff',0,4,6);FB.ring(w,'#ffd84a',120,3,7)}
 function afterBattleRender(){
- if(!B)return;const fx=B.fx;B.fx=[];const cnt={},dly={},fld=document.querySelector('.fld'),q=id=>document.querySelector(`[data-u="${id}"]`);
- if(B.cut&&fld){const c=document.createElement('div'),f=ART[B.cut.art];c.className='bnr'+(B.cut.foe?' foe':'');c.innerHTML=(f?`<div class="ba" style="background-image:url(assets/${f})"></div>`:'')+`<div class="bx"><small>${B.cut.sub}</small><b>${B.cut.t}</b></div>`;fld.appendChild(c);const w=B.cut.foe?'100%':'-100%';c.animate([{transform:`translateX(${w})`,opacity:0},{transform:'none',opacity:1,offset:.14},{transform:'none',opacity:1,offset:.84},{transform:`translateX(${B.cut.foe?'-30%':'30%'})`,opacity:0}],{duration:1050,easing:'steps(14)',fill:'both'}).onfinish=()=>c.remove();B.cut=null}
- if(B.quake&&fld){setTimeout(()=>fld.classList.add('quake'),160);B.quake=0}
- fx.forEach(f=>{const el=q(f.uid);if(!el)return;
-  if(f.fx){let d=0;try{d=(FXR[f.fx]||FXR.impact)(el,{from:q(f.from)})||0}catch(e){}dly[f.uid]=Math.max(dly[f.uid]||0,d);return}
-  const p=document.createElement('div'),d=dly[f.uid]||0;p.className='pop '+f.c;p.textContent=f.t;cnt[f.uid]=(cnt[f.uid]||0)+1;p.style.top=(10+cnt[f.uid]*16)+'%';p.style.animationDelay=d+'ms';p.style.animationFillMode='both';el.appendChild(p);setTimeout(()=>p.remove(),900+d);if(f.sh)setTimeout(()=>el.classList.add('shake','flash'),d)})}
+ if(!B)return;const fx=B.fx;B.fx=[];const act=B.act,snd=B.snd;B.act=null;B.snd=null;const cnt={},dly={},fld=document.querySelector('.fld'),q=id=>document.querySelector(`[data-u="${id}"]`);
+ if(B.cut&&fld){const c=document.createElement('div'),f=ART[B.cut.art];c.className='bnr'+(B.cut.foe?' foe':'');c.innerHTML=(f?`<div class="ba" style="background-image:url(assets/${f})"></div>`:'')+`<div class="bx"><small>${B.cut.sub}</small><b>${B.cut.t}</b></div>`;fld.appendChild(c);const w=B.cut.foe?'100%':'-100%';c.animate([{transform:`translateX(${w})`,opacity:0},{transform:'none',opacity:1,offset:.14},{transform:'none',opacity:1,offset:.84},{transform:`translateX(${B.cut.foe?'-30%':'30%'})`,opacity:0}],{duration:1050,easing:'steps(14)',fill:'both'}).onfinish=()=>c.remove();
+  const bg=fld.querySelector('.art.bg'),dm=document.createElement('div');dm.style.cssText='position:absolute;inset:0;background:#000;pointer-events:none';bg&&bg.nextSibling?fld.insertBefore(dm,bg.nextSibling):fld.prepend(dm);fxA(dm,[{opacity:0},{opacity:.5,offset:.15},{opacity:.5,offset:.8},{opacity:0}],1150,0);B.cut=null}
+ const hop=act&&act.hop,T0=hop?160:0,hasDz=fx.some(f=>f.dz!=null),T1=T0+(hasDz?280:0);
+ if(hop)lunge(act);if(hasDz)setTimeout(()=>sfx('dice'),T0);
+ if(B.quake&&fld){setTimeout(()=>fld.classList.add('quake'),T1+160);B.quake=0}
+ if(snd)setTimeout(()=>{sfx(snd.s);if(snd.hit&&snd.s!=='hit'&&snd.s!=='miss'&&snd.s!=='dodge')setTimeout(()=>sfx(snd.crit?'crit':'hit'),130);else if(snd.crit)sfx('crit')},T1);
+ fx.forEach(f=>{if(f.dz!=null){const el=q(f.uid);el&&dieRoll(el,f.dz,f.t,T0)}});
+ setTimeout(()=>{fx.forEach(f=>{if(f.dz!=null)return;const el=q(f.uid);if(!el)return;
+  if(f.fx){let d=0;try{d=(FXR[f.fx]||FXR.impact)(fxWrap(el),{from:q(f.from)})||0}catch(e){}dly[f.uid]=Math.max(dly[f.uid]||0,d);return}
+  const d=dly[f.uid]||0;
+  if(f.ko){setTimeout(()=>{const e2=q(f.uid);if(e2){reactKO(e2);sfx('ko')}},d+380);return}
+  const p=document.createElement('div');p.className='pop '+f.c;p.textContent=f.t;cnt[f.uid]=(cnt[f.uid]||0)+1;p.style.top=(4+cnt[f.uid]*15)+'%';p.style.animationDelay=d+'ms';p.style.animationFillMode='both';el.appendChild(p);setTimeout(()=>p.remove(),950+d);
+  if(f.sh)setTimeout(()=>{const e2=q(f.uid);e2&&reactHit(e2,f)},d);
+  if(f.miss)setTimeout(()=>{const e2=q(f.uid);e2&&reactMiss(e2)},d)})},T1);
+ setTimeout(()=>{if(!B)return;[...B.al,...B.en].forEach(u=>{if(u.gh==null||u.gh<u.hp){u.gh=u.hp;return}if(u.gh>u.hp){const b=document.querySelector(`[data-u="${u.uid}"] .bar.h>b`);if(b){b.style.transition='width .5s steps(6)';b.style.width=clamp(u.hp/u.mhp*100,0,100)+'%'}u.gh=u.hp}})},T1+560);
+ const tick2=[...B.en,...B.al].some(u=>u.koT&&Date.now()-u.koT<1200);if(tick2)setTimeout(()=>{if(!B)return;B.en.forEach(e=>{const el=q(e.uid);if(el&&!alive(e)&&Date.now()-e.koT>=1150){el.classList.remove('ko');el.classList.add('dead')}})},1700);}
 function syncBack(){B.al.forEach(a=>{const c=G.chars[a.id];c.hp=Math.max(1,a.hp);c.mp=a.mp})}
 function win(){
  syncBack();const r=G.run,o=B.o;B.en.forEach(e=>{if(G.dex[e.k])G.dex[e.k].k++});let exp=B.en.reduce((s,e)=>s+e.exp,0),gold=B.en.reduce((s,e)=>s+e.gold,0);
