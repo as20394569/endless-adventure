@@ -77,3 +77,8 @@
 側面視角、**全身、面向右**（魔物在右邊），透明背景，600×800，腳底對齊畫面下緣。長相、服裝與一般立繪完全一致。
 每個角色 4 張：`bt_<鍵>`（待機，武器備戰）、`bt_<鍵>_atk`（攻擊揮出／射出）、`bt_<鍵>_cast`（施法／舉手）、`bt_<鍵>_hurt`（受傷後仰）。
 鍵：`hero_m`、`hero_f`、`rio`、`minato`、`vel`、`koro`、`sain`、`noa`、`hiyo`（例：`bt_hero_m_atk`、`bt_rio_cast`）。
+
+
+## 魔物攻擊圖（2026-11-19 追加）
+每隻魔物一張 `enemy_<鍵>_atk`：與 `enemy_<鍵>` 同一隻、同配色同比例，**面向左**、攻擊瞬間（撲咬、揮擊、噴吐、施法），動作幅度大、輪廓清楚。1:1 512×512 透明背景，身體位置與待機圖大致對齊（遊戲會直接換圖）。可選：`enemy_<鍵>_hurt`（受擊後仰）。
+鍵：slime bat shroom snake golem boss1 ghost crab fish frog croc boss2 lizard goblin spark beetle forge boss3 tome wolf ink bknight banshee boss4 puppet eye meteor astro twins boss5 swift vine moth weather gnaw boss6
