@@ -247,6 +247,10 @@ table.st td:first-child{text-align:left;color:var(--mt)}
 .mats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:16px}
 @media(min-width:900px){.mats{grid-template-columns:1fr 1fr 1fr}}
 .card.lock{opacity:.5}
+.itn{position:relative;display:inline-block;margin:2px 0;z-index:5;background:#000;border:2px solid #9fb0ff;color:#dfe5ff;font-size:13px;padding:0 6px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.itn.wn{border-color:var(--gd);color:var(--gd)}
+.itn.dg{border-color:#ff5d6c;color:#fff;background:#7a1414;animation:bl2 .7s steps(2) infinite;outline:0}
+.al.aim{box-shadow:0 0 0 3px #ff5d6c;}.al.aim .nm:after{content:" ⚠";color:#ff5d6c}
 /* 受擊反應・骰子・識別度 */
 .bar>i{position:relative;z-index:1}
 .bar>b{position:absolute;left:0;top:0;bottom:0;background:#fff;z-index:0}
@@ -2033,7 +2037,7 @@ function dchoose(){
  const r=G.run;
  if(!r.opts){
   if(isBossFloor()&&r.rm===r.rooms-1)r.opts=[{ty:'boss'}];
-  else{const w={battle:45,event:24,treasure:9,rest:r.mod==='calm'?20:8,elite:r.fl>1?9:0,merchant:6},n=R(2,3),o=[];
+  else{const w={battle:45,event:24,treasure:9,rest:r.mod==='calm'?22:12,elite:r.fl>1?9:0,merchant:6},n=R(2,3),o=[];
    while(o.length<n){let t=R(1,Object.values(w).reduce((a,b)=>a+b,0)),k;for(k in w){t-=w[k];if(t<=0)break}if(o.find(x=>x.ty===k)&&k!=='battle')continue;o.push({ty:k,hid:r.mod==='fog'||Math.random()<.22})}
    const pid=pqHere();if(pid)o[0]={ty:'pq',id:pid};
    r.opts=o}
@@ -2055,7 +2059,7 @@ function advance(){
  let ab='';if(d.id==='abyss'){G.best=Math.max(G.best,r.fl);if(r.fl%10===0&&r.fl>(G.abR||0)){G.abR=r.fl;const g=300+r.fl*20;G.gold+=g;r.gold+=g;addItem('m0s',2);ab=`<p class="gdtx">首次踏過第 ${r.fl} 層！公會測量組在這裡架了繩梯，下次可以直接從第 ${r.fl+1} 層出發。</p><p>測量組的謝禮：${g} 金、🗝️ 守門者之證 ×2。</p>`}}
  else if(r.fl>=d.fl)return clearDungeon();
  r.fl++;r.rm=0;r.rooms=R(3,4)+(isBossFloor()?1:0);if(d.id==='abyss')qProg('abyss','',r.fl);
- let ex='';if(r.mod==='wind'){healAll(.15);ex='<br>祝福之風吹過，身體輕了一些。'}
+ let ex='';healAll(.1);ex='<br>在階梯上喘口氣，生命與魔力回復了一些。';if(r.mod==='wind'){healAll(.15);ex+='<br>祝福之風吹過，身體又輕了一些。'}
  save();dmsg('發現階梯',`<p>你們找到了通往第 ${r.fl} 層的階梯。${ex}</p>${ab}${isBossFloor()?'<p class="rdtx">這一層的深處，有強大的氣息……</p>':''}`,()=>{const k='mid_'+d.id;if(MID[d.id]===r.fl)maybe(k,()=>{save();dchoose()});else dchoose()},'往下一層')}
 function clearDungeon(){
  const d=runD(),first=!G.clear[d.id];G.clear[d.id]=1;qProg('clear',d.id);G.party.forEach(id=>addAff(id,3));
@@ -2076,7 +2080,8 @@ function check(stat,dc){sfx('dice');
  return{ok,txt:`<div class="dice">🎲 ${STN[stat]}檢定　d20〔${r}〕${mod>=0?'+':''}${mod} ＝ ${r+mod}　／　難度 ${dc}　→　<b class="${ok?'':'rdtx'}">${r===20?'大成功':r===1?'大失敗':ok?'成功':'失敗'}</b></div>`}}
 function hasCls(c){return G.party.find(id=>clsOf(id)===c)}
 /* 房間 */
-function mkEnemy(t,L,boss){const r=G.run,ra=(r&&r.mod==='rage'?1.2:1)*(L<5?.75+L*.05:1),b=7+L*2.4+L*L*.08,hp=Math.round((20+L*10+L*L*.4)*t.h),tier=boss?6:t.h>2?3:1;
+const EPW=L=>L<4?[1,1]:[Math.min(1.5,1+(L-3)*.07),Math.min(1.35,1+(L-3)*.05)];
+function mkEnemy(t,L,boss){const r=G.run,ew=EPW(L),fod=!boss&&t.h<=2&&L>=3,ra=(r&&r.mod==='rage'?1.2:1)*(L<5?.75+L*.05:1)*(boss?1+(ew[0]-1)*.5:ew[0])*(fod?1.15:1),b=7+L*2.4+L*L*.08,hp=Math.round((20+L*10+L*L*.4)*t.h*ew[1]*(fod?1.35:1)),tier=boss?6:t.h>2?3:1;
  return{n:t.n,e:t.e,k:t.k,mt:t.mt,key:'enemy_'+t.k,lv:L,ally:false,boss:!!boss,mhp:hp,hp,atk:Math.round(b*t.a*ra),mag:Math.round(b*t.m*ra),def:Math.round((3+L*1.5)*t.d),spd:Math.round((5+L*.9)*t.s),luk:Math.round(t.l+L*.3),wk:t.wk||[],rs:t.rs||[],at:t.at||'phys',fx:t.fx||'claw',st:{},sk:t.sk||[],p2:boss?t.p2:null,exp:Math.round((8+L*4)*tier),gold:Math.round((4+L*1.5)*tier)}}
 function pool(){const d=runD();if(d.id!=='abyss')return d;return DG[Math.min(4,Math.floor((G.run.fl-1)/4)%5)]}
 function rBattle(amb){const L=runL(),p=pool();let n=L<3?R(1,2):R(2,3);if(G.run.mod==='horde')n++;n=Math.min(3,n);if(L<5)n=Math.min(n,G.party.length);const es=[];for(let i=0;i<n;i++)es.push(mkEnemy(pick(p.en),L));startBattle(es,{amb})}
@@ -2151,9 +2156,12 @@ function allyAuto(u){if(!B||B.cur!==u||!alive(u)||B.menu==='end')return;const al
   if(low.length>=2&&ha)return exec(u,SK[ha],null);if(h1)return exec(u,SK[h1],low[0]);if(ha)return exec(u,SK[ha],null);
   if(low.includes(u)&&hs)return exec(u,SK[hs],null);
   const w=low[0];if(w.hp<w.mhp*.3){const k=G.inv.potion>0?'potion':G.inv.hipotion>0?'hipotion':null;if(k){B.pend={item:k};B.menu='tgA';return tgt(w.uid)}}}
+ const fireE=en.find(e=>e.int&&e.int.k==='fire'),stunK=u.sk.find(k=>SK[k].eff&&SK[k].eff.k==='stun'&&SK[k].tg==='e1'&&can(k));
+ if(fireE&&stunK&&!fireE.boss&&Math.random()<.8)return exec(u,SK[stunK],fireE);
+ if(fireE&&(fireE.int.s.all||fireE.int.tg===u.uid)&&u.hp<u.mhp*.75&&!u.sk.some(k=>SK[k].ty==='heal'&&can(k)&&low.length))return cmdGuard();
  const tough=B.o.boss||B.o.elite;B.used=B.used||{};
  if(tough&&B.rd<=2){const bf=u.sk.find(k=>SK[k].ty==='buff'&&can(k)&&!B.used[u.uid+k]);if(bf){B.used[u.uid+bf]=1;return exec(u,SK[bf],null)}}
- const tg=en.slice().sort((a,b)=>a.hp-b.hp)[0],atk=u.sk.filter(k=>(SK[k].ty==='phys'||SK[k].ty==='mag')&&can(k));
+ const tg=(fireE&&fireE.hp<u.atk*3)?fireE:en.slice().sort((a,b)=>a.hp-b.hp)[0],atk=u.sk.filter(k=>(SK[k].ty==='phys'||SK[k].ty==='mag')&&can(k));
  const aoe=atk.filter(k=>SK[k].tg==='ea').sort((a,b)=>SK[b].pow-SK[a].pow)[0],one=atk.filter(k=>SK[k].tg==='e1').sort((a,b)=>SK[b].pow-SK[a].pow)[0];
  const thrift=!tough&&u.mp<u.mmp*.3;
  if(en.length>=2&&aoe&&!thrift)return exec(u,SK[aoe],null);
@@ -2167,7 +2175,7 @@ function startBattle(en,o){
  [...B.al,...B.en].forEach((u,i)=>u.uid=i);G.dex=G.dex||{};en.forEach(e=>{G.dex[e.k]=G.dex[e.k]||{k:0}});
  blog(o&&o.boss?`迷宮之主 ${en[0].n} 現身了！`:o&&o.amb?'遭到伏擊！':`${en.map(e=>e.n).join('、')} 出現了！`);
  if(o&&o.amb)B.al.forEach(u=>{u.hp=Math.max(1,u.hp-Math.round(u.mhp*.08))});
- S.scr='battle';render();setTimeout(nextTurn,600)}
+ en.forEach(planEnemy);S.scr='battle';render();setTimeout(nextTurn,600)}
 function blog(t){B.log.push(t);if(B.log.length>30)B.log.shift()}
 const alive=u=>u.hp>0;
 function nextTurn(){
@@ -2178,17 +2186,35 @@ function nextTurn(){
  const u=B.q.shift();if(!alive(u))return nextTurn();
  u.guard=false;B.cur=u;
  if(u.st.poison>0){const d=Math.max(1,Math.round(u.mhp*.06));u.hp=Math.max(0,u.hp-d);u.st.poison--;B.fx.push({uid:u.uid,fx:'poison'});B.fx.push({uid:u.uid,t:'-'+d,c:'p',sh:1,r:.06,tint:'#c070ff'});if(u.hp<=0){u.koT=Date.now()+300;B.fx.push({uid:u.uid,ko:1})}blog(`${u.n} 受到毒的侵蝕，失去 ${d} 生命`);if(!alive(u)){blog(`${u.n} 倒下了`);render();return setTimeout(nextTurn,600)}}
- if(u.st.stun>0){u.st.stun--;blog(`${u.n} 動彈不得！`);B.menu='wait';render();return setTimeout(nextTurn,650)}
+ if(u.st.stun>0){u.st.stun--;if(!u.ally&&u.int&&(u.int.k==='fire'||u.int.k==='charge')){u.int=null;planEnemy(u);blog(`${u.n} 的蓄力被打斷了！`);B.fx.push({uid:u.uid,t:'打斷！',c:'lb'})}else blog(`${u.n} 動彈不得！`);B.menu='wait';render();return setTimeout(nextTurn,650)}
  if(u.ally){if(G.auto){B.menu='wait';render();setTimeout(()=>{if(B&&B.cur===u&&B.menu==='wait')allyAuto(u)},window.FAST?1:750)}else{B.menu='main';render()}}else{B.menu='wait';render();setTimeout(()=>enemyAct(u),window.FAST?1:600)}}
 function tick(u){for(const k of['atkUp','defUp','defDn','atkDn'])if(u.st[k]>0)u.st[k]--}
+function planEnemy(u){if(!B||!alive(u))return;const ts=B.al.filter(alive);if(!ts.length)return;
+ if(u.chg){const c=u.chg;u.chg=null;u.int={k:'fire',s:c,tg:c.all?null:pick(ts).uid};return}
+ let s=null,r=Math.random();for(const k of u.sk||[]){if(k.ty==='heal'&&u.hp>u.mhp*.6)continue;if(k.ty==='buff'&&k.self&&u.st[k.eff.k]>0)continue;if((r-=k.ch)<0){s=k;break}}
+ if(!s){u.int={k:'atk',tg:pick(ts).uid};return}
+ if(s.ty==='heal'||s.ty==='buff'){u.int={k:'sk',s};return}
+ const heavy=s.all||s.pow>=1.3,tough=u.boss||(B.o&&B.o.elite);
+ if(heavy&&(tough?Math.random()<.75:Math.random()<.4))u.int={k:'charge',s};else u.int={k:'sk',s,tg:s.all?null:pick(ts).uid}}
+function intTag(e){if(!B||!alive(e)||!e.int)return '';const I=e.int,tn=I.tg!=null?((B.al.find(a=>a.uid===I.tg)||{}).n||'?'):'全體';
+ if(I.k==='atk')return `<div class="itn">⚔ 攻擊 → ${tn}</div>`;
+ if(I.k==='charge')return `<div class="itn wn">… 蓄力：${I.s.n}</div>`;
+ if(I.k==='fire')return `<div class="itn dg">⚠ ${I.s.n}→${I.s.all?'全體':tn}</div>`;
+ if(I.s.ty==='heal')return `<div class="itn">✚ ${I.s.n}</div>`;
+ if(I.s.ty==='buff')return `<div class="itn">${I.s.self?'▲':'▼'} ${I.s.n}</div>`;
+ return `<div class="itn">✦ ${I.s.n} → ${I.s.all?'全體':tn}</div>`}
+function aimed(a){return B&&B.en.some(e=>alive(e)&&e.int&&e.int.k==='fire'&&(e.int.s.all||e.int.tg===a.uid))}
 function enemyAct(u){
  if(!B)return;const ts=B.al.filter(alive);if(!ts.length)return nextTurn();
- if(u.p2&&!u.ph2&&u.hp<=u.mhp*.5){u.ph2=1;u.atk=Math.round(u.atk*u.p2.atk);u.mag=Math.round(u.mag*u.p2.atk);u.sk=u.p2.sk;blog(u.p2.say);toast(u.p2.say);sfx('crit');render();return setTimeout(()=>enemyAct(u),window.FAST?1:2200)}
- let s=null,r=Math.random();for(const k of u.sk||[]){if(k.ty==='heal'&&u.hp>u.mhp*.6)continue;if(k.ty==='buff'&&k.self&&u.st[k.eff.k]>0)continue;if((r-=k.ch)<0){s=k;break}}
- if(!s)return exec(u,{n:'',basic:1,ty:u.at,pow:1,tg:'e1',fx:u.fx,mp:0},pick(ts));
- if(s.ty==='heal')return exec(u,{n:s.n,ty:'heal',fix:s.pow,tg:'self',fx:'heal',mp:0},u);
- if(s.ty==='buff')return exec(u,{n:s.n,ty:'buff',tg:s.self?'self':'ea',eff:s.eff,fx:s.fx||(s.self?'guard':'roar'),mp:0},null);
- exec(u,{n:s.n,ty:s.ty,pow:s.pow,tg:s.all?'ea':'e1',eff:s.eff,fx:s.fx,el:s.el,drain:s.drain,mp:0},pick(ts))}
+ if(u.p2&&!u.ph2&&u.hp<=u.mhp*.5){u.ph2=1;u.atk=Math.round(u.atk*u.p2.atk);u.mag=Math.round(u.mag*u.p2.atk);u.sk=u.p2.sk;u.int=null;u.chg=null;planEnemy(u);blog(u.p2.say);toast(u.p2.say);sfx('crit');render();return setTimeout(()=>enemyAct(u),window.FAST?1:2200)}
+ if(!u.int)planEnemy(u);const I=u.int;u.int=null;const tgU=()=>(I.tg!=null&&B.al.find(a=>a.uid===I.tg&&alive(a)))||pick(ts);
+ if(I.k==='charge'){u.chg=I.s;planEnemy(u);blog(`${u.n} 開始蓄力……下次行動：${I.s.n}（強化）`);B.fx.push({uid:u.uid,fx:'roar'});B.fx.push({uid:u.uid,t:'蓄力',c:'lb'});render();sfx('buff');return setTimeout(nextTurn,window.FAST?1:1200)}
+ if(I.k==='atk'){const t=tgU();planEnemy(u);return exec(u,{n:'',basic:1,ty:u.at,pow:1,tg:'e1',fx:u.fx,mp:0},t)}
+ const s=I.s;
+ if(s.ty==='heal'){planEnemy(u);return exec(u,{n:s.n,ty:'heal',fix:s.pow,tg:'self',fx:'heal',mp:0},u)}
+ if(s.ty==='buff'){planEnemy(u);return exec(u,{n:s.n,ty:'buff',tg:s.self?'self':'ea',eff:s.eff,fx:s.fx||(s.self?'guard':'roar'),mp:0},null)}
+ const fire=I.k==='fire',t=tgU();planEnemy(u);
+ exec(u,{n:s.n+(fire?'・強化':''),ty:s.ty,pow:s.pow*(fire?1.5:1),tg:s.all?'ea':'e1',eff:s.eff,fx:s.fx,el:s.el,drain:s.drain,mp:0,big:fire},t)}
 /* ============ 骰子規則 ============ */
 function evaOf(u,x,sk){if(sk.ty==='mag'||x.st.stun>0)return 2;const r=(x.spd-u.spd)/Math.max(1,u.spd);return clamp(2+Math.round(r*5),2,6)+(x.guard?2:0)}
 function critLine(u,sk){return Math.max(14,20-Math.min(6,Math.floor(u.luk/10))-(sk.cr||0))}
@@ -2199,6 +2225,7 @@ function diceHelp(){modal(`<div class="ttl">🎲 戰鬥骰子規則</div><div cl
 <div class="row"><div class="gr"><b>命中</b>：骰值 ≥ 目標的<b>閃避值</b>才打得中。閃避值 2～6，目標比攻擊者越快就越高；目標防禦中 +2。<br><span class="mt">魔法攻擊不會被閃避；暈眩中的目標無法閃避。</span></div></div>
 <div class="row"><div class="gr"><b>爆擊</b>：骰值 ≥ 爆擊線就爆擊（傷害 ×1.7）。爆擊線 = 20 − 幸運÷10 − 技能加成，最低 14。</div></div>
 <div class="row"><div class="gr"><b>傷害浮動</b>：骰值越高打越痛，1 點約 ×0.87，20 點約 ×1.15。</div></div>
+<div class="row"><div class="gr"><b>魔物意圖</b>：魔物頭上會顯示下一步要做什麼。「蓄力」後下一次會放<span class="rdtx">強化版</span>（威力 ×1.5），被瞄準的隊員會亮紅框。用<b>防禦</b>減半、用<b>暈眩</b>打斷蓄力，或在它出手前打倒它。</div></div>
 <div class="row"><div class="gr"><b>逃跑</b>：d20 + 敏捷÷6 ≥ 11 就成功。首領戰無法逃跑。</div></div>
 <div class="row"><div class="gr"><b>迷宮檢定</b>：d20 + 能力修正 ≥ 難度。自然 20 必定成功，自然 1 必定失敗。</div></div>
 </div><div class="sub" style="margin-top:8px">骰子顏色：<span class="gdtx">金＝爆擊</span>　白＝命中　<span class="rdtx">紅＝落空</span></div>`)}
@@ -2259,15 +2286,15 @@ function tgt(uid){
 function stTxt(u){const m={stun:'暈',poison:'毒',atkUp:'攻↑',defUp:'防↑',defDn:'防↓',atkDn:'攻↓'};return Object.keys(m).filter(k=>u.st[k]>0).map(k=>`<span class="tag">${m[k]}</span>`).join('')}
 function vBattle(){
  const d=runD(),u=B.cur,m=B.menu;let cmd='';
- if(m==='main')cmd=`<div class="sub" style="margin-bottom:4px"><b class="gdtx">${u.n}</b> 的回合　<span class="mt">點魔物可查看情報</span></div><div class="cmd"><button class="btn gd" onclick="cmdAtk()">⚔️ 攻擊</button><button class="btn" onclick="cmdSkill()">✨ 技能</button><button class="btn" onclick="cmdItem()">🧪 道具</button><button class="btn" onclick="cmdGuard()">🛡️ 防禦<small>減傷並回魔</small></button><button class="btn" onclick="cmdFlee()">💨 逃跑</button></div>`;
+ if(m==='main')cmd=`<div class="sub" style="margin-bottom:4px"><b class="gdtx">${u.n}</b> 的回合　<span class="mt">點魔物可查看情報</span></div><div class="cmd"><button class="btn gd" onclick="cmdAtk()">⚔️ 攻擊</button><button class="btn" onclick="cmdSkill()">✨ 技能</button><button class="btn" onclick="cmdItem()">🧪 道具</button><button class="btn" onclick="cmdGuard()">🛡️ 防禦<small>傷害減半・回魔</small></button><button class="btn" onclick="cmdFlee()">💨 逃跑</button></div>`;
  else if(m==='skill')cmd=`<div class="cmd two">${u.sk.map(k=>`<button class="btn" ${u.mp<SK[k].mp?'disabled':''} onclick="pickSkill('${k}')"><span>${SK[k].n}<small>魔力 ${SK[k].mp}・${SK[k].d}</small></span></button>`).join('')}<button class="btn" onclick="cmdBack()">返回</button></div>`;
  else if(m==='item'){const ks=Object.keys(G.inv).filter(k=>G.inv[k]>0&&ITEM[k].use);cmd=`<div class="cmd two">${ks.map(k=>`<button class="btn" onclick="pickItem('${k}')"><span>${ITEM[k].ic} ${ITEM[k].n} ×${G.inv[k]}<small>${ITEM[k].d}</small></span></button>`).join('')||'<div class="sub">沒有可用的道具</div>'}<button class="btn" onclick="cmdBack()">返回</button></div>`}
  else if(m==='tgE'||m==='tgA'||m==='tgD')cmd=`<div class="sub gdtx" style="margin-bottom:4px">請點選目標</div><div class="cmd two"><button class="btn" onclick="cmdBack()">取消</button></div>`;
  else if(m==='end')cmd=B.endHtml;
  else cmd=`<div class="sub" style="text-align:center;padding:14px">${G.auto?'自動戰鬥中……':'……'}</div>`;
- return `<div class="bt"><div class="fld n${B.en.length}">${art('bg_'+d.id,'','bg')}${m==='end'?'':autoBtn('autob')}<button class="btn sm diceb" onclick="event.stopPropagation();diceHelp()">🎲 規則</button>${B.en.map((e,i)=>`<div class="en e${i} ${e.boss?'bs':''} ${koCls(e)} ${m==='tgE'&&alive(e)?'tg':''}" style="${koSt(e)}" data-u="${e.uid}" onclick="enemyTap(${e.uid})">${art(e.key,e.e,'')}<div class="nm">${e.n} <small>Lv.${e.lv}</small> ${stTxt(e)}</div>${pbar('h',e.hp,e.mhp,e.gh)}<div class="hpn">${e.hp}/${e.mhp}</div></div>`).join('')}</div>
+ return `<div class="bt"><div class="fld n${B.en.length}">${art('bg_'+d.id,'','bg')}${m==='end'?'':autoBtn('autob')}<button class="btn sm diceb" onclick="event.stopPropagation();diceHelp()">🎲 規則</button>${B.en.map((e,i)=>`<div class="en e${i} ${e.boss?'bs':''} ${koCls(e)} ${m==='tgE'&&alive(e)?'tg':''}" style="${koSt(e)}" data-u="${e.uid}" onclick="enemyTap(${e.uid})">${art(e.key,e.e,'')}${intTag(e)}<div class="nm">${e.n} <small>Lv.${e.lv}</small> ${stTxt(e)}</div>${pbar('h',e.hp,e.mhp,e.gh)}<div class="hpn">${e.hp}/${e.mhp}</div></div>`).join('')}</div>
  <div class="blog">${B.log.slice(-3).map(l=>`<div>${l}</div>`).join('')}</div>
- <div class="als">${B.al.map(a=>`<div class="al ${a===u&&m!=='wait'&&m!=='end'?'cur':''} ${alive(a)?(a.hp<a.mhp*.3?'low':''):'dead '+koCls(a)} ${(m==='tgA'&&alive(a))||(m==='tgD'&&!alive(a))?'tg':''}" style="${koSt(a)}" data-u="${a.uid}" onclick="tgt(${a.uid})">${face(a.id,'av')}<div class="gr"><div class="nm">${a.n}</div>${pbar('h',a.hp,a.mhp,a.gh)}${pbar('m',a.mp,a.mmp)}<small>${a.hp}/${a.mhp}　${a.mp}/${a.mmp}</small><div>${stTxt(a)}</div></div></div>`).join('')}</div>
+ <div class="als">${B.al.map(a=>`<div class="al ${a===u&&m!=='wait'&&m!=='end'?'cur':''} ${alive(a)?(a.hp<a.mhp*.3?'low':'')+(aimed(a)?' aim':''):'dead '+koCls(a)} ${(m==='tgA'&&alive(a))||(m==='tgD'&&!alive(a))?'tg':''}" style="${koSt(a)}" data-u="${a.uid}" onclick="tgt(${a.uid})">${face(a.id,'av')}<div class="gr"><div class="nm">${a.n}</div>${pbar('h',a.hp,a.mhp,a.gh)}${pbar('m',a.mp,a.mmp)}<small>${a.hp}/${a.mhp}　${a.mp}/${a.mmp}</small><div>${stTxt(a)}</div></div></div>`).join('')}</div>
  <div>${cmd}</div></div>`}
 const rnd=(a,b)=>a+Math.random()*(b-a);
 function fxE(p,css){const d=document.createElement('div');d.style.cssText='position:absolute;pointer-events:none;z-index:5;'+css;p.appendChild(d);return d}
