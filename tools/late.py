@@ -25,7 +25,7 @@ with sync_playwright() as p:
         else:stall=0
         last=n
         if pg.evaluate("ST.runs.length")>=maxruns:break
-    r=json.loads(pg.evaluate("JSON.stringify({sum:balSum(),first:ST.first,per:ST.runs.reduce((a,r)=>{const k=r.d+':'+r.res+(r.fl?'@'+r.fl:'');a[k]=(a[k]||0)+1;return a},{}),lv:G.chars.hero.lv,errs:ST.errs.slice(0,3),seen:Object.keys(G.seen).filter(k=>/d7/.test(k)),gear:G.gear.filter(g=>g.af).length+'/'+G.gear.length,mats:Object.keys(G.inv).filter(k=>/m7/.test(k)).map(k=>k+':'+G.inv[k]).join(' ')})"))
+    r=json.loads(pg.evaluate("JSON.stringify({sum:balSum(),first:ST.first,per:ST.runs.reduce((a,r)=>{const k=r.d+':'+r.res+(r.fl?'@'+r.fl:'');a[k]=(a[k]||0)+1;return a},{}),lv:G.chars.hero.lv,errs:ST.errs.slice(0,3),seen:Object.keys(G.seen).filter(k=>/d[78]/.test(k)),gear:G.gear.filter(g=>g.af).length+'/'+G.gear.length,mats:Object.keys(G.inv).filter(k=>/m[78]/.test(k)).map(k=>k+':'+G.inv[k]).join(' ')})"))
     for k in ('first','per','lv','errs','seen','gear','mats'):print(k,r[k])
     for k,v in sorted(r['sum'].items()):print(' ',k,v)
     print('pageerr',errs[:5])
