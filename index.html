@@ -397,7 +397,7 @@ matk:{n:'攻擊',mp:0,ty:'mag',pow:.5,tg:'e1',basic:1},
  b_koro:{n:'貓步・千手',mp:9,ty:'phys',pow:2.3,tg:'e1',cr:6,steal:1,d:'羈絆技：重擊並順手摸走金幣'},
  b_sain:{n:'禁書・零式',el:'dark',mp:16,ty:'mag',pow:1.8,tg:'ea',d:'羈絆技：全體大魔法'},
  b_noa:{n:'星矢・穿雲',mp:10,ty:'phys',pow:2.5,tg:'e1',cr:4,d:'羈絆技：貫穿一切的一箭'},
- b_hiyo:{n:'奧義・緋夜櫻',mp:15,ty:'phys',pow:1.85,tg:'ea',d:'羈絆技：全體斬擊'}
+ b_hiyo:{n:'奧義・緋夜櫻',mp:16,ty:'phys',pow:1.7,tg:'ea',d:'羈絆技：全體斬擊'}
 };
 const FXM={slash:'slash',gbreak:'pierce',whirl:'cross',fire:'fire',frost:'ice',meteor:'fire',aim:'arrow',parrow:'arrow',rain:'arrows',heal:'heal',bless:'buff',sanct:'heal',bash:'impact',wall:'guard',judge:'quake',stab:'slash',fang:'poison',smoke:'smoke',iai:'slash',focus:'buff',moon:'cross',combo:'flurry',breath:'heal',kick:'tail',a_holy:'holy',a_verdict:'heal',a_void:'cross',a_wheel:'cross',a_blaze:'fire',a_starfall:'star',a_coffin:'ice',a_sanct:'heal',a_pierce:'arrow',a_arrowrain:'arrows',a_mark:'arrow',a_venom:'poison',a_crush:'impact',a_hundred:'flurry',a_force:'pierce',a_spring:'heal',a_smite:'holy',a_iron:'guard',a_hammer:'quake',a_shadow:'dark',a_mist:'poison',a_kasumi:'slash',a_moon:'cross',b_friend:'heal',b_vel:'guard',b_koro:'flurry',b_sain:'dark',b_noa:'arrow',b_hiyo:'cross'};
 for(const k in FXM){SK[k].fx=FXM[k];if(k[1]==='_')SK[k].big=1}
@@ -680,14 +680,14 @@ M('tome','冰封書靈','📘',[.8,.5,1.3,.7,1.1,6],['fire'],['ice'],'frost','ma
 M('wolf','霜狼','🐺',[1,1.2,.6,.8,1.6,8],['fire'],['ice'],'bite','phys',[P('撕咬',1.3,.35,'bite'),Mg('冰息',.9,.25,'frost',ef('atkDn',.5))]);
 M('ink','墨水史萊姆','⚫',[1.3,.9,1,1,.7,4],['holy'],['dark','poison'],'quake','phys',[Mg('墨染',.6,.3,'ink',ef('defDn',.8)),Mg('墨彈',1.1,.25,'ink')]);
 M('bknight','禁書騎士','🛡️',[1.3,1.1,.6,1.7,.7,5],['fire'],['ice'],'slash','phys',[P('書頁斬',1.4,.35,'cross'),Bf('守勢','defUp',.2)]);
-M('banshee','冰晶女妖','🧊',[2.6,.8,1.45,1.1,1.3,7],['fire'],['ice'],'frost','mag',[Mg('凍哭',.8,.35,'wave',Object.assign({all:1},ef('stun',.25,1))),Mg('冰晶之槍',1.5,.3,'ice',{el:'ice'})]);
+M('banshee','冰晶女妖','🧊',[2.6,.8,1.38,1.1,1.3,7],['fire'],['ice'],'frost','mag',[Mg('凍哭',.8,.35,'wave',Object.assign({all:1},ef('stun',.2,1))),Mg('冰晶之槍',1.5,.3,'ice',{el:'ice'})]);
 M('boss4','緘默館長','📚',[6.5,1,1.4,1.3,1.1,7],['fire'],['ice','dark'],'dark','mag',[Mg('禁止喧嘩',.9,.35,'wave',Object.assign({all:1},ef('atkDn',.7))),Mg('判決之書',1.6,.25,'dark',{el:'dark'}),Hl('歸檔',.08,.15)]);
 M('puppet','星屑傀儡','⭐',[1.2,1.05,.6,1.3,.9,5],['dark'],['holy'],'pierce','phys',[P('突刺',1.3,.35,'pierce'),P('亂舞',.7,.25,'flurry',{all:1})]);
 M('eye','虛空之眼','👁️',[.8,.5,1.4,.7,1.3,8],['holy'],['dark'],'gaze','mag',[Mg('凝視',.7,.3,'gaze',ef('stun',.3,1)),Mg('虛空光線',1.4,.3,'beam',{el:'dark'})]);
 M('meteor','隕石獸','☄️',[1.4,1.1,.8,1.4,.8,4],['ice'],['fire'],'claw','phys',[P('隕石衝撞',1.4,.35,'rock'),Mg('灼熱咆哮',.8,.25,'flame',{all:1,el:'fire'})]);
 M('astro','天球術士','🔮',[.9,.5,1.25,.8,1.2,7],['dark'],['holy'],'spark','mag',[Mg('星爆',.8,.35,'star',{all:1}),Mg('重力',.6,.25,'dark',ef('defDn',.8))]);
 M('twins','雙子星衛','♊',[3,1.4,.9,1.4,1.3,8],['dark'],['holy'],'slash','phys',[P('雙星連斬',1.6,.4,'cross'),Bf('星光護盾','defUp',.2)]);
-M('boss5','星隕之王','👑',[7.5,1.45,1.45,1.4,1.2,8],['dark'],['fire','holy'],'cross','phys',[Mg('天墜',1,.35,'star',Object.assign({all:1},ef('defDn',.5))),P('王權之劍',1.7,.25,'cross'),Mg('星之重壓',.8,.15,'dark',Object.assign({all:1},ef('stun',.2,1)))]);
+M('boss5','星隕之王','👑',[7,1.45,1.38,1.4,1.2,8],['dark'],['fire','holy'],'cross','phys',[Mg('天墜',1,.35,'star',Object.assign({all:1},ef('defDn',.5))),P('王權之劍',1.7,.25,'cross'),Mg('星之重壓',.8,.15,'dark',Object.assign({all:1},ef('stun',.2,1)))]);
 M('swift','崖燕','🐦',[.75,1.2,.5,.6,1.8,9],['poison'],[],'pierce','phys',[P('俯衝',1.35,.35,'pierce'),P('亂啄',.7,.25,'flurry',{all:1})]);
 M('vine','纏板藤','🪢',[1.3,1.05,.7,1.1,.7,4],['fire'],['poison'],'whip','phys',[P('絞緊',1,.3,'whip',ef('stun',.3,1)),P('抽打',.75,.25,'whip',{all:1})]);
 M('moth','霧蛾','🦋',[.85,.5,1.3,.7,1.2,7],['fire'],['poison'],'spore','mag',[Mg('鱗粉',.7,.3,'spore',Object.assign({all:1},ef('atkDn',.5))),Mg('霧中燈',1.2,.3,'gaze',ef('stun',.3,1))]);
@@ -698,7 +698,7 @@ MON.boss1.p2={say:'古樹的根從地底整片翻起，迴廊的苔蘚全都轉�
 MON.boss2.p2={say:'主教把鐘繩纏上手腕，敲響了沉在水底的那口大鐘。',atk:1.06,sk:[Mg('喪鐘',1,.35,'bell',Object.assign({all:1},ef('defDn',.6))),Mg('溺水詛咒',1.4,.35,'water',ef('poison',.7)),Mg('退潮',.7,.2,'water',Object.assign({all:1},ef('stun',.15,1)))]};
 MON.boss3.p2={say:'赤燼龍的鱗片一片片掀開，底下的熔岩亮了起來。',atk:1.06,sk:[Mg('燼息',1.05,.35,'flame',{all:1,el:'fire'}),P('龍爪',1.6,.35,'claw'),P('尾掃',.8,.2,'quake',Object.assign({all:1},ef('stun',.2,1)))]};
 MON.boss4.p2={say:'館長闔上最後一本書。整座書庫安靜得聽得見結霜的聲音。',atk:1.1,sk:[Mg('禁止喧嘩',1,.35,'wave',Object.assign({all:1},ef('atkDn',.7))),Mg('判決之書',1.7,.35,'dark',{el:'dark'}),Mg('除籍',.8,.2,'ice',Object.assign({all:1,el:'ice'},ef('stun',.2,1)))]};
-MON.boss5.p2={say:'星隕之王摘下王冠。塔頂的星星一顆接一顆熄滅——然後落了下來。',atk:1.05,sk:[Mg('天墜',1.1,.35,'star',Object.assign({all:1},ef('defDn',.5))),P('王權之劍',1.8,.35,'cross'),Mg('星之重壓',.85,.2,'dark',Object.assign({all:1},ef('stun',.2,1)))]};
+MON.boss5.p2={say:'星隕之王摘下王冠。塔頂的星星一顆接一顆熄滅——然後落了下來。',atk:1.05,sk:[Mg('天墜',1,.35,'star',Object.assign({all:1},ef('defDn',.5))),P('王權之劍',1.65,.35,'cross'),Mg('星之重壓',.85,.2,'dark',Object.assign({all:1},ef('stun',.2,1)))]};
 MON.boss6.p2={say:'裂風鵰收起翅膀，落在棧道上——整條路都在晃。',atk:1.15,sk:[P('震翼',.9,.35,'quake',Object.assign({all:1},ef('stun',.2,1))),P('攫擊',1.9,.35,'claw'),Mg('裂風',1,.2,'wave',{all:1})]};
 M('crust','鹽殼蜥','🦎',[1.35,1.15,.5,1.5,.8,5],['ice'],['fire'],'bite','phys',[P('鹽殼衝撞',1.35,.35,'rock'),Bf('結晶','defUp',.2)]);
 M('slug','鹵沼蛞蝓','🐌',[1.5,.8,1.1,1,.5,4],['fire'],['poison','ice'],'spit','mag',[Mg('鹵水噴濺',.75,.3,'water',Object.assign({all:1},ef('poison',.4))),Mg('脫水',.9,.3,'spit',ef('atkDn',.6))]);
@@ -707,13 +707,14 @@ M('egret','鹽田白鷺','🕊️',[.85,1.25,.5,.7,1.7,9],['poison'],[],'pierce'
 M('pillar','鹽柱巨人','🗿',[3.3,1.4,.6,1.8,.6,4],['ice'],['poison','fire'],'quake','phys',[P('崩鹽',.9,.35,'quake',Object.assign({all:1},ef('defDn',.4))),P('鹽柱鎚',1.7,.3,'rock',ef('stun',.25,1))]);
 M('boss7','鹽魟','🐟',[8.5,1.55,1.4,1.3,1.3,9],['ice'],['poison','fire'],'tail','phys',[Mg('鹵潮',.95,.35,'water',{all:1}),P('毒棘',1.6,.3,'pierce',ef('poison',.6)),Mg('蜃氣',.6,.15,'gaze',Object.assign({all:1},ef('atkDn',.6)))]);
 MON.boss7.p2={say:'鹽魟一頭鑽進鹽殼底下——腳下的白色地面，開始像水一樣起伏。',atk:1.12,sk:[P('破殼突襲',1.9,.35,'pierce',ef('defDn',.5)),Mg('鹵潮',1.05,.3,'water',Object.assign({all:1},ef('poison',.4))),Hl('吸鹵',.07,.15)]};
-M('sandfish','砂鰍','🐟',[1.2,1.1,.5,1.2,1.1,6],['ice'],['fire'],'bite','phys',[P('鑽砂突咬',1.4,.35,'bite'),P('甩砂',.75,.25,'rock',Object.assign({all:1},ef('atkDn',.4)))]);
-M('jackal','河床胡狼','🐺',[.85,1.12,.5,.7,1.7,10],['fire'],[],'bite','phys',[P('撕咬',1.4,.35,'bite'),P('群狩',.7,.25,'flurry',{all:1})]);
-M('dust','塵旋','🌪️',[.8,.5,1.25,.6,1.3,8],['ice'],['poison','fire'],'wave','mag',[Mg('砂塵',.75,.3,'wave',Object.assign({all:1},ef('atkDn',.5))),Mg('迷眼',1.3,.3,'gaze',ef('stun',.25,1))]);
-M('wheel','棄轍','🛞',[1.35,1.05,.4,1.6,.6,4],['fire'],['poison'],'quake','phys',[P('輾壓',1.45,.35,'quake'),Bf('卡進車轍','defUp',.2)]);
-M('camel','迷途鹽駝','🐫',[3.2,1.4,.6,1.6,.8,5],['ice'],['poison'],'quake','phys',[P('踐踏',.9,.35,'quake',Object.assign({all:1},ef('stun',.2,1))),P('鹽袋甩擊',1.7,.3,'tail',ef('defDn',.5))]);
+M('sandfish','砂鰍','🐟',[1.0,1.02,.5,1.05,1.1,6],['ice'],['fire'],'bite','phys',[P('鑽砂突咬',1.4,.35,'bite'),P('甩砂',.75,.25,'rock',Object.assign({all:1},ef('atkDn',.4)))]);
+M('jackal','河床胡狼','🐺',[.8,1.05,.5,.7,1.7,10],['fire'],[],'bite','phys',[P('撕咬',1.4,.35,'bite'),P('群狩',.7,.25,'flurry',{all:1})]);
+M('dust','塵旋','🌪️',[.78,.5,1.15,.6,1.3,8],['ice'],['poison','fire'],'wave','mag',[Mg('砂塵',.75,.3,'wave',Object.assign({all:1},ef('atkDn',.5))),Mg('迷眼',1.3,.3,'gaze',ef('stun',.25,1))]);
+M('wheel','棄轍','🛞',[1.12,1.0,.4,1.45,.6,4],['fire'],['poison'],'quake','phys',[P('輾壓',1.45,.35,'quake'),Bf('卡進車轍','defUp',.2)]);
+M('camel','迷途鹽駝','🐫',[2.95,1.3,.6,1.6,.8,5],['ice'],['poison'],'quake','phys',[P('踐踏',.9,.35,'quake',Object.assign({all:1},ef('stun',.2,1))),P('鹽袋甩擊',1.7,.3,'tail',ef('defDn',.5))]);
 M('boss8','伏流蛇王','🐍',[9,1.6,1.45,1.35,1.2,9],['ice'],['fire','poison'],'bite','phys',[Mg('吸乾',1,.35,'water',{all:1}),P('絞殺',1.7,.3,'whip',ef('stun',.25,1)),P('毒牙',1.3,.15,'bite',Object.assign({drain:1},ef('poison',.5)))]);
 MON.boss8.p2={say:'蛇王鑽回伏流——驛站的地板開始往下陷，鹽砂從四面八方灌進來。',atk:1.12,sk:[P('崩床',1,.35,'quake',Object.assign({all:1},ef('defDn',.5))),P('絞殺',1.9,.35,'whip',ef('stun',.25,1)),Hl('飲伏流',.07,.15)]};
+M('mimic','寶箱怪','📦',[2.3,1.35,.6,1.5,.9,8],['fire'],['poison'],'bite','phys',[P('咬合',1.6,.35,'bite',ef('defDn',.4)),P('吞金',1.05,.3,'bite',{drain:1})]);
 const DGM={d1:[['slime','bat','shroom','snake'],'golem','boss1'],d2:[['ghost','crab','fish','frog'],'croc','boss2'],d3:[['lizard','goblin','spark','beetle'],'forge','boss3'],d4:[['tome','wolf','ink','bknight'],'banshee','boss4'],d5:[['puppet','eye','meteor','astro'],'twins','boss5'],d6:[['swift','moth','vine','weather'],'gnaw','boss6'],d7:[['crust','mirage','slug','egret'],'pillar','boss7'],d8:[['sandfish','jackal','dust','wheel'],'camel','boss8']};
 function matN(d){return Object.keys(DGM).indexOf(d.id)+1}
 DG.forEach(d=>{const m=DGM[d.id];if(m){d.en=m[0].map(k=>MON[k]);d.el=MON[m[1]];d.bs=MON[m[2]]}});
@@ -734,7 +735,7 @@ const MOD=[
  {k:'wind',n:'祝福之風',d:'每上一層回復 15% 生命與魔力'},
  {k:'luck',n:'幸運星',d:'所有檢定 +2'}
 ];
-const RT={battle:{n:'魔物的氣息',ic:'⚔️',d:'戰鬥'},elite:{n:'強敵的威壓',ic:'💀',d:'精英戰，獎勵豐厚'},event:{n:'奇妙的動靜',ic:'❓',d:'隨機事件'},treasure:{n:'寶物的光芒',ic:'💎',d:'寶箱'},rest:{n:'安全的角落',ic:'🔥',d:'休息'},merchant:{n:'流浪商人',ic:'🎒',d:'購買補給'},boss:{n:'迷宮之主',ic:'👑',d:'首領戰'},hid:{n:'未知的岔路',ic:'🌫️',d:'不知道裡面有什麼'},post:{n:'驛站遺址',ic:'🏚️',d:'休息，並找到下一層的路標'}};
+const RT={battle:{n:'魔物的氣息',ic:'⚔️',d:'戰鬥'},elite:{n:'強敵的威壓',ic:'💀',d:'精英戰，獎勵豐厚'},event:{n:'奇妙的動靜',ic:'❓',d:'隨機事件'},treasure:{n:'寶物的光芒',ic:'💎',d:'寶箱（偶爾會咬人）'},rest:{n:'安全的角落',ic:'🔥',d:'休息'},merchant:{n:'流浪商人',ic:'🎒',d:'購買補給'},boss:{n:'迷宮之主',ic:'👑',d:'首領戰'},hid:{n:'未知的岔路',ic:'🌫️',d:'不知道裡面有什麼'},post:{n:'驛站遺址',ic:'🏚️',d:'休息，並找到下一層的路標'}};
 
 /* ============ 狀態 ============ */
 let G=null,S={scr:'title'},B=null,DV=null;
@@ -786,8 +787,8 @@ const RN=['','精良的','稀有的','傳說的'],RM=[1,1.25,1.6,2.1];
 const WA=[['銅劍','獵弓','短刀'],['鋼劍','長弓','打刀'],['祕銀劍','鷹眼弓','名刀'],['星鐵劍','龍骨弓','妖刀'],['天隕劍','星弓','神刀'],['蒼穹劍','天風弓','雲切'],['鹽晶劍','白砂弓','潮切'],['驛路劍','風蝕弓','砂切']];
 const WM=['橡木杖','水晶杖','賢者之杖','霜語法典','星辰權杖','蒼穹之杖','鹵晶杖','涸川杖'],HN=['皮帽','鐵盔','祕銀頭冠','霜紋兜帽','星織頭環','天風羽冠','白砂頭巾','驛笠'],AN=['皮甲','鎖子甲','祕銀鎧','霜紋法袍','星織戰衣','蒼穹戰衣','鹽紋外套','旅塵斗篷'],CN=['銅戒指','水紋護符','赤燼耳墜','霜晶項鍊','星屑冠','天風指環','結繩手環','驛鈴墜'];
 const tiOf=t=>t>=46?7:Math.min(6,Math.floor((t-1)/5));
-const AFX={crmp:{n:'迴魔',d:'爆擊時回復 8% 魔力'},weak:{n:'破綻',d:'命中弱點時傷害再 +25%'},tough:{n:'獵首',d:'對精英與迷宮之主傷害 +12%'},tox:{n:'趁隙',d:'對中毒或暈眩的目標傷害 +30%'},vamp:{n:'嗜血',d:'普通攻擊傷害的 15% 回復生命'},grd:{n:'堅守',d:'防禦時回復 8% 生命'},fast:{n:'先機',d:'戰鬥開始時攻擊上升（2 回合）'},thorn:{n:'荊棘',d:'受到物理攻擊時反彈 15% 傷害'}};
-const AFS={w:['crmp','weak','tough','tox','vamp'],h:['crmp','weak','fast','grd'],a:['grd','thorn','fast'],c:['crmp','tough','tox','fast','grd','vamp']};
+const AFX={crmp:{n:'迴魔',d:'爆擊時回復 8% 魔力'},weak:{n:'破綻',d:'命中弱點時傷害再 +25%'},tough:{n:'獵首',d:'對精英與迷宮之主傷害 +12%'},tox:{n:'趁隙',d:'對中毒或暈眩的目標傷害 +30%'},vamp:{n:'嗜血',d:'普通攻擊傷害的 15% 回復生命'},grd:{n:'堅守',d:'防禦時回復 8% 生命'},fast:{n:'先機',d:'戰鬥開始時攻擊上升（2 回合）'},thorn:{n:'荊棘',d:'受到物理攻擊時反彈 15% 傷害'},pierce:{n:'穿甲',d:'攻擊時無視目標 25% 防禦'},link:{n:'呼應',d:'隊友爆擊後，自己的下一次攻擊命中時必定爆擊'}};
+const AFS={w:['crmp','weak','tough','tox','vamp','pierce','link'],h:['crmp','weak','fast','grd','link'],a:['grd','thorn','fast'],c:['crmp','tough','tox','fast','grd','vamp','link']};
 function afOf(id){const o={};const c=G.chars[id];if(!c)return o;for(const sl in c.eq){const g=c.eq[sl]&&gearOf(c.eq[sl]);if(g&&g.af)o[g.af]=1}return o}
 function rollR(b){const x=Math.random()-(b||0);return x<.03?3:x<.15?2:x<.45?1:0}
 function genGear(t,r,slot,kind,o){o=o||{};
@@ -2351,7 +2352,7 @@ function vGuild(){
  return `${art('bg_guild','🗺️','sc')}<div class="pn"><div class="ttl">冒險者公會</div><div class="sub" style="margin-bottom:8px">迷宮的構造每次進入都會改變，還會發生不同的「異變」。出發前記得補給。</div>
  <div class="pn" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">📋</span><div class="gr"><span class="gdtx" style="font-size:17px">委託板</span><div class="sub">${qOpen()?`階級 ${RANK[G.q.rank].n}・${qn} 件進行中${qd?`・<span class="gdtx">${qd} 件可回報</span>`:''}`:'踏破翠苔迴廊後開放'}</div></div>${qOpen()?`<button class="btn sm ${qd?'gd':''}" onclick="go('quest')">查看</button>`:''}</div></div>
  <div class="pn" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">🎖️</span><div class="gr"><span class="gdtx" style="font-size:17px">上位職業認定</span><div class="sub">Lv.${ADV_LV}・踏破赤燼礦坑・${ADV_COST} 金</div></div><button class="btn sm" onclick="advMenu()">查看</button></div></div>
- ${DG.map((d,i)=>{const op=dgOpen(i);if(d.p2&&!G.clear.d5)return '';return `${d.p2&&!DG[i-1].p2?'<div class="ttl" style="margin-top:16px">第二部　背面的地圖</div><div class="sub" style="margin-bottom:8px">舊地圖邊框以外的地方。沒有畫到一半的線可以跟，只能自己走、自己畫。</div>':''}<div class="pn ${G.clear[d.id]?'gold':''}" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">${op?d.ic:'🔒'}</span><div class="gr"><b class="sf" style="font-size:17px">${op?d.n:'？？？'}</b> ${G.clear[d.id]?'<span class="tag gdtx">已踏破</span>':''}<div class="sub">${op?d.d:'踏破前一座迷宮後開放'}</div><div class="sub">${op?`建議 Lv.${d.lv}　${d.id==='abyss'?'無限層'+(G.best?`・最深 ${G.best} 層`:''):'共 '+d.fl+' 層'}`:''}</div></div>${op?`<button class="btn gd sm" onclick="enterDungeon(${i})">出發</button>`:''}</div>${op&&d.id==='abyss'&&G.best>=10?`<button class="btn wd sm" style="margin-top:8px" onclick="enterDungeon(${i},${Math.floor(G.best/10)*10+1})">從測量組的繩梯下去（第 ${Math.floor(G.best/10)*10+1} 層出發）</button>`:''}</div>`}).join('')}</div>`}
+ ${DG.map((d,i)=>{const op=dgOpen(i);if(d.p2&&!G.clear.d5)return '';return `${d.p2&&!DG[i-1].p2?'<div class="ttl" style="margin-top:16px">第二部　背面的地圖</div><div class="sub" style="margin-bottom:8px">舊地圖邊框以外的地方。沒有畫到一半的線可以跟，只能自己走、自己畫。</div>':''}<div class="pn ${G.clear[d.id]?'gold':''}" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">${op?d.ic:'🔒'}</span><div class="gr"><b class="sf" style="font-size:17px">${op?d.n:'？？？'}</b> ${G.clear[d.id]?'<span class="tag gdtx">已踏破</span>':''}<div class="sub">${op?d.d:'踏破前一座迷宮後開放'}</div><div class="sub">${op?`建議 Lv.${d.lv}　${d.id==='abyss'?'無限層'+(G.best?`・最深 ${G.best} 層`:''):'共 '+d.fl+' 層'}`:''}</div></div>${op?`<button class="btn gd sm" onclick="enterDungeon(${i})">出發</button>`:''}</div>${op&&d.id!=='abyss'&&G.clear[d.id]&&d.fl>=6?`<button class="btn wd sm" style="margin-top:8px" onclick="enterDungeon(${i},${d.fl-3})">走捷徑（第 ${d.fl-3} 層出發，收穫較少）</button>`:''}${op&&d.id==='abyss'&&G.best>=10?`<button class="btn wd sm" style="margin-top:8px" onclick="enterDungeon(${i},${Math.floor(G.best/10)*10+1})">從測量組的繩梯下去（第 ${Math.floor(G.best/10)*10+1} 層出發）</button>`:''}</div>`}).join('')}</div>`}
 function runD(){return DG[G.run.di]}
 function runL(){const r=G.run,d=runD();return d.id==='abyss'?d.lv+Math.round(r.fl*1.3):d.lv+r.fl-1}
 function isBossFloor(){const r=G.run,d=runD();return d.id==='abyss'?r.fl%5===0:r.fl===d.fl}
@@ -2420,7 +2421,9 @@ function pool(){const d=runD();if(d.id!=='abyss')return d;return DG[Math.min(4,M
 function rBattle(amb){const L=runL(),p=pool();let n=L<3?R(1,2):R(2,3);if(G.run.mod==='horde')n++;n=Math.min(3,n);if(L<5)n=Math.min(n,G.party.length);const es=[];for(let i=0;i<n;i++)es.push(mkEnemy(pick(p.en),L));startBattle(es,{amb})}
 function rElite(){const L=runL(),p=pool(),es=[mkEnemy(p.el,L)];if(L>6)es.push(mkEnemy(pick(p.en),L));startBattle(es,{elite:1})}
 function rBoss(){const L=runL(),p=pool(),b=mkEnemy(p.bs,L+1,1);if(runD().id==='abyss')b.n='守門者・'+b.n;startBattle([b],{boss:1})}
-function rTreasure(){sfx('chest');const L=runL(),g=giveGold(R(20,40)+L*5);let h=`<p>角落裡有一只積滿灰塵的寶箱。</p><p>獲得 <b class="gdtx">${g} 金</b></p>`;
+function rTreasure(){sfx('chest');const L=runL();
+ if(L>=4&&runD().id!=='abyss'&&Math.random()<.15){dmsg('📦 寶箱……？','<p>角落裡有一只積滿灰塵的寶箱。伸手去掀蓋子的那一瞬間，蓋子自己掀開了——裡面是一圈牙。</p><p class="rdtx">寶箱怪！</p>',()=>startBattle([mkEnemy(MON.mimic,L)],{elite:1,then:()=>{const ge=giveGear(.3,1),g=giveGold(R(40,70)+L*8);dmsg('📦 寶箱怪的肚子',`<p>寶箱怪攤開了。肚子裡塞滿了牠這些年吞下去的東西。</p><p>獲得 <b class="gdtx">${g} 金</b></p><p>獲得 <b class="r${ge.r}">${ge.n}</b> <span class="sub">${gearTxt(ge)}</span></p>`,advance)}}),'迎戰');return}
+ const g=giveGold(R(20,40)+L*5);let h=`<p>角落裡有一只積滿灰塵的寶箱。</p><p>獲得 <b class="gdtx">${g} 金</b></p>`;
  if(Math.random()<.6){const ge=giveGear(.1);h+=`<p>獲得 <b class="r${ge.r}">${ge.n}</b> <span class="sub">${gearTxt(ge)}</span></p>`}else{const k=pick(['potion','ether','hipotion','feather']);addItem(k);h+=`<p>獲得 ${ITEM[k].ic} ${ITEM[k].n}</p>`}
  dmsg('💎 寶箱',h,advance)}
 function rRest(){if(G.run&&runD().id==='d8')return rPost();healAll(.35);const salt=G.run&&runD().id==='d7';if(salt)G.party.forEach(id=>{const c=G.chars[id],s=statOf(id);c.mp=Math.min(s.mmp,c.mp+Math.round(s.mmp*.3))});let h=salt?'<p>土埂邊有一間沒人住的鹽田小屋，水缸裡還有半缸雨水。生命回復了 35%，魔力回復了 65%。</p>':'<p>你們找到一處安全的角落，生起小小的營火。生命與魔力回復了 35%。</p>';const ns=G.party.filter(x=>x!=='hero');
@@ -2592,7 +2595,7 @@ function koSt(u){if(alive(u)||!u.koT)return '';const e=Date.now()-u.koT;return e
 function koCls(u){if(alive(u))return '';return u.koT&&Date.now()-u.koT<1200?'ko':'dead'}
 function exec(u,sk,t,item,bon){
  if(sk===SK.atk&&u.ally){const c=clsOf(u.id);if(c==='healer')sk=SK.hatk;else if(c==='mage')sk=SK.matk}
- B.menu='wait';if(sk.mp)u.mp-=sk.mp;
+ B.menu='wait';if(sk.mp)u.mp-=sk.mp;const lnk=!!(u.ally&&u.lnk&&(sk.ty==='phys'||sk.ty==='mag'));if(lnk)u.lnk=0;
  const basic=sk===SK.atk||!!sk.basic;const fxk=item?(sk.ty==='heal'?'heal':'buff'):sk.fx||(basic?(u.ally?ATKFX[clsOf(u.id)]:'claw'):sk.ty==='heal'?'heal':sk.ty==='buff'?'buff':'claw');let snd=FXS[fxk]||'hit',anyCrit=false,anyHit=false;
  if(!basic&&!item&&sk.n)B.cut={t:sk.n,sub:u.n,foe:!u.ally,art:u.ally?artKey(u.id):(ART[u.key+'_atk']?u.key+'_atk':u.key)};B.act={uid:u.uid,ally:u.ally,hop:sk.ty==='phys'||sk.ty==='mag',ph:sk.ty==='phys',tg:t?t.uid:null,id:u.id,sk:!basic&&!item,tint:TINT[sk.el]||TINT[sk.fx]||(u.ally?'#ffd84a':'#ff5d6c')};if(sk.tg==='ea'&&(sk.ty==='phys'||sk.ty==='mag'))B.aoe={fx:sk.fx||'impact',onAlly:!u.ally,tint:TINT[sk.el]||TINT[sk.fx]||'#fff'};
  const foes=u.ally?B.en:B.al,pals=u.ally?B.al:B.en;
@@ -2600,11 +2603,11 @@ function exec(u,sk,t,item,bon){
  blog(item?`${u.n} 使用了 ${item}`:basic?`${u.n} 的攻擊！`:`${u.n} 使出「${sk.n}」！`);
  for(const x of tg){
   if(sk.ty==='phys'||sk.ty==='mag'){
-   const nat=d20(),bn=u.ally?(bon||0):0,roll=nat===1?1:Math.min(20,nat+bn),ev=evaOf(u,x,sk),ct=critLine(u,sk),hit=nat===20||(nat!==1&&roll>=ev),crit=hit&&(nat===20||roll>=ct);
+   const nat=d20(),bn=u.ally?(bon||0):0,roll=nat===1?1:Math.min(20,nat+bn),ev=evaOf(u,x,sk),ct=critLine(u,sk),hit=nat===20||(nat!==1&&roll>=ev),crit=hit&&(nat===20||roll>=ct||lnk);
    B.fx.push({uid:x.uid,dz:bn&&nat!==1?nat+'+'+bn:nat,t:crit?'c':hit?'n':'m'});
    if(!hit){B.fx.push({uid:x.uid,t:roll===1?'失手':'閃避',c:'x',miss:1});snd=roll===1?'miss':'dodge';blog(roll===1?`🎲1　大失手！沒打中 ${x.n}`:`🎲${roll}（閃避 ${ev}）　${x.n} 閃開了`);continue}
    const a=(sk.ty==='mag'?u.mag:u.atk)*(u.st.atkUp>0?1.3:1)*(u.st.atkDn>0?.75:1);
-   const d=x.def*(x.st.defUp>0?1.4:1)*(x.st.defDn>0?.6:1)*(sk.ty==='mag'?.7:1);
+   const d=x.def*(x.st.defUp>0?1.4:1)*(x.st.defDn>0?.6:1)*(sk.ty==='mag'?.7:1)*(u.ally&&u.af&&u.af.pierce?.75:1);
    let dm=(a*sk.pow-d*.5)*(.85+roll*.015);const bk=!u.ally&&B.blk?B.blk[x.uid]||0:0;if(bk){dm*=bk===2?.5:.75;B.fx.push({uid:x.uid,t:bk===2?'完美格擋':'格擋',c:'lb'})}
    if(u.ally&&sk.mp&&G.run&&G.run.mod==='mana')dm*=1.2;
    let em=0;if(sk.el&&x.wk&&x.wk.includes(sk.el)){dm*=1.5;em=1}else if(sk.el&&x.rs&&x.rs.includes(sk.el)){dm*=.6;em=-1}
@@ -2612,11 +2615,11 @@ function exec(u,sk,t,item,bon){
    if(crit)dm*=1.7;if(x.guard)dm*=.5;
    if(sk.amb&&(x.st.poison>0||x.st.stun>0||x.st.atkDn>0||x.st.defDn>0)){dm*=1.6;B.fx.push({uid:x.uid,t:'破綻',c:'lb'})}
    dm=Math.max(1,Math.round(dm));
+   if(crit&&u.ally)B.al.forEach(a=>{if(a!==u&&a.af&&a.af.link&&alive(a)&&!a.lnk){a.lnk=1;B.fx.push({uid:a.uid,t:'呼應',c:'lb'})}});
    if(crit&&af.crmp){const mm=Math.round(u.mmp*.08);u.mp=Math.min(u.mmp,u.mp+mm);B.fx.push({uid:u.uid,t:'迴魔 +'+mm,c:'s'})}
    if(basic&&af.vamp){const hh=Math.round(dm*.15);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
    if(!u.ally&&x.af&&x.af.thorn&&sk.ty==='phys'&&alive(u)){const th=Math.max(1,Math.round(dm*.15));u.hp=Math.max(1,u.hp-th);B.fx.push({uid:u.uid,t:'荊棘 '+th,c:'d'})}
-   if(sk.drain&&!u.ally&&alive(u)){const h=Math.max(1,Math.round(dm*.5));u.hp=Math.min(u.mhp,u.hp+h);B.fx.push({uid:u.uid,t:'+'+h,c:'h'})}
-   const was=x.hp;x.hp=Math.max(0,x.hp-dm);if(x.hp<=0&&x.ally&&x.st.endure>0){x.st.endure=0;x.hp=1;B.fx.push({uid:x.uid,t:'撐住了！',c:'lb'});blog(`${x.n} 咬牙撐住了！`)}anyHit=true;if(crit)anyCrit=true;const tn=TINT[sk.el]||TINT[fxk]||'#fff';B.fx.push({uid:x.uid,fx:fxk,from:u.uid});if(crit)B.fx.push({uid:x.uid,t:'CRITICAL',c:'lb'});if(em)B.fx.push({uid:x.uid,t:em>0?'WEAK':'RESIST',c:'lb '+(em>0?'w':'r')});B.fx.push({uid:x.uid,t:String(dm),c:crit?'c':em>0?'w':em<0?'r':sk.ty==='mag'?'m':'d',sh:1,r:dm/x.mhp,crit,tint:tn});if(was>0&&x.hp<=0){x.koT=Date.now()+480;B.fx.push({uid:x.uid,ko:1})}if(sk.drain){const hh=Math.round(dm*.5);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
+      const was=x.hp;x.hp=Math.max(0,x.hp-dm);if(x.hp<=0&&x.ally&&x.st.endure>0){x.st.endure=0;x.hp=1;B.fx.push({uid:x.uid,t:'撐住了！',c:'lb'});blog(`${x.n} 咬牙撐住了！`)}anyHit=true;if(crit)anyCrit=true;const tn=TINT[sk.el]||TINT[fxk]||'#fff';B.fx.push({uid:x.uid,fx:fxk,from:u.uid});if(crit)B.fx.push({uid:x.uid,t:'CRITICAL',c:'lb'});if(em)B.fx.push({uid:x.uid,t:em>0?'WEAK':'RESIST',c:'lb '+(em>0?'w':'r')});B.fx.push({uid:x.uid,t:String(dm),c:crit?'c':em>0?'w':em<0?'r':sk.ty==='mag'?'m':'d',sh:1,r:dm/x.mhp,crit,tint:tn});if(was>0&&x.hp<=0){x.koT=Date.now()+480;B.fx.push({uid:x.uid,ko:1})}if(sk.drain){const hh=Math.round(dm*.5);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
    blog(`🎲${roll}　${crit?'爆擊！':''}${em>0?'命中弱點！':em<0?'被抵抗了…':''}${x.n} 受到 ${dm} 傷害${x.hp<=0?'，倒下了！':''}`);
    if(sk.steal&&u.ally){const g=giveGold(10+runL()*3);blog(`順手摸走了 ${g} 金`)}
   }else if(sk.ty==='heal'){

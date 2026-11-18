@@ -103,6 +103,7 @@
 | `enemy_boss8` | 1:1　512×512 | 伏流蛇王：極粗的巨蛇，鱗片是濕潤的深青色、帶白色鹽紋，從石井口盤繞而出（井口石欄可畫，作為牠纏繞的物件），頭部昂起、張口露出雙毒牙。面向左。透明背景 | 乾河床迷宮之主 |
 | `cg_p2_d8` | 3:4　768×1024 | 半埋驛站的二樓窗台，棗站在窗內，把一本攤開的厚驛簿轉向畫面外（主角視角），另一手剛蓋下車輪形木印章；窗台上放著拆下來的小銅鈴，窗外是傍晚的乾河床與剛點亮的屋簷油燈 | 「往哪裡，還沒想好」結尾 |
 
+| `enemy_mimic` | 1:1　512×512 | 寶箱怪：普通木製寶箱（鐵包角、舊鎖頭），蓋子張開成一張大嘴，裡面是一圈白牙和一條長舌，箱底伸出四條短短的木腳。面向左。透明背景 | 各迷宮寶箱房偶爾出現（Lv.4 以上） |
 
 ## 戰鬥立繪（側面舞台用，2026-11-19 追加）
 側面視角、**全身、面向右**（魔物在右邊），透明背景，600×800，腳底對齊畫面下緣。長相、服裝與一般立繪完全一致。
@@ -112,4 +113,4 @@
 
 ## 魔物攻擊圖（2026-11-19 追加）
 每隻魔物一張 `enemy_<鍵>_atk`：與 `enemy_<鍵>` 同一隻、同配色同比例，**面向左**、攻擊瞬間（撲咬、揮擊、噴吐、施法），動作幅度大、輪廓清楚。1:1 512×512 透明背景，身體位置與待機圖大致對齊（遊戲會直接換圖）。可選：`enemy_<鍵>_hurt`（受擊後仰）。
-鍵：slime bat shroom snake golem boss1 ghost crab fish frog croc boss2 lizard goblin spark beetle forge boss3 tome wolf ink bknight banshee boss4 puppet eye meteor astro twins boss5 swift vine moth weather gnaw boss6 crust mirage slug egret pillar boss7 sandfish jackal dust wheel camel boss8
+鍵：slime bat shroom snake golem boss1 ghost crab fish frog croc boss2 lizard goblin spark beetle forge boss3 tome wolf ink bknight banshee boss4 puppet eye meteor astro twins boss5 swift vine moth weather gnaw boss6 crust mirage slug egret pillar boss7 sandfish jackal dust wheel camel boss8 mimic
