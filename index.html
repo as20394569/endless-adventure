@@ -142,6 +142,7 @@ b{font-weight:400}
 #toast{position:fixed;left:50%;top:56px;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:90%}
 #toast div{background:#000;border:2px solid var(--gd);color:var(--gd);padding:5px 14px;font-size:16px;animation:ts 2.4s steps(12) forwards}
 @keyframes ts{0%{opacity:0}10%,80%{opacity:1}100%{opacity:0}}
+textarea{width:100%;padding:8px 10px;margin-top:8px;border:2px solid var(--ln);border-radius:4px;background:#000;color:var(--tx);font:12px/1.4 monospace;word-break:break-all;resize:vertical}
 input[type=text]{width:100%;padding:10px 12px;border:2px solid var(--ln);border-radius:4px;background:#000;color:var(--tx);font:inherit}
 .sel{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .opt{border:2px solid var(--mt);border-radius:4px;padding:10px;text-align:center;background:#000;width:100%}
@@ -402,6 +403,7 @@ const TR={
  d3:{bpm:126,l:"E4 E4 F4 E4 G4 _ F4 E4 D4 D4 E4 D4 F4 _ E4 D4 E4 E4 F4 E4 A4 _ G4 F4 E4 _ D4 _ E4 _ _ -",b:"E2 E2 - E2 E2 - E2 - D2 D2 - D2 D2 - D2 - E2 E2 - E2 F2 - F2 - E2 - D2 - E2 - - -"},
  d4:{bpm:76,w:'triangle',v:.045,l:"F#4 _ _ C#5 _ _ A4 _ G#4 _ _ E4 _ _ C#4 _ D4 _ _ A4 _ _ F#4 _ E4 _ G#4 _ C#4 _ _ -",b:"F#2 _ _ _ _ _ _ _ C#2 _ _ _ _ _ _ _ D2 _ _ _ _ _ _ _ C#2 _ _ _ _ _ _ _"},
  d5:{bpm:110,l:"C4 _ G4 _ D#4 _ D4 C4 A#3 _ F4 _ D4 _ C4 A#3 G#3 _ D#4 _ C4 _ G#3 _ G3 _ B3 _ D4 _ G4 -",b:"C2 - C3 - C2 - C3 - A#1 - A#2 - A#1 - A#2 - G#1 - G#2 - G#1 - G#2 - G1 - G2 - G1 - G2 -"},
+ d6:{bpm:98,w:'triangle',v:.045,l:"G4 _ D5 _ C5 B4 A4 _ G4 _ E4 _ G4 _ _ - A4 _ E5 _ D5 C5 B4 _ A4 _ F#4 _ D4 _ _ -",b:"G2 - D3 - G2 - D3 - E2 - B2 - E2 - B2 - A2 - E3 - A2 - E3 - D2 - A2 - D2 - A2 -"},
  abyss:{bpm:90,l:"E4 _ D#4 _ E4 _ B3 _ C4 _ B3 _ A#3 _ B3 _ E4 _ F4 _ E4 _ D#4 _ B3 _ _ _ - - - -",b:"E2 - - - B1 - - - C2 - - - B1 - - - E2 - - - F2 - - - B1 - - - E2 - - -"},
  battle:{bpm:152,l:"A4 A4 C5 A4 E5 _ D5 C5 B4 B4 D5 B4 G5 _ F5 E5 A4 A4 C5 E5 A5 _ G5 E5 F5 E5 D5 C5 B4 _ E5 _",b:"A2 A2 A2 A2 A2 A2 A2 A2 G2 G2 G2 G2 G2 G2 G2 G2 F2 F2 F2 F2 F2 F2 F2 F2 E2 E2 E2 E2 E2 E2 E2 E2"},
  boss:{bpm:164,l:"D5 _ A4 D5 F5 _ E5 D5 C5 _ G4 C5 E5 _ D5 C5 A#4 _ F4 A#4 D5 _ C5 A#4 A4 _ C#5 _ E5 _ A5 _",b:"D2 D2 D3 D2 D2 D2 D3 D2 C2 C2 C3 C2 C2 C2 C3 C2 A#1 A#1 A#2 A#1 A#1 A#1 A#2 A#1 A1 A1 A2 A1 A1 A1 A2 A1"}
@@ -410,7 +412,7 @@ function trParse(x){const a=x.trim().split(/\s+/),o=[];for(let i=0;i<a.length;i+
 function bgmStop(){if(BG.tm){clearInterval(BG.tm);BG.tm=null}BG.name=null}
 function bgm(name,tr){if(!AC||MUTE){return}const key=name+'|'+(tr||0);if(BG.name===key&&BG.tm)return;bgmStop();const T=TR[name];if(!T)return;BG.name=key;if(!T.p)T.p={l:trParse(T.l),b:trParse(T.b)};BG.step=0;BG.next=AC.currentTime+.1;const sd=30/(T.bpm+(tr||0)*2),mul=Math.pow(2,(tr||0)/12);
  BG.tm=setInterval(()=>{if(AC.state!=='running')return;if(BG.next<AC.currentTime)BG.next=AC.currentTime+.05;while(BG.next<AC.currentTime+.25){const i=BG.step,l=T.p.l[i%T.p.l.length],b=T.p.b[i%T.p.b.length];if(l)tone(l[0]*mul,BG.next,sd*l[1]*.95,T.w||'square',T.v||.022);if(b)tone(b[0]*mul,BG.next,sd*b[1]*.9,'triangle',.045);BG.step++;BG.next+=sd}},60)}
-const BTR={d1:0,d2:-2,d3:2,d4:-4,d5:3,abyss:-5};
+const BTR={d1:0,d2:-2,d3:2,d4:-4,d5:3,abyss:-5,d6:1};
 function updBgm(){const s=S.scr;let n='town',tr=0;if(s==='title'||s==='create')n='title';else if(s==='story'||s==='regist')n='story';else if(s==='battle'){n=B&&B.o.boss?'boss':'battle';tr=G&&G.run?BTR[runD().id]||0:0}else if(s==='dungeon'&&G&&G.run)n=runD().id;else if(s==='tavern'||s==='npc')n='tavern';else if(s==='guild')n='guild';else if(s==='shop')n='shop';else if(s==='party'||s==='chr'||s==='bag')n='camp';else if(s==='log')n='story';bgm(n,tr)}
 function toggleMute(){MUTE=!MUTE;try{localStorage.setItem('ea_mute',MUTE?'1':'0')}catch(e){}if(MUTE)bgmStop();render()}
 document.addEventListener('pointerdown',e=>{if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(x){return}}if(AC.state==='suspended')AC.resume().then(updBgm);else updBgm();if(e.target.closest&&e.target.closest('button'))sfx('click')},true);
@@ -532,6 +534,10 @@ Object.assign(ITEM,{
  m5b:MT('虛空稜鏡','🔮','星隕之塔・虛空之眼、天球術士。能看見平常看不見的星'),
  m5e:MT('雙子星徽','♊','星隕之塔・雙子星衛（精英）'),
  m5s:MT('王冠殘片','👑','星隕之塔・星隕之王（迷宮之主）'),
+ m6a:MT('燕巢藤絲','🪹','風簷棧道・崖燕、纏板藤。搓成弦，淋了雨也不會鬆'),
+ m6b:MT('崖霧粉','⏳','風簷棧道・霧蛾、風化石俑。抹在手上不打滑，攀崖的人離不開'),
+ m6e:MT('啃樑獸門齒','🪚','風簷棧道・啃樑獸（精英）'),
+ m6s:MT('裂風尾羽','🦅','風簷棧道・裂風鵰（迷宮之主）'),
  m0s:MT('守門者之證','🗝️','無盡迴廊・每五層的守門者')
 });
 const E=(n,e,k,h,a,d,s,sk)=>({n,e,k,h,a,d,s,sk});
@@ -561,7 +567,8 @@ const DG=[
   el:E('雙子星衛','♊','twins',3,1.4,1.4,1.3,{n:'雙星連斬',pow:1.6,ch:.45}),
   bs:E('星隕之王','👑','boss5',7.5,1.45,1.4,1.2,{n:'天墜',pow:1,all:1,eff:{k:'defDn',t:3,ch:.5},ch:.55}),
   end:['|塔頂。星星近得像伸手就能摘下來。','{F}|「……畫完了。五座迷宮，全部。」','|你們把羊皮紙翻過來。背面是一整片空白。','{F}|「下一張地圖，就由我們自己來畫吧。」','|【主線完結——無盡迴廊將持續開放，冒險仍在繼續】']},
- {id:'abyss',n:'無盡迴廊',lv:4,fl:Infinity,ic:'♾️',d:'沒有盡頭的迴廊。每五層有一名守門者，越深越危險，也越豐饒。',un:2}
+ {id:'abyss',n:'無盡迴廊',lv:4,fl:Infinity,ic:'♾️',d:'沒有盡頭的迴廊。每五層有一名守門者，越深越危險，也越豐饒。',un:2},
+ {id:'d6',n:'風簷棧道',lv:25,fl:9,ic:'🌬️',p2:1,req:'d5',d:'釘在東壁斷崖上的舊木棧道，不在任何一張公會地圖上。每隔一段，岩壁上鑿著避風的石龕。'}
 ];
 const ELN={fire:'火',ice:'冰',holy:'聖',dark:'暗',poison:'毒'};
 const P=(n,pow,ch,fx,o)=>Object.assign({n,ty:'phys',pow,ch,fx},o||{}),Mg=(n,pow,ch,fx,o)=>Object.assign({n,ty:'mag',pow,ch,fx},o||{}),Hl=(n,pow,ch)=>({n,ty:'heal',pow,ch}),Bf=(n,k,ch,o)=>Object.assign({n,ty:'buff',ch,self:1,eff:{k,t:3,ch:1}},o||{});
@@ -598,13 +605,21 @@ M('meteor','隕石獸','☄️',[1.4,1.2,.8,1.4,.8,4],['ice'],['fire'],'claw','p
 M('astro','天球術士','🔮',[.9,.5,1.35,.8,1.2,7],['dark'],['holy'],'spark','mag',[Mg('星爆',.8,.35,'star',{all:1}),Mg('重力',.6,.25,'dark',ef('defDn',.8))]);
 M('twins','雙子星衛','♊',[3,1.4,.9,1.4,1.3,8],['dark'],['holy'],'slash','phys',[P('雙星連斬',1.6,.4,'cross'),Bf('星光護盾','defUp',.2)]);
 M('boss5','星隕之王','👑',[7.5,1.45,1.45,1.4,1.2,8],['dark'],['fire','holy'],'cross','phys',[Mg('天墜',1,.35,'star',Object.assign({all:1},ef('defDn',.5))),P('王權之劍',1.7,.25,'cross'),Mg('星之重壓',.8,.15,'dark',Object.assign({all:1},ef('stun',.2,1)))]);
-const DGM={d1:[['slime','bat','shroom','snake'],'golem','boss1'],d2:[['ghost','crab','fish','frog'],'croc','boss2'],d3:[['lizard','goblin','spark','beetle'],'forge','boss3'],d4:[['tome','wolf','ink','bknight'],'banshee','boss4'],d5:[['puppet','eye','meteor','astro'],'twins','boss5']};
+M('swift','崖燕','🐦',[.75,1.2,.5,.6,1.8,9],['poison'],[],'pierce','phys',[P('俯衝',1.35,.35,'pierce'),P('亂啄',.7,.25,'flurry',{all:1})]);
+M('vine','纏板藤','🪢',[1.3,1.05,.7,1.1,.7,4],['fire'],['poison'],'whip','phys',[P('絞緊',1,.3,'whip',ef('stun',.3,1)),P('抽打',.75,.25,'whip',{all:1})]);
+M('moth','霧蛾','🦋',[.85,.5,1.3,.7,1.2,7],['fire'],['poison'],'spore','mag',[Mg('鱗粉',.7,.3,'spore',Object.assign({all:1},ef('atkDn',.5))),Mg('霧中燈',1.2,.3,'gaze',ef('stun',.3,1))]);
+M('weather','風化石俑','🪨',[1.5,1.15,.4,1.9,.5,3],['ice'],['poison','fire'],'quake','phys',[P('崩落',1.4,.35,'rock'),Bf('風化硬殼','defUp',.2)]);
+M('gnaw','啃樑獸','🦫',[3.1,1.4,.6,1.3,1.1,6],['fire'],[],'bite','phys',[P('啃斷',1.65,.35,'bite',ef('defDn',.6)),P('甩板',.85,.3,'tail',{all:1})]);
+M('boss6','裂風鵰','🦅',[8,1.45,1.3,1.3,1.5,9],['ice'],['poison'],'claw','phys',[Mg('裂風',.95,.35,'wave',{all:1}),P('攫擊',1.7,.3,'claw'),Mg('逆風',.6,.15,'wave',Object.assign({all:1},ef('atkDn',.6)))]);
+MON.boss6.p2={say:'裂風鵰收起翅膀，落在棧道上——整條路都在晃。',atk:1.15,sk:[P('震翼',.9,.35,'quake',Object.assign({all:1},ef('stun',.2,1))),P('攫擊',1.9,.35,'claw'),Mg('裂風',1,.2,'wave',{all:1})]};
+const DGM={d1:[['slime','bat','shroom','snake'],'golem','boss1'],d2:[['ghost','crab','fish','frog'],'croc','boss2'],d3:[['lizard','goblin','spark','beetle'],'forge','boss3'],d4:[['tome','wolf','ink','bknight'],'banshee','boss4'],d5:[['puppet','eye','meteor','astro'],'twins','boss5'],d6:[['swift','moth','vine','weather'],'gnaw','boss6']};
+function matN(d){return Object.keys(DGM).indexOf(d.id)+1}
 DG.forEach(d=>{const m=DGM[d.id];if(m){d.en=m[0].map(k=>MON[k]);d.el=MON[m[1]];d.bs=MON[m[2]]}});
 Object.keys(DGM).forEach((id,i)=>{const m=DGM[id];m[0].forEach((k,j)=>MON[k].mt='m'+(i+1)+(j%2?'b':'a'));MON[m[1]].mt='m'+(i+1)+'e';MON[m[2]].mt='m'+(i+1)+'s'});
 function skDesc(k){return (k.ty==='heal'?'回復自身生命':k.ty==='buff'?(k.self?'強化自身':'削弱我方全體'):(k.ty==='mag'?'魔法':'物理')+(k.all?'・全體':'・單體')+' ×'+k.pow)+(k.el?'・'+ELN[k.el]+'屬性':'')+(k.eff?'・'+({stun:'暈眩',poison:'中毒',atkUp:'攻擊上升',defUp:'防禦上升',defDn:'防禦下降',atkDn:'攻擊下降'})[k.eff.k]:'')+(k.drain?'・吸取生命':'')}
 function monInfoHtml(e){const dx=G.dex&&G.dex[e.k];return `<div class="row" style="align-items:flex-start">${art(e.key,`<span style="font-size:54px">${e.e}</span>`,'pt')}<div class="gr"><span class="gdtx" style="font-size:22px">${e.n}</span><div class="sub">Lv.${e.lv}${e.boss?'・迷宮之主':e.exp>(8+e.lv*4)*2?'・精英':''}${dx?`　擊破 ${dx.k||0} 次`:''}</div>${pbar('h',e.hp,e.mhp)}<div class="sub">生命 ${e.hp} / ${e.mhp}</div><div style="margin-top:4px">弱點：${e.wk.length?e.wk.map(x=>`<span class="tag wk">${ELN[x]}</span>`).join(''):'<span class="mt">無</span>'}　抗性：${e.rs.length?e.rs.map(x=>`<span class="tag rsx">${ELN[x]}</span>`).join(''):'<span class="mt">無</span>'}</div></div></div>
  <table class="st" style="margin-top:10px"><tr><td>攻擊</td><td>${e.atk}</td><td style="text-align:left;color:var(--mt)">　魔攻</td><td>${e.mag}</td></tr><tr><td>防禦</td><td>${e.def}</td><td style="text-align:left;color:var(--mt)">　敏捷</td><td>${e.spd}</td></tr><tr><td>幸運</td><td>${e.luk}</td><td style="text-align:left;color:var(--mt)">　普通攻擊</td><td>${e.at==='mag'?'魔法':'物理'}</td></tr><tr><td>經驗</td><td>${e.exp}</td><td style="text-align:left;color:var(--mt)">　金幣</td><td>${e.gold}</td></tr></table>
- <div class="ttl" style="margin-top:12px">技能</div><div class="list">${e.sk.map(k=>`<div class="row"><div class="gr">${k.n}<div class="sub">${skDesc(k)}</div></div><span class="tag">${Math.round(k.ch*100)}%</span></div>`).join('')}</div>${e.mt?`<div class="sub" style="margin-top:8px">掉落素材：<span style="color:#fff">${ITEM[e.mt].ic} ${ITEM[e.mt].n}</span>${e.boss||e.mt[2]==='e'?'（必定掉落）':''}</div>`:''}`}
+ <div class="ttl" style="margin-top:12px">技能</div>${e.p2?`<div class="sub rdtx" style="margin-bottom:4px">${e.ph2?'已改變行動模式':'生命低於一半時，會改變行動模式'}</div>`:''}<div class="list">${e.sk.map(k=>`<div class="row"><div class="gr">${k.n}<div class="sub">${skDesc(k)}</div></div><span class="tag">${Math.round(k.ch*100)}%</span></div>`).join('')}</div>${e.mt?`<div class="sub" style="margin-top:8px">掉落素材：<span style="color:#fff">${ITEM[e.mt].ic} ${ITEM[e.mt].n}</span>${e.boss||e.mt[2]==='e'?'（必定掉落）':''}</div>`:''}`}
 function enemyTap(uid){if(!B)return;if(B.menu==='tgE')return tgt(uid);const e=B.en.find(x=>x.uid===uid);if(e&&alive(e))modal(monInfoHtml(e))}
 function dexShow(k,L,boss){modal(monInfoHtml(mkEnemy(MON[k],L,boss)))}
 const MOD=[
@@ -666,11 +681,11 @@ function addAff(id,n){if(id==='hero'||G.aff[id]==null)return;G.aff[id]=clamp(G.a
 function addItem(k,n){G.inv[k]=(G.inv[k]||0)+(n||1)}
 /* 裝備生成 */
 const RN=['','精良的','稀有的','傳說的'],RM=[1,1.25,1.6,2.1];
-const WA=[['銅劍','獵弓','短刀'],['鋼劍','長弓','打刀'],['祕銀劍','鷹眼弓','名刀'],['星鐵劍','龍骨弓','妖刀'],['天隕劍','星弓','神刀']];
-const WM=['橡木杖','水晶杖','賢者之杖','霜語法典','星辰權杖'],HN=['皮帽','鐵盔','祕銀頭冠','霜紋兜帽','星織頭環'],AN=['皮甲','鎖子甲','祕銀鎧','霜紋法袍','星織戰衣'],CN=['銅戒指','水紋護符','赤燼耳墜','霜晶項鍊','星屑冠'];
+const WA=[['銅劍','獵弓','短刀'],['鋼劍','長弓','打刀'],['祕銀劍','鷹眼弓','名刀'],['星鐵劍','龍骨弓','妖刀'],['天隕劍','星弓','神刀'],['蒼穹劍','天風弓','雲切']];
+const WM=['橡木杖','水晶杖','賢者之杖','霜語法典','星辰權杖','蒼穹之杖'],HN=['皮帽','鐵盔','祕銀頭冠','霜紋兜帽','星織頭環','天風羽冠'],AN=['皮甲','鎖子甲','祕銀鎧','霜紋法袍','星織戰衣','蒼穹戰衣'],CN=['銅戒指','水紋護符','赤燼耳墜','霜晶項鍊','星屑冠','天風指環'];
 function rollR(b){const x=Math.random()-(b||0);return x<.03?3:x<.15?2:x<.45?1:0}
 function genGear(t,r,slot,kind,o){o=o||{};
- t=Math.max(1,Math.round(t));const ti=Math.min(4,Math.floor((t-1)/5)),m=RM[r];slot=slot||pick(['w','w','a','h','c']);
+ t=Math.max(1,Math.round(t));const ti=Math.min(5,Math.floor((t-1)/5)),m=RM[r];slot=slot||pick(['w','w','a','h','c']);
  const g={id:'g'+Date.now().toString(36)+R(1000,99999),slot,r,t,plus:0,st:{}};let nm;
  if(slot==='w'){kind=kind||(Math.random()<.35?'mag':'atk');if(kind==='mag'){nm=o.nm||WM[ti];g.st.mag=Math.round((4+t*1.6)*m);g.st.mmp=Math.round((2+t*.6)*m)}else{nm=o.nm||pick(WA[ti]);g.st.atk=Math.round((4+t*1.6)*m)}}
  else if(slot==='h'){nm=HN[ti];g.st.def=Math.round((1.5+t*.6)*m);g.st.mmp=Math.round((3+t*.9)*m)}
@@ -705,10 +720,10 @@ function doRegist(){
  fullHeal();save();play('pro2',()=>go('town'))}
 
 /* ============ 劇情 ============ */
-const CAST={'老調音師':{k:'npc_tuner',c:'#9aa7b0',h:'#d8d8d0'},'老監察':{k:'npc_inspector',c:'#7a86a8',h:'#b8b8b8'},'赫妲':{k:'npc_hilda',c:'#e08a4a',h:'#7a3b2a'},'瑪爾塔':{k:'npc_marta',c:'#c9a878',h:'#8a8f9c'},'葛蘭':{k:'npc_gran',c:'#8c9a7a',h:'#e0e0e0'}};
+const CAST={'穗':{k:'npc_sui',c:'#d9a05b',h:'#5a3b24'},'老調音師':{k:'npc_tuner',c:'#9aa7b0',h:'#d8d8d0'},'老監察':{k:'npc_inspector',c:'#7a86a8',h:'#b8b8b8'},'赫妲':{k:'npc_hilda',c:'#e08a4a',h:'#7a3b2a'},'瑪爾塔':{k:'npc_marta',c:'#c9a878',h:'#8a8f9c'},'葛蘭':{k:'npc_gran',c:'#8c9a7a',h:'#e0e0e0'}};
 const Hn=()=>G.hero.name,Fn=()=>NPC[friendId()].n,Ml=()=>G.hero.g==='m';
 const fl=(a,b)=>Fn()+'|'+(Ml()?a:b);
-const MID={d1:3,d2:3,d3:3,d4:4,d5:7};
+const MID={d1:3,d2:3,d3:3,d4:4,d5:7,d6:4};
 const SC={
  pro1:{t:'序章　沒畫完的地圖',f:()=>{const Y=Ml()?'你':'妳',H=Hn(),F=Fn();return[
   '#序章　沒畫完的地圖',
@@ -916,7 +931,7 @@ const SC={
   '|幾天後，寄往村子的地圖有了回信。信封裡只有一張字條，和一支新的炭筆。',
   '葛蘭的手記|『背面是空的。接下來，畫你們自己的。——葛蘭』',
   fl('「下一張地圖，要從哪裡開始畫呢？」','「下一張。從哪開始。」'),
-  '|【主線完結。無盡迴廊將持續開放——冒險仍在繼續。】']}},
+  '|【第一部「沒畫完的地圖」完結——羊皮紙的背面，還是空的。】']}},
  in_abyss:{t:'外傳　無盡迴廊',f:()=>[
   '#外傳　無盡迴廊',
   '|城郊的地面裂開了一道口子。往下看，階梯一圈一圈地盤旋，看不見底。',
@@ -1513,7 +1528,7 @@ function pqStart(id){if(!pqAvail(id))return;const p=G.pq[id],c=pqCh(id);p.ph=1;s
 function pqHere(){const r=G.run,d=runD();if(!r||r.pqd||!G.pq)return null;return G.party.find(id=>{if(id==='hero')return false;const p=G.pq[id],c=pqCh(id);return p&&p.ph===1&&c&&c.dg===d.id&&r.fl>=c.fl})}
 function pqRoom(id){const c=pqCh(id);return{n:`${NPC[id].n}的心事`,ic:'💠',d:c.rt}}
 function rPq(id){const p=G.pq[id],c=pqCh(id),k='pq_'+pqKey(id)+(p.ch+1);
- play(k+'b',()=>{save();if(!c.foe)return pqFinish(id);const L=runL()+1;
+ play(k+'b',()=>{save();if(!c.foe)return pqFinish(id);const L=Math.max(runL()+1,Math.round(G.party.reduce((a,x)=>a+G.chars[x].lv,0)/G.party.length)-3);
   startBattle(c.foe.map(f=>{const e=mkEnemy(MON[f.k],L);e.n=f.n;e.mhp=e.hp=Math.round(e.hp*f.h);e.atk=Math.round(e.atk*f.a);e.mag=Math.round(e.mag*f.a);e.exp=Math.round(e.exp*1.5);return e}),{elite:1,pq:id,then:()=>pqFinish(id)})})}
 function pqFinish(id){const p=G.pq[id],c=pqCh(id),key=pqKey(id),n=p.ch+1;
  play('pq_'+key+n+'c',()=>{p.ch=n;p.ph=0;G.run.pqd=1;addAff(id,5);let h;
@@ -1549,7 +1564,7 @@ const CAMP={
   ()=>['「刀要每天擦。不是因為會鏽。是擦的時候，會知道自己今天心靜不靜。」',`「今天擦得很順。」她只說了這一句。但${Yn()}們都聽懂了。`],
   ()=>['「方才那一戰，你退了半步。」',`${Yn()}以為要挨罵了。「退得好。那半步若是不退，我的刀就出不去。……與人並肩，原來是這樣的事。」`]]
 };
-function EV2(L){const Y=Yn(),mi=DG.indexOf(pool())+1,mk='m'+mi+'a',np=G.party.filter(x=>x!=='hero'),gg=g=>`<p>獲得 <b class="r${g.r}">${g.n}</b> <span class="sub">${gearTxt(g)}</span></p>`;return[
+function EV2(L){const Y=Yn(),mi=matN(pool()),mk='m'+mi+'a',np=G.party.filter(x=>x!=='hero'),gg=g=>`<p>獲得 <b class="r${g.r}">${g.n}</b> <span class="sub">${gearTxt(g)}</span></p>`;return[
  ()=>({t:'還溫著的鍋子',d:'轉角有一處剛被收拾過的營地。火堆的灰還是溫的，鍋裡剩著半鍋湯，旁邊用石頭壓著一張紙條：「喝完請把鍋子倒扣。」',o:[
   {l:'喝掉，把鍋子倒扣好',f:()=>{healAll(.18);return `<p>湯很淡，但是熱的。全員回復了一些生命與魔力。${Y}們照著紙條，把鍋子倒扣在石頭上。</p>`}},
   {l:'在紙條旁留下一瓶回復藥',s:G.inv.potion>0?'消耗 回復藥 ×1':`${Y}沒有回復藥`,f:()=>{if(!(G.inv.potion>0))return `<p>${Y}翻了翻背包，沒有多的藥。只好在紙條背面寫了一句「謝謝招待」。</p>`;G.inv.potion--;const x=18+L*9;G.party.forEach(id=>{gainExp(id,x);addAff(id,2)});return `<p>${Y}把藥壓在紙條上，補了一行字：「下一位請用。」</p><p>不知道會是誰拿到。但這座迷宮裡，大概就是這樣一個接一個走下去的。全員獲得 ${x} 經驗。</p><p class="pktx">夥伴們好感 +2</p>`}},
@@ -1597,11 +1612,99 @@ const EVD={
   {l:'問：「這一層的魔物怕什麼？」',f:()=>{const x=25+L*10;G.party.forEach(id=>gainExp(id,x));return `<p>書頁上密密麻麻地浮出字來，足足寫了三頁，還附了插圖。</p><p>全員獲得 ${x} 經驗。</p>`}},
   {l:'問：「這附近哪裡有寶物？」',s:'幸運檢定・難度 13',f:()=>{const c=check('luk',13);if(c.ok){const g=giveGear(.3,1);return c.txt+'<p>書頁上浮出一張小小的地圖，箭頭指著旁邊書架的第三層。</p>'+`<p>獲得 <b class="r${g.r}">${g.n}</b> <span class="sub">${gearTxt(g)}</span></p>`}return c.txt+'<p>書頁上浮出一行字：「在你們的背包底層。上次沒整理。」</p><p>翻了翻，只找到半塊壓扁的乾糧。</p>'}},
   {l:'什麼都不問，把它闔上',f:()=>{G.party.forEach(id=>{const c=G.chars[id],s=statOf(id);c.mp=Math.min(s.mmp,c.mp+Math.round(s.mmp*.3))});return '<p>別問不想知道的事。你們輕輕把書闔上，放回架上。</p><p>書脊暖了一下，像是鬆了一口氣。全員魔力回復了一些。</p>'}}]})],
+ d6:L=>[()=>({t:'翹起來的板子',d:'腳下一塊棧板的一頭翹了起來，釘子鬆了一半。從板縫看下去，是雲。',o:[
+  {l:'把釘子敲回去',s:'攻擊檢定・難度 14',f:()=>{const c=check('atk',14);if(c.ok){const x=20+L*9;G.party.forEach(id=>gainExp(id,x));return c.txt+`<p>敲到第三下，板子服貼了。下一個走過這裡的人是誰，沒有人知道，但他不會踩空。全員獲得 ${x} 經驗。</p>`}hurtAll(.08);return c.txt+'<p>釘子敲歪了，板子彈起來，結結實實打在小腿上。全員受到一點傷害。</p>'}},
+  {l:'蹲下來看板底',f:()=>{G.party.forEach(id=>{const c=G.chars[id],s=statOf(id);c.mp=Math.min(s.mmp,c.mp+Math.round(s.mmp*.2))});return `<p>板底用刀尖刻著日期，旁邊還有一行小字：</p><div class="dice">${pick(['「雨季前換。手凍得握不住刨刀。」','「這塊是我女兒釘的。歪的。不准笑。」','「第四百一十二塊。」','「今天崖下的雲散了一次。看見鹽階在反光。」','「樑還好。板子先撐十年。」'])}</div><p>不知道是哪一年、哪一個人。你們把板子輕輕按回去。全員魔力回復了一些。</p>`}},
+  {l:'大步跨過去',f:()=>'<p>跨過去之後，誰都沒有回頭看那道縫。</p>'}]}),
+ ()=>({t:'風停了',d:'毫無預兆地，風停了。雲從崖腳一路退開，東邊的整片大地第一次露了出來——丘陵、乾河床、遠處一片發白的東西。沒有一處畫在地圖上。',noq:1,o:[
+  {l:'把看得見的先描下來',f:()=>{const x=24+L*10;G.party.forEach(id=>{gainExp(id,x);addAff(id,1)});return `<p>炭筆沙沙地響了很久。</p><p>「那條河往哪邊流？」「南。……大概。」「大概的不能畫。」</p><p>最後落在紙上的，只有確定的三條線。雲又合上了。全員獲得 ${x} 經驗。</p><p class="pktx">夥伴們好感 +1</p>`}},
+  {l:'趁沒有風趕路',f:()=>{healAll(.12);return '<p>難得不必一手扶著岩壁走路。這一段走得比哪一段都快。全員回復了一些生命與魔力。</p>'}},
+  {l:'坐下來，看到雲合上為止',f:()=>{G.party.forEach(id=>{const c=G.chars[id],s=statOf(id);c.mp=Math.min(s.mmp,c.mp+Math.round(s.mmp*.35));addAff(id,2)});return '<p>腳懸在棧道外面晃。誰也沒有說「好高」。</p><p>全員魔力回復了不少。</p><p class="pktx">夥伴們好感 +2</p>'}}]})],
  d5:L=>[()=>({t:'星屑雨',d:'塔壁的裂口外，細碎的光點正斜斜地落下來。有幾粒飄進了走廊，落在地上還是亮的。',o:[
   {l:'伸手去接',s:'幸運檢定・難度 13',f:()=>{const c=check('luk',13);if(c.ok){addItem('m5a',2);return c.txt+'<p>掌心一陣溫熱。攤開手，是兩撮還在發光的細砂。</p><p>獲得 ✨ 星屑砂 ×2。</p>'}hurtAll(.1);return c.txt+'<p>接是接到了，但比想像中燙得多。全員的手都紅了一片。</p>'}},
   {l:'靠著牆看一會',f:()=>{G.party.forEach(id=>{const c=G.chars[id],s=statOf(id);c.mp=Math.min(s.mmp,c.mp+Math.round(s.mmp*.3));addAff(id,1)});return '<p>沒有人說話。光點落了很久才停。</p><p>全員魔力回復了一些。</p><p class="pktx">夥伴們好感 +1</p>'}},
   {l:'趁亮趕路',f:()=>{const g=giveGold(R(20,35)+L*5);return `<p>星屑把走廊照得通明，平常看不見的角落也一清二楚。順路撿到 ${g} 金。</p>`}}]})]
 };
+/* ============ 第二部　背面的地圖 ============ */
+Object.assign(SC,{
+ in_d6:{t:'第二部　背面的地圖',f:()=>{const H=Hn(),F=Fn();return[
+  '#第二部　背面的地圖',
+  '|公會櫃台。瑪爾塔把一份發黃的委託書攤在你們面前，手指壓著其中一行。',
+  '瑪爾塔|「三十年前的委託書。測繪範圍：城周五座迷宮。」',
+  '瑪爾塔|「東壁以外，一個字都沒有。沒人付錢的地方，公會不派人去畫。這不是偷懶，是規矩。」',
+  `${H}|「那面崖壁上有路。從塔頂看得很清楚，一條貼著崖面的線。」`,
+  '瑪爾塔|「有路，就表示有人走。有人走，卻沒有任何一張圖上有它。」',
+  '瑪爾塔|「……我在這個櫃台坐了三十年，從來沒想過要問為什麼。」',
+  '|她抽出一張新的委託書，在委託人那一欄簽下自己的名字，推了過來。',
+  '瑪爾塔|「沒有委託人的測繪，公會不能發補給，也不能替你們記錄生還。所以，委託人是我。」',
+  '瑪爾塔|「報酬，銅幣一枚。先說好，不會加。」',
+  fl('「一枚也是正式的委託喔。我會好好收著的。」','「……夠了。一枚也是委託。」'),
+  '|——城東，東壁。',
+  '|站到崖邊才知道，那條「線」是木頭。一塊接一塊的棧板，用鐵釘和木楔固定在鑿進岩壁的橫樑上，寬度只夠兩個人錯身。',
+  '|板子有新有舊。最新的幾塊，木頭還是白的。',
+  `|${F}把羊皮紙翻到背面，壓在膝蓋上。空白的紙面被風吹得直響。`,
+  fl('「第一筆要畫在哪裡，我想了一整個晚上。」','「第一筆。想了一晚。」'),
+  fl('「結果，還是只能從腳底下開始畫呢。」','「……從腳下開始。」'),
+  '|炭筆落下。背面的地圖，有了第一條線。']}},
+ mid_d6:{t:'過路費',f:()=>{const Y=Yn(),H=Hn(),F=Fn();return[
+  '|第四段棧道的盡頭，岩壁上鑿著一處避風的石龕。裡面有火塘，灰還是溫的。',
+  '|牆邊靠著一疊刨好的木板、一把刨刀、半桶鐵釘。還有一個人。',
+  '|十二、三歲的孩子，坐在那疊木板上，手裡拿著鎚子，像是已經等了很久。',
+  '穗|「過路費。一個人兩根釘子。」',
+  `${H}|「……釘子？」`,
+  '穗|「你們踩過的每一塊板子都會鬆一點。鬆了要重釘。釘子不會自己長出來。」',
+  fl('「對不起，我們身上沒有帶釘子……可以用別的東西抵嗎？」','「沒帶釘子。……有別的能抵嗎。」'),
+  '|孩子把你們從頭看到腳，最後視線停在背包的肩帶上。',
+  '穗|「那就扛板子。一人兩塊，扛到下一個風簷。」',
+  '|板子比看起來重得多。孩子自己扛了三塊走在最前面，腳步一次也沒有猶豫。',
+  `|放下板子的時候，${Y}看見了板底。每一塊都用刀尖刻著日期，還有一個很小的記號——一道屋簷，下面一橫。`,
+  '穗|「我們家的記號。誰釘的板子，誰負責到它爛掉為止。」',
+  '穗|「最舊的一塊是我阿祖的阿祖釘的。本來在最前面那一段。」',
+  `${H}|「本來？」`,
+  '穗|「被叼走了。今年春天開始，前面的板子一塊一塊地不見。阿公的膝蓋不行了，現在是我在補，可是我補的沒有牠拆的快。」',
+  '|她說這些的時候沒有抬頭，一直在數桶裡的釘子。',
+  fl('「這條路……是通到哪裡的呢？」','「這條路，通到哪。」'),
+  '穗|「鹽階。再過去我不知道。阿公說，以前每年都有人從那邊上來換釘子。」',
+  '穗|「我沒見過。可是路斷了的話，就算有人想上來，也上不來吧。」',
+  '|她把鎚子插回腰帶，連名字也沒問，就回頭去釘剛才那幾塊板子了。',
+  `|${F}在圖上這個位置，畫了一個小小的屋簷記號。`]}},
+ pre_d6:{t:'一百四十年份的巢',f:()=>[
+  '|棧道在這裡斷了。橫樑還在，上面的板子一塊也不剩，只有釘孔排成整齊的兩列。',
+  '|斷口對面突出的岩台上，有一個巢。大得像一間屋子。',
+  '|巢是用棧板搭的。新的、舊的、發黑的、裂開的，交錯著疊在一起。有幾塊板底朝上，刻著的日期還看得見。',
+  fl('「……牠不是在搗亂。牠只是覺得，這是整面崖壁上最好的木頭。」','「……不是搗亂。牠覺得這是最好的木頭。」'),
+  `${Hn()}|「可惜這些木頭有主人。」`,
+  '|巢裡的東西張開了翅膀。風，從那一刻起換了方向。']},
+ end_d6:{t:'屋簷下面一橫',f:()=>{const H=Hn(),F=Fn();return[
+  '|裂風鵰最後一次振翅，沒能飛起來。牠往崖下滑翔了很長一段，消失在雲裡。',
+  '|穗是自己踩著橫樑走過來的。沒有板子的那一段，她走得和平地一樣。',
+  '|她爬進巢裡，把板子一塊一塊翻過來。看日期，看記號，然後分成兩疊。',
+  '穗|「這邊的還能用。這邊的爛了。」',
+  '|翻到最底下的時候，她停了很久。那塊板子黑得像鐵，邊緣被磨得圓圓的，板底的日期淺到要用手指去摸才讀得出來。',
+  '穗|「……阿祖的阿祖。」',
+  fl('「要把它釘回原來的地方嗎？我們可以幫忙扛。」','「釘回去嗎。我們扛。」'),
+  '穗|「不釘了。它已經踩不得了。」',
+  '|她把那塊板子抱在懷裡，想了一下，又補了一句。',
+  '穗|「掛在風簷裡。阿公每天都看得到。」',
+  `|${F}攤開羊皮紙，把棧道從頭畫到這裡，在斷口的位置停了筆。`,
+  fl('「這條路的名字，要怎麼寫才好呢？」','「路的名字。怎麼寫。」'),
+  '穗|「沒有名字。我們都只叫它『路』。」',
+  '穗|「……外面的人要怎麼叫，隨便。板子不要亂踩就好。」',
+  `|${F}想了想，在線的旁邊寫下四個字，又在下面補了一行很小的註記。`,
+  '背面的地圖|『風簷棧道。過路費：鐵釘，每人兩根。』',
+  '|穗湊過來，把那行字看了兩遍。她其實不識字——這件事是後來才知道的。但旁邊那個屋簷記號，她認得。',
+  '|——公會櫃台。',
+  '|瑪爾塔把圖攤開。正面是三十年前的五座迷宮，她沒有看。她看的是背面那一條細細的線。',
+  '瑪爾塔|「刻在板子上的日期，最早是一百四十年前。……公會成立，才九十年。」',
+  '瑪爾塔|「報到，確認。全員生還。委託完成。」',
+  '|一枚銅幣被推過櫃台。接著，她從抽屜裡拿出一張告示，親手釘上了委託板。',
+  '公會告示|『東壁棧道，可通行。途中有補板人收取過路費，請備妥鐵釘。賒帳者，扛板。』',
+  '瑪爾塔|「還有。棧道的另一頭，那孩子說叫什麼？」',
+  `${H}|「鹽階。」`,
+  '瑪爾塔|「沒聽過。」',
+  '|她說這三個字的時候，嘴角動了一下。三十年前，測繪師們聽見沒聽過的地名時，大概就是這種表情。',
+  '|【第二部　第一章　完——棧道盡頭的路，將在之後的更新開放】']}}
+});
 function scCg(id){if(/^pq_/.test(id)){const m=id.match(/^pq_([a-z]+)(\d)([abc])$/),cg='cg_pq_'+m[1]+(m[1]==='fr'?'_'+G.hero.g:'');if(m[2]==='3'&&m[3]==='c'&&ART[cg])return cg;return m[3]==='a'?(m[1]==='hiyo'&&m[2]==='3'?'bg_guild':'bg_tavern'):'bg_'+PQ[m[1]][m[2]-1].dg}if(id==='pro1'||id==='pro2')return 'cg_prologue_'+G.hero.g;if(/^fg_/.test(id))return 'bg_forge';if(/^rk_/.test(id))return 'bg_guild';const m=id.match(/_(d\d|abyss)$/);if(!m)return null;return /^end_/.test(id)?'bg_guild':'bg_'+m[1]}
 function play(id,then){G.seen[id]=1;story(SC[id].f(),then,scCg(id))}
 function maybe(id,then){if(SC[id]&&!G.seen[id])play(id,then);else then()}
@@ -1617,14 +1720,14 @@ function vStory(){
  const p=ln.indexOf('|'),w=ln.slice(0,p),t=ln.slice(p+1);let pic='';
  if(w){if(w===G.hero.name)pic=face('hero','');else{const id=Object.keys(NPC).find(k=>NPC[k].n===w&&G.chars[k]);if(id)pic=face(id,'');else if(CAST[w])pic=art(CAST[w].k,bust(CAST[w].c,CAST[w].h),'')}}
  else if(s.cg&&ART[s.cg])pic=art(s.cg,'',s.cg.startsWith('cg_')?'cgp':'wide');
- const paper=/手記|字跡|帳簿|的信|回信|紙條|筆記|通知|明信片|論文|藤結|草結|書頁|登記簿/.test(w);s.full=t;
+ const paper=/手記|字跡|帳簿|的信|回信|紙條|筆記|通知|告示|背面的地圖|明信片|論文|藤結|草結|書頁|登記簿/.test(w);s.full=t;
  return `<div class="vn" onclick="storyNext()"><button class="btn sm skip" onclick="event.stopPropagation();storyEnd()">略過</button><div class="stage">${pic}</div><div class="box ${paper?'paper':''}">${w?`<div class="who">${w}</div>`:''}<div id="vtxt" class="${w?'':'nar'}"></div><div class="nx">▼</div></div></div>`}
 function storyType(){const s=S.story;if(!s||s.done)return;if(s.tm)clearInterval(s.tm);let n=0;const e=$('#vtxt');if(!e)return;
  s.tm=setInterval(()=>{n+=1;e.textContent=s.full.slice(0,n);if(n>=s.full.length){clearInterval(s.tm);s.tm=null;s.done=true}},24)}
 function vLog(){
  const ks=Object.keys(SC).filter(k=>G.seen[k]);
  return `<div class="pn gold"><div class="ttl">冒險手記</div><div class="sub">經歷過的故事可以在這裡重新閱讀。（${ks.length} / ${Object.keys(SC).length}）</div><div class="list">${Object.keys(SC).map(k=>G.seen[k]?`<div class="row"><div class="gr">${SC[k].t}</div><button class="btn sm" onclick="story(SC['${k}'].f(),()=>go('log'),scCg('${k}'))">閱讀</button></div>`:`<div class="row lock"><div class="gr">？？？</div></div>`).join('')}</div></div>
- <div class="pn"><div class="ttl">魔物圖鑑</div><div class="sub">戰鬥中點魔物也能查看。數值為該迷宮的基準等級。</div>${DG.filter(d=>DGM[d.id]).map(d=>`<div style="margin-top:8px"><span class="gdtx">${d.ic} ${d.n}</span><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">${[...DGM[d.id][0],DGM[d.id][1],DGM[d.id][2]].map((k,i)=>(G.dex||{})[k]?`<button class="btn sm" onclick="dexShow('${k}',${d.lv+(i===5?d.fl:i===4?2:0)},${i===5})">${MON[k].n}</button>`:'<span class="btn sm lock">？？？</span>').join('')}</div></div>`).join('')}</div>
+ <div class="pn"><div class="ttl">魔物圖鑑</div><div class="sub">戰鬥中點魔物也能查看。數值為該迷宮的基準等級。</div>${DG.filter(d=>DGM[d.id]&&(!d.p2||G.clear.d5)).map(d=>`<div style="margin-top:8px"><span class="gdtx">${d.ic} ${d.n}</span><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">${[...DGM[d.id][0],DGM[d.id][1],DGM[d.id][2]].map((k,i)=>(G.dex||{})[k]?`<button class="btn sm" onclick="dexShow('${k}',${d.lv+(i===5?d.fl:i===4?2:0)},${i===5})">${MON[k].n}</button>`:'<span class="btn sm lock">？？？</span>').join('')}</div></div>`).join('')}</div>
  <div class="pn"><div class="ttl">羈絆故事</div><div class="list">${npcList().map(id=>[0,1].map(i=>G.flags['b'+(i+1)+id]?`<div class="row"><div class="gr">${NPC[id].n}　羈絆 ${i?'二':'一'}</div><button class="btn sm" onclick="story(NPC['${id}'].bond[${i}],()=>go('log'))">閱讀</button></div>`:`<div class="row lock"><div class="gr">${NPC[id].n}　羈絆 ${i?'二':'一'}　<span class="sub">好感 ${i?80:50}</span></div></div>`).join('')).join('')}</div></div>`}
 
 /* ============ 畫面切換 ============ */
@@ -1646,10 +1749,17 @@ function render(){
 function pbar(cls,v,m,g){const p=clamp(v/m*100,0,100);return `<div class="bar ${cls} ${cls==='h'&&v>0&&v<m*.3?'low':''}">${g!=null&&g>v?`<b style="width:${clamp(g/m*100,0,100)}%"></b>`:''}<i style="width:${p}%"></i></div>`}
 function vRight(){
  return `<div class="ttl">隊伍</div>`+G.party.map(id=>{const c=G.chars[id],s=statOf(id);return `<div class="row" style="margin-bottom:12px">${face(id,'av')}<div class="gr"><b>${nameOf(id)}</b> <span class="sub">Lv.${c.lv} ${clsName(id)}</span>${pbar('h',c.hp,s.mhp)}${pbar('m',c.mp,s.mmp)}<div class="sub">${c.hp}/${s.mhp}　${c.mp}/${s.mmp}</div></div></div>`}).join('')
- +`<div class="ttl" style="margin-top:18px">羊皮紙地圖</div><div class="sub">已踏破 ${cleared()} / 5 座迷宮</div><div class="map">${DG.slice(0,5).map(d=>`<i class="${G.clear[d.id]?'ok':''}"></i>`).join('')}</div>${G.best?`<div class="sub" style="margin-top:8px">無盡迴廊最深：第 ${G.best} 層</div>`:''}`}
+ +`<div class="ttl" style="margin-top:18px">羊皮紙地圖</div><div class="sub">已踏破 ${DG.slice(0,5).filter(d=>G.clear[d.id]).length} / 5 座迷宮</div><div class="map">${DG.slice(0,5).map(d=>`<i class="${G.clear[d.id]?'ok':''}"></i>`).join('')}</div>${G.clear.d5?`<div class="sub" style="margin-top:8px">背面：${DG.filter(d=>d.p2).map(d=>G.clear[d.id]?d.n:G.seen['in_'+d.id]?d.n+'（測繪中）':'還是空白').join('、')}</div><div class="map">${DG.filter(d=>d.p2).map(d=>`<i class="${G.clear[d.id]?'ok':''}"></i>`).join('')}<i style="border-style:dashed;opacity:.5"></i><i style="border-style:dashed;opacity:.5"></i></div>`:''}${G.best?`<div class="sub" style="margin-top:8px">無盡迴廊最深：第 ${G.best} 層</div>`:''}`}
 
 /* ============ 標題 / 建立 ============ */
-function vTitle(){return `<div class="title">${art('kv_title','🗺️','kv')}<h1>無盡冒險</h1><div class="en">ENDLESS ADVENTURE</div><div class="bx">${hasSave()?`<button class="btn gd" onclick="cont()">繼續冒險</button>`:''}<button class="btn ${hasSave()?'':'gd'}" onclick="go('create')">開始新的冒險</button><button class="btn sm" onclick="toggleMute()">音樂與音效：${MUTE?'關':'開'}</button><div class="ps">— PRESS START —</div><div class="sub">單人冒險 TRPG　每一次探索都獨一無二</div></div></div>`}
+function vTitle(){return `<div class="title">${art('kv_title','🗺️','kv')}<h1>無盡冒險</h1><div class="en">ENDLESS ADVENTURE</div><div class="bx">${hasSave()?`<button class="btn gd" onclick="cont()">繼續冒險</button>`:''}<button class="btn ${hasSave()?'':'gd'}" onclick="go('create')">開始新的冒險</button><button class="btn sm" onclick="toggleMute()">音樂與音效：${MUTE?'關':'開'}</button><button class="btn sm" onclick="saveMenu()">存檔備份／匯入</button><div class="ps">— PRESS START —</div><div class="sub">單人冒險 TRPG　每一次探索都獨一無二</div></div></div>`}
+function saveCode(){const s=localStorage.getItem(SAVE);return s?btoa(unescape(encodeURIComponent(s))):''}
+function saveMenu(){if(G&&S.scr!=='title')save();S.svc=0;const c=saveCode();modal(`<div class="ttl">存檔備份</div><div class="sub">存檔只放在這台裝置的瀏覽器裡，清除瀏覽資料就會消失。把下面這段文字複製到別處保存；換裝置或想還原時，貼回這裡再按「匯入」。</div><textarea id="svtx" rows="6" spellcheck="false" placeholder="把備份的文字貼在這裡">${c}</textarea><div class="chips" style="margin-top:8px">${c?'<button class="btn sm gd" onclick="svCopy()">複製</button>':''}<button class="btn sm" onclick="$(\'#svtx\').value=\'\';$(\'#svtx\').focus()">清空以便貼上</button><button class="btn sm" onclick="svLoad()">匯入（覆蓋目前存檔）</button></div>`)}
+function svCopy(){const e=$('#svtx');e.select();try{if(navigator.clipboard)navigator.clipboard.writeText(e.value);else document.execCommand('copy');toast('已複製，貼到記事本或訊息裡保存')}catch(x){toast('請長按文字手動複製')}}
+function svLoad(){let o;try{o=JSON.parse(decodeURIComponent(escape(atob($('#svtx').value.replace(/\s+/g,'')))))}catch(e){o=null}
+ if(!o||!o.hero||!o.chars||!Array.isArray(o.party)||!o.chars.hero)return toast('這段文字不是有效的存檔');
+ if(hasSave()&&!S.svc){S.svc=1;return toast(`將覆蓋目前的存檔，再按一次「匯入」確認（${o.hero.name}　Lv.${o.chars.hero.lv}）`)}
+ localStorage.setItem(SAVE,JSON.stringify(o));closeModal();B=null;G=null;S={scr:'title'};render();toast('存檔已匯入，按「繼續冒險」')}
 function cont(){G=load();migrate();if(!G.flags.reg)return go('regist');if(G.run){dchoose()}else go('town')}
 function vCreate(){
  const hc=g=>g==='m'?'#7fa8f0':'#f09ac0',hh=g=>g==='m'?'#3b4a7a':'#b0527a';
@@ -1661,11 +1771,11 @@ function vCreate(){
  ${hasSave()?'<div class="sub rdtx" style="margin-top:8px;text-align:center">※ 完成公會登記後會覆蓋現有存檔</div>':''}</div><button class="btn wd" onclick="go('title')">返回</button></div>`}
 
 /* ============ 城鎮 ============ */
-function nextGoal(){const d=DG.find(d=>d.id!=='abyss'&&!G.clear[d.id]);return d?`踏破「${d.n}」（建議 Lv.${d.lv}）`:'主線已完結——挑戰無盡迴廊的更深處'}
+function nextGoal(){const d=DG.find(d=>d.id!=='abyss'&&!G.clear[d.id]);return d?`${d.p2?'把「'+d.n+'」畫上背面的地圖':'踏破「'+d.n+'」'}（建議 Lv.${d.lv}）`:'棧道盡頭的「鹽階」還沒有路可下——先到無盡迴廊的更深處練練手'}
 function vTown(){
  const hot=npcList().filter(id=>bondReady(id));if(qOpen())qFill();const qr=qOpen()?G.q.list.filter(qDone).length:0;
- return `${art('bg_town','🏰','sc')}<div class="pn gold"><div class="ttl">迷宮都市・艾爾特利亞</div><div>目前目標：<span class="gdtx">${nextGoal()}</span></div>${G.party.some(id=>apLeft(id)>0)?'<div class="gdtx" style="margin-top:6px">▲ 有尚未分配的養成點數</div>':''}${hot.length?`<div class="pktx" style="margin-top:6px">💗 ${hot.map(nameOf).join('、')} 似乎有話想對你說</div>`:''}${npcList().some(pqAvail)?`<div class="gdtx" style="margin-top:6px">💠 ${npcList().filter(pqAvail).map(nameOf).join('、')} 好像有心事，到酒館聽聽看</div>`:''}${qr?`<div class="gdtx" style="margin-top:6px">📋 有 ${qr} 件委託可以回公會回報</div>`:''}${qOpen()&&!G.flags.qb?'<div style="margin-top:6px">📋 公會的委託板對你們開放了</div>':''}${fgOpen()&&!G.seen.fg_open?'<div style="margin-top:6px">⚒️ 公會後巷有間工坊開著門</div>':''}</div>
- <div class="cards"><button class="card" onclick="go('guild')"><div class="ic">🗺️</div><b>冒險者公會</b><span class="sub">挑選迷宮出發</span></button><button class="card" onclick="go('tavern')"><div class="ic">🍺</div><b>旅人酒館</b><span class="sub">與夥伴交流</span></button><button class="card" onclick="go('shop')"><div class="ic">🏪</div><b>雜貨與武具</b><span class="sub">補給、裝備、禮物</span></button><button class="card ${fgOpen()?'':'lock'}" onclick="openForge()"><div class="ic">⚒️</div><b>爐邊工坊</b><span class="sub">${fgOpen()?'打造、升階裝備':'踏破翠苔迴廊後開放'}</span></button><button class="card" onclick="go('party')"><div class="ic">🛡️</div><b>隊伍與養成</b><span class="sub">能力、裝備、強化</span></button><button class="card" onclick="go('log')"><div class="ic">📖</div><b>冒險手記</b><span class="sub">重讀故事</span></button></div>`}
+ return `${art('bg_town','🏰','sc')}<div class="pn gold"><div class="ttl">迷宮都市・艾爾特利亞</div><div>目前目標：<span class="gdtx">${nextGoal()}</span></div>${G.party.some(id=>apLeft(id)>0)?'<div class="gdtx" style="margin-top:6px">▲ 有尚未分配的養成點數</div>':''}${hot.length?`<div class="pktx" style="margin-top:6px">💗 ${hot.map(nameOf).join('、')} 似乎有話想對你說</div>`:''}${npcList().some(pqAvail)?`<div class="gdtx" style="margin-top:6px">💠 ${npcList().filter(pqAvail).map(nameOf).join('、')} 好像有心事，到酒館聽聽看</div>`:''}${qr?`<div class="gdtx" style="margin-top:6px">📋 有 ${qr} 件委託可以回公會回報</div>`:''}${qOpen()&&!G.flags.qb?'<div style="margin-top:6px">📋 公會的委託板對你們開放了</div>':''}${fgOpen()&&!G.seen.fg_open?'<div style="margin-top:6px">⚒️ 公會後巷有間工坊開著門</div>':''}${G.clear.d5&&!G.seen.in_d6?'<div class="gdtx" style="margin-top:6px">🧭 瑪爾塔在公會翻出了一份舊委託書，好像和東壁那條線有關</div>':''}</div>
+ <div class="cards"><button class="card" onclick="go('guild')"><div class="ic">🗺️</div><b>冒險者公會</b><span class="sub">挑選迷宮出發</span></button><button class="card" onclick="go('tavern')"><div class="ic">🍺</div><b>旅人酒館</b><span class="sub">與夥伴交流</span></button><button class="card" onclick="go('shop')"><div class="ic">🏪</div><b>雜貨與武具</b><span class="sub">補給、裝備、禮物</span></button><button class="card ${fgOpen()?'':'lock'}" onclick="openForge()"><div class="ic">⚒️</div><b>爐邊工坊</b><span class="sub">${fgOpen()?'打造、升階裝備':'踏破翠苔迴廊後開放'}</span></button><button class="card" onclick="go('party')"><div class="ic">🛡️</div><b>隊伍與養成</b><span class="sub">能力、裝備、強化</span></button><button class="card" onclick="go('log')"><div class="ic">📖</div><b>冒險手記</b><span class="sub">重讀故事</span></button></div><button class="btn sm wd" style="margin-top:10px" onclick="saveMenu()">💾 存檔備份／匯入</button>`}
 
 /* ============ 夥伴 / 好感 ============ */
 function bondReady(id){return (G.aff[id]>=50&&!G.flags['b1'+id])||(G.aff[id]>=80&&!G.flags['b2'+id])}
@@ -1759,7 +1869,7 @@ function useMenu(k){modal(`<div class="ttl">對誰使用${ITEM[k].n}？</div><di
 function useItem(k,id){const it=ITEM[k],c=G.chars[id],s=statOf(id);if(G.inv[k]<=0)return;if(it.use==='hp')c.hp=Math.min(s.mhp,c.hp+Math.round(s.mhp*it.v));else c.mp=Math.min(s.mmp,c.mp+Math.round(s.mmp*it.v));G.inv[k]--;save();closeModal();render();if(G.inv[k]>0)useMenu(k)}
 
 /* ============ 商店 ============ */
-function shopStock(){if(!G.shop||G.shop.day!==G.day){const t=[1,5,10,15,20,22][cleared()];G.shop={day:G.day,list:[genGear(t,0,'w','atk'),genGear(t,0,'w','mag'),genGear(t,0,'h'),genGear(t,0,'a'),genGear(t,0,'c'),genGear(t+1,1)]};G.shop.list.forEach(g=>g.v=Math.round(g.v*1.6))}return G.shop.list}
+function shopStock(){if(!G.shop||G.shop.day!==G.day){const t=[1,5,10,15,20,22,27][Math.min(6,cleared())];G.shop={day:G.day,list:[genGear(t,0,'w','atk'),genGear(t,0,'w','mag'),genGear(t,0,'h'),genGear(t,0,'a'),genGear(t,0,'c'),genGear(t+1,1)]};G.shop.list.forEach(g=>g.v=Math.round(g.v*1.6))}return G.shop.list}
 function vShop(){
  const st=shopStock(),dc=G.q.rank>=2?.9:1;
  return `${art('bg_shop','🏪','sc')}<div class="pn"><div class="ttl">補給品</div>${dc<1?'<div class="sub gdtx">公會持牌冒險者：補給品九折</div>':''}<div class="list">${Object.keys(ITEM).filter(k=>ITEM[k].use).map(k=>shopRow(k,dc)).join('')}</div></div>
@@ -1770,21 +1880,22 @@ function buyItem(k,p){if(G.gold<p)return;G.gold-=p;addItem(k);save();if($('#moda
 function buyGear(i){const g=G.shop.list[i];if(G.gold<g.v)return;G.gold-=g.v;g.v=Math.round(g.v/1.6);G.gear.push(g);G.shop.list.splice(i,1);toast(`購入 ${g.n}`);save();render()}
 
 /* ============ 鍛造（爐邊工坊） ============ */
-const FT=[6,11,17,23,29],FISTN=['皮拳套','鐵拳套','祕銀拳套','星鐵拳套','天隕拳套'],DAGN=['銅匕首','鋼匕首','祕銀匕首','星鐵匕首','天隕匕首'];
+const FT=[6,11,17,23,29],FISTN=['皮拳套','鐵拳套','祕銀拳套','星鐵拳套','天隕拳套','蒼穹拳套'],DAGN=['銅匕首','鋼匕首','祕銀匕首','星鐵匕首','天隕匕首','天風匕首'];
 const FSL=[['w','武器'],['h','頭部'],['a','身體'],['c1','飾品・迅捷'],['c2','飾品・活力']];
 const FQ=[[3,3,0,0,20],[4,4,1,0,45],[8,8,2,1,110]],RQ=[[3,3,0,0,15],[4,4,1,0,35],[6,6,2,1,90]];
 const HILDA=['「素材放檯子上。別放爐邊，會燒掉。」','「稀有的東西要用精英身上的料。傳說級？去跟迷宮之主要。」','「飾品我也做。別露出那種表情，打鐵的手沒有你想的那麼粗。」','「升階是把舊東西回爐重打。強化過的等級會留著，放心。」','「說清楚是給誰用的。同一塊鐵，打成劍和打成拳套，是兩回事。」'];
 function fgOpen(){return !!G.clear.d1}
 function fgDisc(){return G.seen.fg_leo?.8:1}
 function fgTiers(){const a=DG.slice(0,5).map((d,i)=>({i,n:d.n,ic:d.ic,t:FT[i],ok:!!G.clear[d.id],m:['m'+(i+1)+'a','m'+(i+1)+'b','m'+(i+1)+'e','m'+(i+1)+'s']}));
- a.push({i:5,n:'無盡迴廊',ic:'♾️',t:Math.max(31,5+Math.round((G.best||0)*1.3)),ok:!!G.clear.d5&&G.best>=20,m:['m5a','m5b','m5e','m0s']});return a}
+ a.push({i:5,n:'無盡迴廊',ic:'♾️',t:Math.max(31,5+Math.round((G.best||0)*1.3)),ok:!!G.clear.d5&&G.best>=20,m:['m5a','m5b','m5e','m0s']});
+ DG.filter(d=>d.p2).forEach((d,j)=>{const n=matN(d);a.push({i:6+j,n:d.n,ic:d.ic,t:35+j*6,ok:!!G.clear[d.id],m:['m'+n+'a','m'+n+'b','m'+n+'e','m'+n+'s']})});return a}
 function mkCost(T,q,t){const c={};T.m.forEach((k,i)=>{if(q[i])c[k]=q[i]});c.gold=Math.round(t*q[4]*fgDisc()/5)*5;return c}
 function fgCost(T,r){return mkCost(T,FQ[r-1],T.t)}
 function canPay(c){return Object.keys(c).every(k=>k==='gold'?G.gold>=c.gold:(G.inv[k]||0)>=c[k])}
 function pay(c){for(const k in c){if(k==='gold')G.gold-=c.gold;else G.inv[k]-=c[k]}}
 function costHtml(c){return `<div class="need">${Object.keys(c).map(k=>k==='gold'?`<span class="${G.gold>=c.gold?'':'no'}">💰 ${c.gold} 金</span>`:`<span class="${(G.inv[k]||0)>=c[k]?'':'no'}">${ITEM[k].ic} ${ITEM[k].n} ${G.inv[k]||0}/${c[k]}</span>`).join('')}</div>`}
 function wName(cls,ti){const i={sword:0,knight:0,ranger:1,samurai:2}[cls];return i!=null?WA[ti][i]:cls==='monk'?FISTN[ti]:cls==='thief'?DAGN[ti]:WM[ti]}
-function fgMake(T,r,sk,id){const cls=clsOf(id),ti=Math.min(4,Math.floor((T.t-1)/5)),mg=cls==='mage'||cls==='healer';
+function fgMake(T,r,sk,id){const cls=clsOf(id),ti=Math.min(5,Math.floor((T.t-1)/5)),mg=cls==='mage'||cls==='healer';
  const g=genGear(T.t,r,sk[0]==='c'?'c':sk,mg?'mag':'atk',{nm:sk==='w'?wName(cls,ti):null,ks:sk==='c1'?['spd','luk']:sk==='c2'?['mhp','mmp']:null});g.fg=1;return g}
 function fgIds(){return ['hero',...npcList().filter(id=>G.aff[id]>=NPC[id].need)]}
 function openForge(){if(fgOpen()){if(!G.seen.fg_open)return play('fg_open',()=>{save();openForge()});if(G.clear.d5&&!G.seen.fg_leo)return play('fg_leo',()=>{save();openForge()})}S.fg=null;S.scr='forge';render();$('#main').scrollTop=0}
@@ -1798,7 +1909,7 @@ function vForge(){
  return `${art('bg_forge','⚒️','sc')}<div class="pn gold"><div class="ttl">爐邊工坊</div><div class="row">${art('npc_hilda',bust(CAST['赫妲'].c,CAST['赫妲'].h),'av')}<div class="gr"><b style="color:${CAST['赫妲'].c}">赫妲</b><br>${f.say}</div></div></div>
  <div class="pn"><div class="ttl">打造　<span class="sub">持有 ${G.gold} 金</span></div>
  <div class="sub">為誰打造</div><div class="chips">${ids.map(id=>`<button class="btn sm ${f.id===id?'on':''}" onclick="fgSet('id','${id}')">${nameOf(id)}</button>`).join('')}</div>
- <div class="sub">使用哪裡的素材</div><div class="chips">${Ts.map(t=>`<button class="btn sm ${f.ti===t.i?'on':''}" ${t.ok?'':'disabled'} onclick="fgSet('ti',${t.i})">${t.ic} ${t.n}</button>`).join('')}</div>
+ <div class="sub">使用哪裡的素材</div><div class="chips">${Ts.filter(t=>t.i<6||G.clear.d5).map(t=>`<button class="btn sm ${f.ti===t.i?'on':''}" ${t.ok?'':'disabled'} onclick="fgSet('ti',${t.i})">${t.ic} ${t.n}</button>`).join('')}</div>
  <div class="sub">品質</div><div class="chips">${[1,2,3].map(r=>`<button class="btn sm ${f.r===r?'on':''}" onclick="fgSet('r',${r})">${['','精良','稀有','傳說'][r]}</button>`).join('')}</div>
  <div class="sub">每件所需（裝備等級 ${T.t}${fgDisc()<1?'・工錢八折':''}）</div>${costHtml(c)}
  <div class="list">${FSL.map(([sk,nm])=>{const g=fgMake(T,f.r,sk,f.id),cur=ch.eq[g.slot]&&gearOf(ch.eq[g.slot]);return `<div class="row"><div class="gr"><b class="r${g.r}">${g.n}</b> <span class="tag">${nm}</span><div class="sub">${gearTxt(g)}</div><div class="sub">${cur?'與裝備中的相比　'+(gDiff(g,cur)||'相同'):'目前這個部位是空的'}</div></div><button class="btn sm gd" ${ok?'':'disabled'} onclick="doForge('${sk}')">打造</button></div>`}).join('')}</div>
@@ -1809,7 +1920,7 @@ function vForge(){
 function doForge(sk){const f=S.fg,T=fgTiers()[f.ti],c=fgCost(T,f.r);if(!T.ok||!canPay(c))return;pay(c);const g=fgMake(T,f.r,sk,f.id);G.gear.push(g);G.q.fg=(G.q.fg||0)+1;sfx('buff');save();render();
  const cur=G.chars[f.id].eq[g.slot]&&gearOf(G.chars[f.id].eq[g.slot]);
  modal(`<div class="ttl">打造完成</div><p>赫妲把還帶著餘溫的成品放上檯子。</p><div class="pn" style="margin-top:8px"><b class="r${g.r}">${g.n}</b> <span class="tag">${slotN(g.slot)}</span><div class="sub">${gearTxt(g)}</div><div class="sub">${cur?gDiff(g,cur):''}</div></div><button class="btn gd wd" onclick="doEquip('${f.id}','${g.slot}','${g.id}')">讓 ${nameOf(f.id)} 裝備</button>`)}
-function upTier(g){const Ts=fgTiers();return Ts.find(T=>T.i<5&&g.t<=T.t)||Ts[5]}
+function upTier(g){const Ts=fgTiers();return Ts.find(T=>T.i<5&&g.t<=T.t)||Ts.find(T=>T.i>5&&T.ok&&g.t>=T.t-10&&g.t<=T.t+2)||Ts[5]}
 function rkCost(g){return mkCost(upTier(g),RQ[g.r],g.t)}
 function rankMenu(){
  const gs=G.gear.filter(g=>g.r<3&&!g.uq).sort((a,b)=>(!!equipped(b.id))-(!!equipped(a.id))||b.v-a.v).slice(0,24);
@@ -1845,15 +1956,22 @@ const QH={
  croc:['水道管理員','巨鱷把排水閘當成了窩。雨季快到了，閘門一定得能開。'],
  forge:['赫妲','熔爐魔像身上的齒輪是好鋼。順便替我看一眼，那東西到底是誰造的。'],
  banshee:['學院教授','女妖一哭，整層書架都結冰。有學生的論文還留在那一層。'],
- twins:['觀星台學者','雙子星衛守著塔的觀測窗。我只需要牠們離開一個晚上。']};
+ twins:['觀星台學者','雙子星衛守著塔的觀測窗。我只需要牠們離開一個晚上。'],
+ swift:['東壁的補板人','崖燕在風簷的樑上築巢，掉下來的泥把火塘都蓋住了。趕走幾隻，剩下的就知道這裡有人住。'],
+ moth:['提燈匠','聽說東壁有種蛾，會把提燈的人一步一步引到崖邊。我做的燈，不能有這種名聲。'],
+ vine:['東壁的補板人','藤從板縫裡鑽出來，一個晚上就能把釘子頂鬆。一個人割不完。'],
+ weather:['公會測量組','剛打好的測量樁，被石俑當成同類搬去排在一起了。請把牠們和樁分開。'],
+ gnaw:['東壁的補板人','牠啃的是承重的樑。板子能補，樑一個人抬不動——所以別讓牠再啃了。']};
 const QD={m1a:['藥草商','菌絲曬乾了可以止血。新人季快到了，得多備一些。'],m1b:['皮匠','獸牙磨成的釦子不會生鏽，訂單已經排到下個月。'],
  m2a:['提燈匠','把燐光封進玻璃，就是不必添油的燈。下礦的人最愛這個。'],m2b:['赫妲','含鐵的淤泥燒過能當助熔劑。味道的事就別問了。'],
  m3a:['旅店老闆','放一顆在暖爐裡，可以熱上一整晚。入冬前要先囤好。'],m3b:['赫妲','礦坑封了以後，像樣的鐵砂只剩魔物身上刮得到。'],
  m4a:['抄寫員','用凍墨寫的字，遇熱才會顯現。寫密件的客人指定要這個。'],m4b:['冰店老闆','霜紋碎片丟進木桶，整個夏天都不會化。'],
- m5a:['玻璃匠','星屑砂燒出來的玻璃，到了晚上會自己微微發亮。'],m5b:['觀星台學者','隔著稜鏡看星星，能看見平常看不見的那幾顆。']};
+ m5a:['玻璃匠','星屑砂燒出來的玻璃，到了晚上會自己微微發亮。'],m5b:['觀星台學者','隔著稜鏡看星星，能看見平常看不見的那幾顆。'],
+ m6a:['製弓匠','燕巢裡的藤絲搓成弦，淋了雨也不會鬆。以前只聽過，沒摸過。'],m6b:['公會測量組','往崖下放繩之前，手和繩結都要抹這個。東壁再過去的路，還得靠它。']};
 const QC={d1:['瑪爾塔','迷宮的構造天天在變，舊圖三天就不能用。再走一趟，把新的路線報回來。'],d2:['公會測量組','水道的水位又變了。走到底，確認哪幾條通道還沒被淹掉。'],
  d3:['公會測量組','礦坑深處的溫度在升。到最底層看一眼，回來告訴我們是不是又有東西醒了。'],d4:['魔導學院','書庫解凍之後，書架的位置每天都不一樣。請走完全層，替我們更新索引。'],
- d5:['瑪爾塔','塔頂欄杆上那行字，風吹久了會磨掉。上去的時候，替我看看還認不認得出來。']};
+ d5:['瑪爾塔','塔頂欄杆上那行字，風吹久了會磨掉。上去的時候，替我看看還認不認得出來。'],
+ d6:['東壁的補板人','雨季前要知道哪幾段的板子鬆了。從頭走到尾，鬆的就在旁邊岩壁上畫個圈。']};
 function qOpen(){return !!G.clear.d1}
 function qSlots(){return G.q.rank>=5?5:G.q.rank>=1?4:3}
 function qDgOf(k){return DG.find(d=>DGM[d.id]&&(DGM[d.id][0].includes(k)||DGM[d.id][1]===k))}
@@ -1862,17 +1980,17 @@ function qInfo(q){return q.ty==='deliver'?QD[q.k]:q.ty==='clear'?QC[q.k]:q.ty===
 function qWhere(q){return q.ty==='hunt'||q.ty==='elite'?`地點：${qDgOf(q.k).n}${q.ty==='elite'?'（「強敵的威壓」）':''}、無盡迴廊`:q.ty==='deliver'?`素材來源：${ITEM[q.k].d.split('。')[0]}`:q.ty==='clear'?'條件：從入口走到底，擊敗迷宮之主':'條件：在一次探索中抵達該層'}
 function qDone(q){return q.ty==='deliver'?(G.inv[q.k]||0)>=q.n:q.c>=q.n}
 function qGen(){
- const open=[0,1,2,3,4].filter(i=>dgOpen(i)),di=open[Math.max(0,open.length-1-pick([0,0,0,1,1,2,3]))],d=DG[di],L=d.lv+d.fl/2;
+ const open=DG.map((d,i)=>i).filter(i=>DGM[DG[i].id]&&dgOpen(i)),di=open[Math.max(0,open.length-1-pick([0,0,0,1,1,2,3]))],d=DG[di],L=d.lv+d.fl/2;
  const ws=[['hunt',35],['deliver',25],['elite',15]];if(G.clear[d.id])ws.push(['clear',15]);if(dgOpen(5))ws.push(['abyss',10]);
  let t=Math.random()*ws.reduce((a,b)=>a+b[1],0),ty;for(const w of ws){ty=w[0];if((t-=w[1])<0)break}
  const q={id:'q'+Date.now().toString(36)+R(100,9999),ty,c:0,n:1};let k=1;
  if(ty==='hunt'){q.k=pick(DGM[d.id][0]);q.n=R(4,7)}
  else if(ty==='elite'){q.k=DGM[d.id][1];q.n=R(1,2);k=1.1+q.n*.3}
- else if(ty==='deliver'){q.k='m'+(di+1)+pick(['a','b']);q.n=R(4,6)}
+ else if(ty==='deliver'){q.k='m'+matN(d)+pick(['a','b']);q.n=R(4,6)}
  else if(ty==='clear'){q.k=d.id;k=1.7}
  else{q.k='abyss';q.N=5*R(1,Math.floor((G.best||0)/5)+1)}
  q.gold=ty==='abyss'?150+q.N*40:Math.round((80+L*22)*k/10)*10;q.pts={hunt:2,deliver:2,elite:3,clear:3,abyss:4}[ty];
- if(Math.random()<.4)q.b=pick([['potion',2],['ether',2],['hipotion',1],['feather',1],[pick(Object.keys(ITEM).filter(x=>ITEM[x].gift)),1],['m'+(di+1)+'e',1]]);
+ if(Math.random()<.4)q.b=pick([['potion',2],['ether',2],['hipotion',1],['feather',1],[pick(Object.keys(ITEM).filter(x=>ITEM[x].gift)),1],['m'+matN(d)+'e',1]]);
  return q}
 function qFill(){const Q=G.q;if(Q.day===G.day)return;Q.day=G.day;let tries=0;
  while(Q.list.length<qSlots()&&tries++<40){const q=qGen();if(!Q.list.some(x=>x.ty===q.ty&&x.k===q.k))Q.list.push(q)}save()}
@@ -1892,13 +2010,13 @@ function vQuest(){
  <button class="btn wd" onclick="go('guild')">返回公會</button>`}
 
 /* ============ 公會 / 迷宮 ============ */
-function dgOpen(i){const d=DG[i];if(d.id==='abyss')return cleared()>=d.un;return i===0||G.clear[DG[i-1].id]}
+function dgOpen(i){const d=DG[i];if(d.req)return !!G.clear[d.req];if(d.id==='abyss')return cleared()>=d.un;return i===0||G.clear[DG[i-1].id]}
 function vGuild(){
  if(qOpen())qFill();const qn=G.q.list.length,qd=G.q.list.filter(qDone).length;
  return `${art('bg_guild','🗺️','sc')}<div class="pn"><div class="ttl">冒險者公會</div><div class="sub" style="margin-bottom:8px">迷宮的構造每次進入都會改變，還會發生不同的「異變」。出發前記得補給。</div>
  <div class="pn" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">📋</span><div class="gr"><span class="gdtx" style="font-size:17px">委託板</span><div class="sub">${qOpen()?`階級 ${RANK[G.q.rank].n}・${qn} 件進行中${qd?`・<span class="gdtx">${qd} 件可回報</span>`:''}`:'踏破翠苔迴廊後開放'}</div></div>${qOpen()?`<button class="btn sm ${qd?'gd':''}" onclick="go('quest')">查看</button>`:''}</div></div>
  <div class="pn" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">🎖️</span><div class="gr"><span class="gdtx" style="font-size:17px">上位職業認定</span><div class="sub">Lv.${ADV_LV}・踏破赤燼礦坑・${ADV_COST} 金</div></div><button class="btn sm" onclick="advMenu()">查看</button></div></div>
- ${DG.map((d,i)=>{const op=dgOpen(i);return `<div class="pn ${G.clear[d.id]?'gold':''}" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">${op?d.ic:'🔒'}</span><div class="gr"><b class="sf" style="font-size:17px">${op?d.n:'？？？'}</b> ${G.clear[d.id]?'<span class="tag gdtx">已踏破</span>':''}<div class="sub">${op?d.d:'踏破前一座迷宮後開放'}</div><div class="sub">${op?`建議 Lv.${d.lv}　${d.id==='abyss'?'無限層'+(G.best?`・最深 ${G.best} 層`:''):'共 '+d.fl+' 層'}`:''}</div></div>${op?`<button class="btn gd sm" onclick="enterDungeon(${i})">出發</button>`:''}</div>${op&&d.id==='abyss'&&G.best>=10?`<button class="btn wd sm" style="margin-top:8px" onclick="enterDungeon(${i},${Math.floor(G.best/10)*10+1})">從測量組的繩梯下去（第 ${Math.floor(G.best/10)*10+1} 層出發）</button>`:''}</div>`}).join('')}</div>`}
+ ${DG.map((d,i)=>{const op=dgOpen(i);if(d.p2&&!G.clear.d5)return '';return `${d.p2&&!DG[i-1].p2?'<div class="ttl" style="margin-top:16px">第二部　背面的地圖</div><div class="sub" style="margin-bottom:8px">舊地圖邊框以外的地方。沒有畫到一半的線可以跟，只能自己走、自己畫。</div>':''}<div class="pn ${G.clear[d.id]?'gold':''}" style="margin-bottom:10px"><div class="row"><span style="font-size:32px">${op?d.ic:'🔒'}</span><div class="gr"><b class="sf" style="font-size:17px">${op?d.n:'？？？'}</b> ${G.clear[d.id]?'<span class="tag gdtx">已踏破</span>':''}<div class="sub">${op?d.d:'踏破前一座迷宮後開放'}</div><div class="sub">${op?`建議 Lv.${d.lv}　${d.id==='abyss'?'無限層'+(G.best?`・最深 ${G.best} 層`:''):'共 '+d.fl+' 層'}`:''}</div></div>${op?`<button class="btn gd sm" onclick="enterDungeon(${i})">出發</button>`:''}</div>${op&&d.id==='abyss'&&G.best>=10?`<button class="btn wd sm" style="margin-top:8px" onclick="enterDungeon(${i},${Math.floor(G.best/10)*10+1})">從測量組的繩梯下去（第 ${Math.floor(G.best/10)*10+1} 層出發）</button>`:''}</div>`}).join('')}</div>`}
 function runD(){return DG[G.run.di]}
 function runL(){const r=G.run,d=runD();return d.id==='abyss'?d.lv+Math.round(r.fl*1.3):d.lv+r.fl-1}
 function isBossFloor(){const r=G.run,d=runD();return d.id==='abyss'?r.fl%5===0:r.fl===d.fl}
@@ -1942,7 +2060,8 @@ function advance(){
 function clearDungeon(){
  const d=runD(),first=!G.clear[d.id];G.clear[d.id]=1;qProg('clear',d.id);G.party.forEach(id=>addAff(id,3));
  const bonus=first?d.lv*60+100:0;G.gold+=bonus;
- const fin=()=>backTown(`踏破「${d.n}」！${first?`首次踏破獎勵 ${bonus} 金。`:''}`);
+ if(first&&d.id==='d6'&&!G.gear.some(g=>g.id==='gcoin'))G.gear.push({id:'gcoin',slot:'c',r:3,t:35,plus:0,st:{luk:30,spd:10,mmp:45},n:'瑪爾塔的銅幣',v:0,uq:1});
+ const fin=()=>backTown(`踏破「${d.n}」！${first?`首次踏破獎勵 ${bonus} 金。`+(d.id==='d6'?'獲得飾品「瑪爾塔的銅幣」。':''):''}`);
  if(first&&SC['end_'+d.id])play('end_'+d.id,fin);else fin()}
 function backTown(msg){G.run=null;G.day++;fullHeal();save();go('town');if(msg)toast(msg)}
 /* 獎勵 */
@@ -1958,7 +2077,7 @@ function check(stat,dc){sfx('dice');
 function hasCls(c){return G.party.find(id=>clsOf(id)===c)}
 /* 房間 */
 function mkEnemy(t,L,boss){const r=G.run,ra=(r&&r.mod==='rage'?1.2:1)*(L<5?.75+L*.05:1),b=7+L*2.4+L*L*.08,hp=Math.round((20+L*10+L*L*.4)*t.h),tier=boss?6:t.h>2?3:1;
- return{n:t.n,e:t.e,k:t.k,mt:t.mt,key:'enemy_'+t.k,lv:L,ally:false,boss:!!boss,mhp:hp,hp,atk:Math.round(b*t.a*ra),mag:Math.round(b*t.m*ra),def:Math.round((3+L*1.5)*t.d),spd:Math.round((5+L*.9)*t.s),luk:Math.round(t.l+L*.3),wk:t.wk||[],rs:t.rs||[],at:t.at||'phys',fx:t.fx||'claw',st:{},sk:t.sk||[],exp:Math.round((8+L*4)*tier),gold:Math.round((4+L*1.5)*tier)}}
+ return{n:t.n,e:t.e,k:t.k,mt:t.mt,key:'enemy_'+t.k,lv:L,ally:false,boss:!!boss,mhp:hp,hp,atk:Math.round(b*t.a*ra),mag:Math.round(b*t.m*ra),def:Math.round((3+L*1.5)*t.d),spd:Math.round((5+L*.9)*t.s),luk:Math.round(t.l+L*.3),wk:t.wk||[],rs:t.rs||[],at:t.at||'phys',fx:t.fx||'claw',st:{},sk:t.sk||[],p2:boss?t.p2:null,exp:Math.round((8+L*4)*tier),gold:Math.round((4+L*1.5)*tier)}}
 function pool(){const d=runD();if(d.id!=='abyss')return d;return DG[Math.min(4,Math.floor((G.run.fl-1)/4)%5)]}
 function rBattle(amb){const L=runL(),p=pool();let n=L<3?R(1,2):R(2,3);if(G.run.mod==='horde')n++;n=Math.min(3,n);if(L<5)n=Math.min(n,G.party.length);const es=[];for(let i=0;i<n;i++)es.push(mkEnemy(pick(p.en),L));startBattle(es,{amb})}
 function rElite(){const L=runL(),p=pool(),es=[mkEnemy(p.el,L)];if(L>6)es.push(mkEnemy(pick(p.en),L));startBattle(es,{elite:1})}
@@ -2064,6 +2183,7 @@ function nextTurn(){
 function tick(u){for(const k of['atkUp','defUp','defDn','atkDn'])if(u.st[k]>0)u.st[k]--}
 function enemyAct(u){
  if(!B)return;const ts=B.al.filter(alive);if(!ts.length)return nextTurn();
+ if(u.p2&&!u.ph2&&u.hp<=u.mhp*.5){u.ph2=1;u.atk=Math.round(u.atk*u.p2.atk);u.mag=Math.round(u.mag*u.p2.atk);u.sk=u.p2.sk;blog(u.p2.say);toast(u.p2.say);sfx('crit');render();return setTimeout(()=>enemyAct(u),window.FAST?1:2200)}
  let s=null,r=Math.random();for(const k of u.sk||[]){if(k.ty==='heal'&&u.hp>u.mhp*.6)continue;if(k.ty==='buff'&&k.self&&u.st[k.eff.k]>0)continue;if((r-=k.ch)<0){s=k;break}}
  if(!s)return exec(u,{n:'',basic:1,ty:u.at,pow:1,tg:'e1',fx:u.fx,mp:0},pick(ts));
  if(s.ty==='heal')return exec(u,{n:s.n,ty:'heal',fix:s.pow,tg:'self',fx:'heal',mp:0},u);
