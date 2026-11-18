@@ -343,6 +343,8 @@ function closeModal(){const m=$('#modal');if(m)m.remove()}
 const STN={mhp:'生命',mmp:'魔力',atk:'攻擊',mag:'魔攻',def:'防禦',spd:'敏捷',luk:'幸運'};
 const SK={
  atk:{n:'攻擊',mp:0,ty:'phys',pow:1,tg:'e1'},
+hatk:{n:'攻擊',mp:0,ty:'mag',pow:.55,tg:'e1',el:'holy',basic:1},
+matk:{n:'攻擊',mp:0,ty:'mag',pow:.5,tg:'e1',basic:1},
  slash:{n:'重斬',mp:4,ty:'phys',pow:1.5,tg:'e1',d:'單體強力斬擊'},
  gbreak:{n:'破甲',mp:5,ty:'phys',pow:1.2,tg:'e1',eff:{k:'defDn',t:3,ch:1},d:'攻擊並降低防禦'},
  whirl:{n:'橫掃',mp:9,ty:'phys',pow:1.15,tg:'ea',d:'斬擊全體敵人'},
@@ -680,6 +682,11 @@ M('moth','霧蛾','🦋',[.85,.5,1.3,.7,1.2,7],['fire'],['poison'],'spore','mag'
 M('weather','風化石俑','🪨',[1.5,1.15,.4,1.9,.5,3],['ice'],['poison','fire'],'quake','phys',[P('崩落',1.4,.35,'rock'),Bf('風化硬殼','defUp',.2)]);
 M('gnaw','啃樑獸','🦫',[3.1,1.4,.6,1.3,1.1,6],['fire'],[],'bite','phys',[P('啃斷',1.65,.35,'bite',ef('defDn',.6)),P('甩板',.85,.3,'tail',{all:1})]);
 M('boss6','裂風鵰','🦅',[8,1.45,1.3,1.3,1.5,9],['ice'],['poison'],'claw','phys',[Mg('裂風',.95,.35,'wave',{all:1}),P('攫擊',1.7,.3,'claw'),Mg('逆風',.6,.15,'wave',Object.assign({all:1},ef('atkDn',.6)))]);
+MON.boss1.p2={say:'古樹的根從地底整片翻起，迴廊的苔蘚全都轉向你們。',atk:1.08,sk:[P('根鬚鞭笞',.95,.35,'whip',{all:1}),Mg('孢子雨',.7,.25,'spore',Object.assign({all:1,el:'poison'},ef('poison',.5))),P('枝幹重擊',1.5,.4,'quake')]};
+MON.boss2.p2={say:'主教把鐘繩纏上手腕，敲響了沉在水底的那口大鐘。',atk:1.06,sk:[Mg('喪鐘',1,.35,'bell',Object.assign({all:1},ef('defDn',.6))),Mg('溺水詛咒',1.4,.35,'water',ef('poison',.7)),Mg('退潮',.7,.2,'water',Object.assign({all:1},ef('stun',.15,1)))]};
+MON.boss3.p2={say:'赤燼龍的鱗片一片片掀開，底下的熔岩亮了起來。',atk:1.06,sk:[Mg('燼息',1.05,.35,'flame',{all:1,el:'fire'}),P('龍爪',1.6,.35,'claw'),P('尾掃',.8,.2,'quake',Object.assign({all:1},ef('stun',.2,1)))]};
+MON.boss4.p2={say:'館長闔上最後一本書。整座書庫安靜得聽得見結霜的聲音。',atk:1.1,sk:[Mg('禁止喧嘩',1,.35,'wave',Object.assign({all:1},ef('atkDn',.7))),Mg('判決之書',1.7,.35,'dark',{el:'dark'}),Mg('除籍',.8,.2,'ice',Object.assign({all:1,el:'ice'},ef('stun',.2,1)))]};
+MON.boss5.p2={say:'星隕之王摘下王冠。塔頂的星星一顆接一顆熄滅——然後落了下來。',atk:1.05,sk:[Mg('天墜',1.1,.35,'star',Object.assign({all:1},ef('defDn',.5))),P('王權之劍',1.8,.35,'cross'),Mg('星之重壓',.85,.2,'dark',Object.assign({all:1},ef('stun',.2,1)))]};
 MON.boss6.p2={say:'裂風鵰收起翅膀，落在棧道上——整條路都在晃。',atk:1.15,sk:[P('震翼',.9,.35,'quake',Object.assign({all:1},ef('stun',.2,1))),P('攫擊',1.9,.35,'claw'),Mg('裂風',1,.2,'wave',{all:1})]};
 const DGM={d1:[['slime','bat','shroom','snake'],'golem','boss1'],d2:[['ghost','crab','fish','frog'],'croc','boss2'],d3:[['lizard','goblin','spark','beetle'],'forge','boss3'],d4:[['tome','wolf','ink','bknight'],'banshee','boss4'],d5:[['puppet','eye','meteor','astro'],'twins','boss5'],d6:[['swift','moth','vine','weather'],'gnaw','boss6']};
 function matN(d){return Object.keys(DGM).indexOf(d.id)+1}
@@ -790,7 +797,7 @@ function doRegist(){
 
 /* ============ 劇情 ============ */
 const CAST={'穗':{k:'npc_sui',c:'#d9a05b',h:'#5a3b24'},'老調音師':{k:'npc_tuner',c:'#9aa7b0',h:'#d8d8d0'},'老監察':{k:'npc_inspector',c:'#7a86a8',h:'#b8b8b8'},'赫妲':{k:'npc_hilda',c:'#e08a4a',h:'#7a3b2a'},'瑪爾塔':{k:'npc_marta',c:'#c9a878',h:'#8a8f9c'},'葛蘭':{k:'npc_gran',c:'#8c9a7a',h:'#e0e0e0'}};
-const Hn=()=>G.hero.name,Fn=()=>NPC[friendId()].n,Ml=()=>G.hero.g==='m';
+const pj=o=>G.party.filter(id=>o[id]).map(id=>NPC[id].n+'|'+o[id]),Hn=()=>G.hero.name,Fn=()=>NPC[friendId()].n,Ml=()=>G.hero.g==='m';
 const fl=(a,b)=>Fn()+'|'+(Ml()?a:b);
 const MID={d1:3,d2:3,d3:3,d4:4,d5:7,d6:4};
 const SC={
@@ -1732,6 +1739,11 @@ Object.assign(SC,{
   `${H}|「本來？」`,
   '穗|「被叼走了。今年春天開始，前面的板子一塊一塊地不見。阿公的膝蓋不行了，現在是我在補，可是我補的沒有牠拆的快。」',
   '|她說這些的時候沒有抬頭，一直在數桶裡的釘子。',
+  ...pj({vel:'「一個人守一整條路……」她看了看自己盾上的凹痕，「我的盾都沒有這麼累過。」',
+   koro:'「兩根釘子喔……我身上只有開鎖用的鐵絲。」她把耳朵壓低，「這個不算吧。」',
+   sain:'「每一塊都刻日期？」他扶了一下眼鏡，「這比公會的帳簿還早。回去我想抄一份。」',
+   noa:'「這些木頭是崖下林子的。年輪很密，是長得很慢的那種。」他摸了摸板緣，「難怪鳥會想要。」',
+   hiyo:'「一人兩根。」她把刀鞘往後挪了一點，「規矩說得清楚，是好路。」'}),
   fl('「這條路……是通到哪裡的呢？」','「這條路，通到哪。」'),
   '穗|「鹽階。再過去我不知道。阿公說，以前每年都有人從那邊上來換釘子。」',
   '穗|「我沒見過。可是路斷了的話，就算有人想上來，也上不來吧。」',
@@ -1755,6 +1767,11 @@ Object.assign(SC,{
   '穗|「不釘了。它已經踩不得了。」',
   '|她把那塊板子抱在懷裡，想了一下，又補了一句。',
   '穗|「掛在風簷裡。阿公每天都看得到。」',
+  ...pj({vel:'「打不贏的時候，至少要記得自己守過什麼。」她低聲說，「那塊板子會替妳家記得。」',
+   koro:'「那塊板子……比我這把鑰匙還舊呢。」她摸著脖子上的鏽鑰匙，沒有再說下去。',
+   sain:'「一百四十年。」他把這個數字在筆記上寫了兩次，「她家的帳，比王都的史書準。」',
+   noa:'「木頭踩不得了，也還記得自己長在哪裡。」他看著崖下的雲，「掛起來，是對的。」',
+   hiyo:'「刀鈍了就掛在牆上，我老家也是這樣。」她難得多說了一句，「不丟，是因為它擋過東西。」'}),
   `|${F}攤開羊皮紙，把棧道從頭畫到這裡，在斷口的位置停了筆。`,
   fl('「這條路的名字，要怎麼寫才好呢？」','「路的名字。怎麼寫。」'),
   '穗|「沒有名字。我們都只叫它『路』。」',
@@ -2146,8 +2163,8 @@ function check(stat,dc){sfx('dice');
 function hasCls(c){return G.party.find(id=>clsOf(id)===c)}
 /* 房間 */
 const EPW=L=>L<4?[1,1]:[Math.min(1.5,1+(L-3)*.07),Math.min(1.35,1+(L-3)*.05)];
-function mkEnemy(t,L,boss){const r=G.run,ew=EPW(L),fod=!boss&&t.h<=2&&L>=3,ra=(r&&r.mod==='rage'?1.2:1)*(L<5?.75+L*.05:1)*(boss?1+(ew[0]-1)*.5:ew[0])*(fod?1.15:1),b=7+L*2.4+L*L*.08,hp=Math.round((20+L*10+L*L*.4)*t.h*ew[1]*(fod?1.35:1)),tier=boss?6:t.h>2?3:1;
- return{n:t.n,e:t.e,k:t.k,mt:t.mt,key:'enemy_'+t.k,lv:L,ally:false,boss:!!boss,mhp:hp,hp,atk:Math.round(b*t.a*ra),mag:Math.round(b*t.m*ra),def:Math.round((3+L*1.5)*t.d),spd:Math.round((5+L*.9)*t.s),luk:Math.round(t.l+L*.3),wk:t.wk||[],rs:t.rs||[],at:t.at||'phys',fx:t.fx||'claw',st:{},sk:t.sk||[],p2:boss?t.p2:null,exp:Math.round((8+L*4)*tier),gold:Math.round((4+L*1.5)*tier)}}
+function mkEnemy(t,L,boss){const r=G.run,ew=EPW(L),fod=!boss&&t.h<=2&&L>=3,ra=(r&&r.mod==='rage'?1.2:1)*(L<5?.75+L*.05:1)*(boss?1+(ew[0]-1)*.5:ew[0])*(fod?1.15:1),b=7+L*2.4+L*L*.08,hp=Math.round((20+L*10+L*L*.4)*t.h*ew[1]*(fod?1.35:1)),tier=boss?6:t.h>2?3:1,el=!boss&&t.h>2,eb=boss&&L>=7&&L<=12?1.1:1;
+ return{n:t.n,e:t.e,k:t.k,mt:t.mt,key:'enemy_'+t.k,lv:L,ally:false,boss:!!boss,mhp:Math.round(hp*(el?1.1:1)),hp:Math.round(hp*(el?1.1:1)),atk:Math.round(b*t.a*ra*(el?1.2:1)*eb),mag:Math.round(b*t.m*ra*(el?1.2:1)*eb),def:Math.round((3+L*1.5)*t.d),spd:Math.round((5+L*.9)*t.s),luk:Math.round(t.l+L*.3),wk:t.wk||[],rs:t.rs||[],at:t.at||'phys',fx:t.fx||'claw',st:{},sk:t.sk||[],p2:boss?t.p2:null,exp:Math.round((8+L*4)*tier),gold:Math.round((4+L*1.5)*tier)}}
 function pool(){const d=runD();if(d.id!=='abyss')return d;return DG[Math.min(4,Math.floor((G.run.fl-1)/4)%5)]}
 function rBattle(amb){const L=runL(),p=pool();let n=L<3?R(1,2):R(2,3);if(G.run.mod==='horde')n++;n=Math.min(3,n);if(L<5)n=Math.min(n,G.party.length);const es=[];for(let i=0;i<n;i++)es.push(mkEnemy(pick(p.en),L));startBattle(es,{amb})}
 function rElite(){const L=runL(),p=pool(),es=[mkEnemy(p.el,L)];if(L>6)es.push(mkEnemy(pick(p.en),L));startBattle(es,{elite:1})}
@@ -2298,7 +2315,7 @@ function tmGame(kind,label,cb){
 function pex(u,s,t,item){if(!item&&(s.ty==='phys'||s.ty==='mag')){B.menu='wait';B.pend=null;render();tmGame('atk',`${u.n}：${s===SK.atk?'攻擊':s.n}`,r=>{if(B)exec(u,s,t,item,[0,2,4][r])})}else exec(u,s,t,item)}
 function defGame(u,name,ts,cb){if(window.FAST||G.auto||G.noTm||!ts.length){B.blk=null;cb();return}
  tmGame('def',`${u.n}：${name||'攻擊'} → ${ts.length>1?'全體':ts[0].n}`,r=>{if(!B)return;B.blk={};ts.forEach(a=>B.blk[a.uid]=r);cb()})}
-function hitStop(ms,keep){const bt=document.querySelector('.bt');if(!bt)return;const an=bt.getAnimations({subtree:true});an.forEach(a=>{try{a.pause()}catch(e){}});setTimeout(()=>an.forEach(a=>{try{a.play()}catch(e){}}),ms)}
+function hitStop(ms,keep){const bt=document.querySelector('.bt');if(!bt)return;const an=bt.getAnimations({subtree:true});an.forEach(a=>{try{a.pause()}catch(e){}});setTimeout(()=>an.forEach(a=>{try{const t=a.effect&&a.effect.target;if(t&&t.isConnected)a.play();else a.cancel()}catch(e){}}),ms)}
 function tmToggle(){G.noTm=!G.noTm;save();toast('時機操作'+(G.noTm?'關閉':'開啟'));diceHelp()}
 /* ============ 骰子規則 ============ */
 function evaOf(u,x,sk){if(sk.ty==='mag'||x.st.stun>0)return 2;const r=(x.spd-u.spd)/Math.max(1,u.spd);return clamp(2+Math.round(r*5),2,6)+(x.guard?2:0)}
@@ -2318,6 +2335,7 @@ function diceHelp(){modal(`<div class="ttl">🎲 戰鬥骰子規則</div><div cl
 function koSt(u){if(alive(u)||!u.koT)return '';const e=Date.now()-u.koT;return e<1200?`--kd:${-e}ms`:''}
 function koCls(u){if(alive(u))return '';return u.koT&&Date.now()-u.koT<1200?'ko':'dead'}
 function exec(u,sk,t,item,bon){
+ if(sk===SK.atk&&u.ally){const c=clsOf(u.id);if(c==='healer')sk=SK.hatk;else if(c==='mage')sk=SK.matk}
  B.menu='wait';if(sk.mp)u.mp-=sk.mp;
  const basic=sk===SK.atk||!!sk.basic;const fxk=item?(sk.ty==='heal'?'heal':'buff'):sk.fx||(basic?(u.ally?ATKFX[clsOf(u.id)]:'claw'):sk.ty==='heal'?'heal':sk.ty==='buff'?'buff':'claw');let snd=FXS[fxk]||'hit',anyCrit=false,anyHit=false;
  if(!basic&&!item&&sk.n)B.cut={t:sk.n,sub:u.n,foe:!u.ally,art:u.ally?artKey(u.id):(ART[u.key+'_atk']?u.key+'_atk':u.key)};B.act={uid:u.uid,ally:u.ally,hop:sk.ty==='phys'||sk.ty==='mag',ph:sk.ty==='phys',tg:t?t.uid:null,id:u.id,sk:!basic&&!item,tint:TINT[sk.el]||TINT[sk.fx]||(u.ally?'#ffd84a':'#ff5d6c')};if(sk.tg==='ea'&&(sk.ty==='phys'||sk.ty==='mag'))B.aoe={fx:sk.fx||'impact',onAlly:!u.ally,tint:TINT[sk.el]||TINT[sk.fx]||'#fff'};

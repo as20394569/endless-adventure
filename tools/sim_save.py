@@ -5,7 +5,7 @@ HERE=os.path.dirname(os.path.abspath(__file__));OUT=os.environ.get('OUT','/tmp')
 from playwright.sync_api import sync_playwright
 sv=open(sys.argv[1],encoding='utf-8').read();maxruns=int(sys.argv[2]);lim=float(sys.argv[3]) if len(sys.argv)>3 else 200
 with sync_playwright() as p:
-    b=p.chromium.launch();pg=b.new_page(viewport={'width':390,'height':800})
+    b=p.chromium.launch(args=['--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows','--disable-features=IntensiveWakeUpThrottling']);pg=b.new_page(viewport={'width':390,'height':800})
     errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
     pg.goto('http://localhost:8765/index.html');pg.wait_for_timeout(400)
     pg.evaluate("s=>localStorage.setItem(SAVE,s)",sv);pg.reload();pg.wait_for_timeout(500)

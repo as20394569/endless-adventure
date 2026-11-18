@@ -1,5 +1,8 @@
 (()=>{
-const st=window.setTimeout;window.setTimeout=(f,ms,...a)=>st(f,Math.min(ms||0,1),...a);
+// 快轉：遊戲的 setTimeout 改用 MessageChannel 排程（不依賴計時器時鐘；headless 在高負載下計時器會停住）
+const MC=new MessageChannel(),TQ=new Map();let TN=1e7;MC.port1.onmessage=e=>{const f=TQ.get(e.data);if(f){TQ.delete(e.data);f()}};
+const ct=window.clearTimeout;window.setTimeout=(f,ms,...a)=>{const id=++TN;TQ.set(id,()=>typeof f==='function'?f(...a):0);MC.port2.postMessage(id);return id};
+window.clearTimeout=id=>{if(TQ.has(id))TQ.delete(id);else ct(id)};
 window.FAST=1;
 window.ST={runs:[],battles:0,wipes:0,retreats:0,log:[],first:{},cur:null,errs:[]};
 const want=id=>{const c=clsOf(id);return (c==='mage'||c==='healer')?'mag':'atk'};
@@ -71,4 +74,16 @@ function endRun(res){const c=ST.cur;if(!c)return;c.res=res;c.b=ST.battles-c.b0;c
  if(res==='clear'&&!c.was&&!ST.first[c.d])ST.first[c.d]={run:ST.runs.length+1,lv:c.lv1,battles:ST.battles,day:G.day,gold:G.gold};
  ST.runs.push(c);ST.cur=null}
 ST.maxAbyss=60;
+})();
+// ===== 戰鬥量測（每場回合數、掉血比例、技能使用與傷害）=====
+(()=>{
+ST.bt=[];ST.sk={};
+const eh=()=>B?B.en.reduce((s,e)=>s+Math.max(0,e.hp),0):0;
+const ah=()=>B?B.al.reduce((s,a)=>s+Math.max(0,a.hp),0):0;
+const _sb=startBattle;window.startBattle=startBattle=function(en,o){_sb(en,o);if(B){B._m={h0:ah(),mh:B.al.reduce((s,a)=>s+a.mhp,0),ty:o&&o.boss?'boss':o&&o.elite?'elite':'norm',d:runD()?runD().id:'?',lv:G.chars.hero.lv}}};
+const _ex=exec;window.exec=exec=function(u,sk,t,item,bon){if(B&&u&&u.ally&&!item){B._pk={k:(clsOf(u.id)||u.id)+':'+(sk.n||'攻擊'),h:eh()}}return _ex(u,sk,t,item,bon)};
+const _nt=nextTurn;window.nextTurn=nextTurn=function(){if(B&&B._pk){const p=B._pk;B._pk=null;const s=ST.sk[p.k]=ST.sk[p.k]||{n:0,d:0};s.n++;s.d+=Math.max(0,p.h-eh())}return _nt()};
+const fin=w=>{if(B&&B._m&&!B._m.done){const m=B._m;m.done=1;ST.bt.push({ty:m.ty,d:m.d,lv:m.lv,rd:B.rd,loss:Math.round((m.h0-ah())/m.mh*1000)/10,w:w?1:0})}};
+const _w=win;window.win=win=function(){fin(1);return _w()};
+const _l=lose;window.lose=lose=function(){fin(0);return _l()};
 })();
