@@ -401,35 +401,53 @@ const FXM={slash:'slash',gbreak:'pierce',whirl:'cross',fire:'fire',frost:'ice',m
 for(const k in FXM){SK[k].fx=FXM[k];if(k[1]==='_')SK[k].big=1}
 const ATKFX={sword:'slash',mage:'spark',ranger:'arrow',monk:'impact',healer:'spark',knight:'impact',thief:'slash',samurai:'slash'};
 const FXS={flurry:'hit',pierce:'slash',quake:'hit',flame:'fire',frost:'ice',spore:'poison',spit:'poison',water:'magic',ink:'poison',rock:'hit',bite:'slash',tail:'hit',whip:'slash',leaf:'slash',bell:'magic',wave:'magic',roar:'debuff',gaze:'magic',beam:'magic',slash:'slash',cross:'slash',claw:'slash',fire:'fire',ice:'ice',spark:'magic',dark:'magic',holy:'magic',star:'fire',arrow:'arrow',arrows:'arrow',impact:'hit',poison:'poison',heal:'heal',buff:'buff',guard:'buff',debuff:'debuff',smoke:'debuff'};
-/* ============ 音效 / 音樂 ============ */
-let AC=null,MUTE=false,BG={name:null,tm:null,step:0,next:0};
+/* ============ 音效 / 音樂（多聲部合成：主旋律＋低音＋琶音＋鼓組＋殘響） ============ */
+let AC=null,MUTE=false,BG={name:null,tm:null,step:0,next:0},AX=null;
 try{MUTE=localStorage.getItem('ea_mute')==='1'}catch(e){}
-const NF={};(()=>{const n=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];for(let o=1;o<7;o++)n.forEach((x,i)=>NF[x+o]=440*Math.pow(2,(i-9)/12+(o-4)))})();
-function tone(f,t,d,type,vol,slide){const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+d);g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.03)}
-function noise(t,d,vol,hp){const b=AC.createBuffer(1,Math.max(1,Math.floor(AC.sampleRate*d)),AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;const s=AC.createBufferSource(),g=AC.createGain(),fl=AC.createBiquadFilter();fl.type='highpass';fl.frequency.value=hp||800;s.buffer=b;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl);fl.connect(g);g.connect(AC.destination);s.start(t)}
-function seq(ns,t,d,type,vol){ns.forEach((n,i)=>tone(NF[n],t+i*d,d*1.6,type,vol))}
-function sfx(k){if(MUTE||!AC||AC.state!=='running')return;const t=AC.currentTime+.01;try{(({
- click:()=>tone(720,t,.04,'square',.018),
- hit:()=>{noise(t,.09,.06,600);tone(170,t,.1,'square',.04,80)},
- slash:()=>{noise(t,.12,.05,3200);tone(900,t,.08,'triangle',.02,300)},
- crit:()=>{noise(t,.14,.07,500);tone(880,t+.02,.14,'square',.03,1320)},
- miss:()=>tone(320,t,.13,'triangle',.035,150),
- fire:()=>{noise(t,.28,.05,400);tone(240,t,.22,'sawtooth',.02,90)},
- ice:()=>{tone(1400,t,.16,'triangle',.035,2200);tone(1900,t+.09,.14,'triangle',.03)},
- magic:()=>tone(480,t,.24,'square',.022,1300),
- arrow:()=>{noise(t,.06,.04,4200);tone(1200,t,.08,'triangle',.025,500)},
- poison:()=>{tone(210,t,.2,'sawtooth',.02,140);noise(t+.05,.12,.02,1500)},
- heal:()=>seq(['C5','E5','G5','C6'],t,.07,'triangle',.04),
- buff:()=>seq(['A4','E5'],t,.09,'square',.025),
- debuff:()=>seq(['A4','D4'],t,.1,'square',.025),
- coin:()=>seq(['B5','E6'],t,.06,'square',.022),
- dice:()=>{for(let i=0;i<3;i++)tone(500+i*90,t+i*.06,.04,'square',.02)},
- lvup:()=>seq(['C5','E5','G5','C6','E6'],t,.08,'square',.03),
- win:()=>seq(['G4','C5','E5','G5','E5','G5','C6'],t,.11,'square',.03),
- lose:()=>seq(['E4','D4','C4','B3','A3'],t,.2,'triangle',.04),
- ko:()=>{noise(t,.3,.05,250);tone(420,t,.32,'square',.03,55)},
- dodge:()=>{noise(t,.08,.03,5000);tone(700,t,.1,'triangle',.02,1100)}
- })[k]||(()=>{}))()}catch(e){}}
+const NF={};(()=>{const n=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];for(let o=1;o<8;o++)n.forEach((x,i)=>NF[x+o]=440*Math.pow(2,(i-9)/12+(o-4)))})();
+function axInit(){if(AX||!AC)return;const m=AC.createGain();m.gain.value=1.8;const cp=AC.createDynamicsCompressor();cp.threshold.value=-16;cp.ratio.value=4;m.connect(cp);cp.connect(AC.destination);
+ const dl=AC.createDelay(1),fb=AC.createGain(),lp=AC.createBiquadFilter(),wet=AC.createGain();dl.delayTime.value=.23;fb.gain.value=.32;lp.type='lowpass';lp.frequency.value=2600;wet.gain.value=.55;dl.connect(lp);lp.connect(fb);fb.connect(dl);lp.connect(wet);wet.connect(m);
+ const mus=AC.createGain();mus.gain.value=.85;mus.connect(m);const fx=AC.createGain();fx.gain.value=1;fx.connect(m);
+ const pw=d=>{const N=32,re=new Float32Array(N),im=new Float32Array(N);for(let k=1;k<N;k++)im[k]=2/(k*Math.PI)*Math.sin(k*Math.PI*d);return AC.createPeriodicWave(re,im)};
+ AX={m,dl,mus,fx,p12:pw(.125),p25:pw(.25)}}
+function osc(type,f){const o=AC.createOscillator();if(type==='p12'||type==='p25')o.setPeriodicWave(AX[type]);else o.type=type;o.frequency.value=f;return o}
+function tone(f,t,d,type,vol,slide,o){o=o||{};const os=osc(type||'square',f),g=AC.createGain();if(slide)os.frequency.exponentialRampToValueAtTime(Math.max(20,slide),t+d);
+ if(o.vib){const l=AC.createOscillator(),lg=AC.createGain();l.frequency.value=5.5;lg.gain.setValueAtTime(0,t);lg.gain.linearRampToValueAtTime(f*.012,t+Math.min(d,.25));l.connect(lg);lg.connect(os.frequency);l.start(t);l.stop(t+d+.05)}
+ const a=o.atk||.012;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+a);if(o.sus)g.gain.setValueAtTime(vol*.8,t+d*.7);g.gain.exponentialRampToValueAtTime(.0001,t+d);os.connect(g);g.connect(o.bus||AX.fx);if(o.wet){const w=AC.createGain();w.gain.value=o.wet;g.connect(w);w.connect(AX.dl)}os.start(t);os.stop(t+d+.05)}
+let NB=null;function noise(t,d,vol,f,o){o=o||{};if(!NB){NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const a=NB.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1}
+ const s=AC.createBufferSource(),g=AC.createGain(),fl=AC.createBiquadFilter();fl.type=o.ft||'highpass';fl.frequency.setValueAtTime(f||800,t);if(o.to)fl.frequency.exponentialRampToValueAtTime(o.to,t+d);fl.Q.value=o.q||1;s.buffer=NB;s.loop=true;
+ g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+(o.atk||.005));g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl);fl.connect(g);g.connect(o.bus||AX.fx);if(o.wet){const w=AC.createGain();w.gain.value=o.wet;g.connect(w);w.connect(AX.dl)}s.start(t,Math.random()*.5);s.stop(t+d+.05)}
+function seq(ns,t,d,type,vol,o){ns.forEach((n,i)=>{if(n)tone(NF[n],t+i*d,d*1.7,type,vol,0,o)})}
+function chord(ns,t,d,type,vol,o){ns.forEach(n=>tone(NF[n],t,d,type,vol,0,o))}
+const SFX={
+ click:t=>{tone(1320,t,.035,'p12',.022);tone(1980,t+.02,.03,'p12',.012)},
+ hit:t=>{tone(170,t,.14,'sine',.12,48);noise(t,.09,.08,1300,{ft:'bandpass',q:.8});noise(t,.02,.05,5000)},
+ slash:t=>{noise(t,.16,.07,6500,{ft:'bandpass',to:1400,q:1.4});tone(2200,t+.03,.09,'square',.018,1800);tone(2370,t+.03,.11,'square',.014,1950,{wet:.3})},
+ crit:t=>{tone(120,t,.22,'sine',.16,40);noise(t,.18,.1,900,{ft:'bandpass'});chord(['E5','G#5','B5'],t+.05,.28,'p25',.025,{wet:.4});tone(2640,t+.05,.25,'square',.02,3520,{wet:.4})},
+ miss:t=>noise(t,.18,.035,700,{ft:'bandpass',to:2600,q:2}),
+ dodge:t=>{noise(t,.16,.04,900,{ft:'bandpass',to:3400,q:3});tone(900,t+.04,.1,'triangle',.02,1500)},
+ fire:t=>{noise(t,.4,.08,300,{ft:'lowpass',to:2400,atk:.06});tone(90,t,.35,'sawtooth',.03,50);for(let i=0;i<6;i++)noise(t+.08+Math.random()*.3,.025,.05,3000)},
+ ice:t=>{[2637,3136,3951,3520].forEach((f,i)=>tone(f,t+i*.045,.35,'sine',.03,0,{wet:.6}));noise(t,.2,.03,6000,{ft:'highpass'})},
+ magic:t=>{seq(['A5','C#6','E6','A6'],t,.04,'p25',.022,{wet:.5});noise(t,.3,.025,5000,{ft:'bandpass',to:9000,q:4,wet:.4})},
+ arrow:t=>{tone(260,t,.12,'triangle',.06,120);tone(1900,t+.02,.16,'sine',.03,800);noise(t+.16,.05,.05,1500,{ft:'bandpass'})},
+ poison:t=>{for(let i=0;i<6;i++)tone(300+Math.random()*500,t+i*.05,.07,'sine',.035,200+Math.random()*300);tone(110,t,.3,'sawtooth',.02,80)},
+ heal:t=>{seq(['C5','E5','G5','C6','E6'],t,.06,'sine',.05,{wet:.6});seq(['G5','C6','E6'],t+.03,.06,'triangle',.02,{wet:.6})},
+ buff:t=>{tone(330,t,.3,'p25',.025,990,{wet:.4});chord(['A4','C#5','E5'],t+.2,.3,'p12',.02,{wet:.5})},
+ debuff:t=>{tone(880,t,.35,'p25',.025,220);chord(['A3','C4','D#4'],t+.2,.3,'p12',.02)},
+ charge:t=>{tone(70,t,.6,'sawtooth',.04,260,{atk:.2});noise(t,.6,.04,200,{ft:'bandpass',to:2400,q:3,atk:.3});tone(140,t,.6,'p25',.02,520,{atk:.3})},
+ block:t=>{tone(980,t,.25,'square',.03,0,{wet:.5});tone(1430,t,.22,'square',.022,0,{wet:.5});noise(t,.06,.07,4000);tone(160,t,.1,'sine',.08,70)},
+ dash:t=>noise(t,.22,.035,500,{ft:'bandpass',to:3000,q:1.5,atk:.04}),
+ coin:t=>{tone(NF.B5,t,.07,'p25',.03);tone(NF.E6,t+.07,.22,'p25',.03,0,{wet:.4})},
+ chest:t=>{tone(180,t,.1,'square',.03,140);seq(['C5','E5','G5','C6'],t+.12,.07,'p25',.03,{wet:.5});noise(t+.12,.4,.02,7000,{ft:'highpass',wet:.5})},
+ stairs:t=>{[0,1,2,3].forEach(i=>{tone(220-i*20,t+i*.11,.06,'triangle',.05,120);noise(t+i*.11,.04,.03,1500,{ft:'bandpass'})})},
+ event:t=>{seq(['E5','B5'],t,.09,'sine',.04,{wet:.6});seq([null,'G#5','E6'],t,.09,'triangle',.02,{wet:.6})},
+ dice:t=>{let x=t;for(let i=0;i<7;i++){x+=.025+Math.random()*.05;tone(600+Math.random()*900,x,.03,'square',.016);noise(x,.012,.03,4000)}tone(1200,x+.06,.06,'p12',.03);noise(x+.06,.03,.05,2500)},
+ lvup:t=>{seq(['C5','E5','G5','C6'],t,.08,'p25',.035,{wet:.4});chord(['C5','E5','G5','C6'],t+.34,.6,'p12',.025,{wet:.5,sus:1});tone(NF.E6,t+.34,.6,'p25',.03,0,{vib:1,wet:.5})},
+ win:t=>{const n=['G4','C5','E5','G5',null,'E5','G5','C6'];seq(n,t,.11,'p25',.035,{wet:.3});[['C4','E4'],['C4','E4'],['C4','G4'],['C4','G4'],null,['C4','A4'],['B3','G4'],['C4','E4','G4']].forEach((c,i)=>c&&chord(c,t+i*.11,.2,'p12',.018));[0,2,4,7].forEach(i=>tone(150,t+i*.11,.08,'sine',.08,50));tone(NF.C6,t+.88,.7,'p25',.03,0,{vib:1,wet:.5})},
+ lose:t=>{seq(['E4','D4','C4','B3','A3'],t,.22,'triangle',.05,{wet:.4});chord(['A2','E3','A3'],t+.9,1.2,'triangle',.03,{wet:.5,sus:1})},
+ ko:t=>{tone(140,t,.35,'sine',.13,35);noise(t,.3,.06,300,{ft:'lowpass'});tone(520,t+.05,.4,'p25',.025,90)}
+};
+function sfx(k){if(MUTE||!AC||AC.state!=='running')return;axInit();try{(SFX[k]||(()=>{}))(AC.currentTime+.01)}catch(e){}}
 const TR={
  title:{bpm:100,l:"E4 _ B4 _ A4 G4 F#4 _ G4 _ E4 _ D4 _ E4 _ C4 _ G4 _ F#4 E4 D4 _ E4 _ _ _ B3 _ - -",b:"E2 - B2 - E2 - B2 - C3 - G2 - D3 - A2 - C3 - G2 - D3 - A2 - E2 - B2 - E2 - - -"},
  town:{bpm:88,w:'triangle',v:.045,l:"E4 G4 C5 _ B4 G4 E4 _ F4 A4 C5 _ A4 F4 D4 _ E4 G4 C5 _ D5 C5 B4 _ A4 G4 F4 D4 C4 _ _ -",b:"C3 - G3 - C3 - G3 - F2 - C3 - F2 - C3 - C3 - G3 - G2 - D3 - F2 - G2 - C3 - - -"},
@@ -448,10 +466,21 @@ const TR={
  battle:{bpm:152,l:"A4 A4 C5 A4 E5 _ D5 C5 B4 B4 D5 B4 G5 _ F5 E5 A4 A4 C5 E5 A5 _ G5 E5 F5 E5 D5 C5 B4 _ E5 _",b:"A2 A2 A2 A2 A2 A2 A2 A2 G2 G2 G2 G2 G2 G2 G2 G2 F2 F2 F2 F2 F2 F2 F2 F2 E2 E2 E2 E2 E2 E2 E2 E2"},
  boss:{bpm:164,l:"D5 _ A4 D5 F5 _ E5 D5 C5 _ G4 C5 E5 _ D5 C5 A#4 _ F4 A#4 D5 _ C5 A#4 A4 _ C#5 _ E5 _ A5 _",b:"D2 D2 D3 D2 D2 D2 D3 D2 C2 C2 C3 C2 C2 C2 C3 C2 A#1 A#1 A#2 A#1 A#1 A#1 A#2 A#1 A1 A1 A2 A1 A1 A1 A2 A1"}
 };
+const TST={title:{q:'m',dr:'calm',arp:1},town:{q:'M',dr:'calm',arp:1},guild:{q:'M',dr:'march'},shop:{q:'M',dr:'bounce',arp:1},camp:{q:'M',dr:'calm',arp:1},tavern:{q:'M',dr:'bounce'},story:{q:'m',dr:'',arp:1},
+ d1:{q:'m',dr:'calm',arp:1},d2:{q:'m',dr:'',arp:1},d3:{q:'m',dr:'rock'},d4:{q:'m',dr:'',arp:1},d5:{q:'m',dr:'march',arp:1},d6:{q:'M',dr:'calm',arp:1},abyss:{q:'m',dr:'',arp:1},battle:{q:'m',dr:'battle',arp:1},boss:{q:'m',dr:'battle',arp:1,heavy:1}};
+const DRP={calm:'K.......H.......',march:'K.S.K.SSK.S.K.SS',bounce:'K.HSK.HSK.HSKKHS',rock:'K.HSKKHSK.HSKKHH',battle:'KHSHKKSHKHSHKKSS'};
+function drum(c,t,v){if(c==='K'){tone(130,t,.16,'sine',.13*v,42)}else if(c==='S'){noise(t,.11,.06*v,1700,{ft:'bandpass',q:.7});tone(220,t,.06,'triangle',.03*v,150)}else if(c==='H'){noise(t,.03,.025*v,7000,{ft:'highpass'})}}
 function trParse(x){const a=x.trim().split(/\s+/),o=[];for(let i=0;i<a.length;i++){if(a[i]==='-'||a[i]==='_'){o.push(null);continue}let d=1;while(a[i+d]==='_')d++;o.push([NF[a[i]],d])}return o}
 function bgmStop(){if(BG.tm){clearInterval(BG.tm);BG.tm=null}BG.name=null}
-function bgm(name,tr){if(!AC||MUTE){return}const key=name+'|'+(tr||0);if(BG.name===key&&BG.tm)return;bgmStop();const T=TR[name];if(!T)return;BG.name=key;if(!T.p)T.p={l:trParse(T.l),b:trParse(T.b)};BG.step=0;BG.next=AC.currentTime+.1;const sd=30/(T.bpm+(tr||0)*2),mul=Math.pow(2,(tr||0)/12);
- BG.tm=setInterval(()=>{if(AC.state!=='running')return;if(BG.next<AC.currentTime)BG.next=AC.currentTime+.05;while(BG.next<AC.currentTime+.25){const i=BG.step,l=T.p.l[i%T.p.l.length],b=T.p.b[i%T.p.b.length];if(l)tone(l[0]*mul,BG.next,sd*l[1]*.95,T.w||'square',T.v||.022);if(b)tone(b[0]*mul,BG.next,sd*b[1]*.9,'triangle',.045);BG.step++;BG.next+=sd}},60)}
+function bgm(name,tr){if(!AC||MUTE){return}axInit();const key=name+'|'+(tr||0);if(BG.name===key&&BG.tm)return;bgmStop();const T=TR[name];if(!T)return;const st=TST[name]||{q:'M'};BG.name=key;if(!T.p)T.p={l:trParse(T.l),b:trParse(T.b)};BG.step=0;BG.next=AC.currentTime+.1;
+ const sd=30/(T.bpm+(tr||0)*2),mul=Math.pow(2,(tr||0)/12),bus=AX.mus,third=st.q==='m'?Math.pow(2,3/12):Math.pow(2,4/12),fifth=Math.pow(2,7/12);let root=null,ar=0;const pat=DRP[st.dr]||'';
+ BG.tm=setInterval(()=>{if(AC.state!=='running')return;if(BG.next<AC.currentTime)BG.next=AC.currentTime+.05;while(BG.next<AC.currentTime+.25){const i=BG.step,t=BG.next,l=T.p.l[i%T.p.l.length],b=T.p.b[i%T.p.b.length];
+  if(l){tone(l[0]*mul,t,sd*l[1]*.95,T.w||'p25',(T.v||.022)*1.1,0,{bus,wet:.35,vib:l[1]>=2,sus:l[1]>=2});if(!T.w)tone(l[0]*mul*2,t,sd*l[1]*.6,'p12',.006,0,{bus})}
+  if(b){root=b[0]*mul;tone(root,t,sd*b[1]*.9,'triangle',.06,0,{bus})}
+  if(st.arp&&root){const ns=[1,third,fifth,2],f=root*2*ns[ar%4];tone(f,t,sd*.8,'p12',.011,0,{bus,wet:.4});ar++}
+  if(pat){const c=pat[i%pat.length];if(c!=='.')drum(c,t,st.heavy?1.25:1)}
+  if(st.heavy&&i%16===0&&root)tone(root/2,t,sd*8,'sawtooth',.02,0,{bus,atk:.1,sus:1});
+  BG.step++;BG.next+=sd}},60)}
 const BTR={d1:0,d2:-2,d3:2,d4:-4,d5:3,abyss:-5,d6:1};
 function updBgm(){const s=S.scr;let n='town',tr=0;if(s==='title'||s==='create')n='title';else if(s==='story'||s==='regist')n='story';else if(s==='battle'){n=B&&B.o.boss?'boss':'battle';tr=G&&G.run?BTR[runD().id]||0:0}else if(s==='dungeon'&&G&&G.run)n=runD().id;else if(s==='tavern'||s==='npc')n='tavern';else if(s==='guild')n='guild';else if(s==='shop')n='shop';else if(s==='party'||s==='chr'||s==='bag')n='camp';else if(s==='log')n='story';bgm(n,tr)}
 function toggleMute(){MUTE=!MUTE;try{localStorage.setItem('ea_mute',MUTE?'1':'0')}catch(e){}if(MUTE)bgmStop();render()}
@@ -1916,8 +1945,8 @@ function vShop(){
  <div class="pn"><div class="ttl">禮物</div><div class="sub">每個人喜歡的東西不一樣，多聊聊就會知道。</div><div class="list">${Object.keys(ITEM).filter(k=>ITEM[k].gift).map(k=>shopRow(k)).join('')}</div></div>
  <div class="pn"><div class="ttl">今日武具</div><div class="sub">每日更換。更好的裝備在迷宮深處。</div><div class="list">${st.map((g,i)=>`<div class="row"><div class="gr"><b class="r${g.r}">${g.n}</b> <span class="tag">${slotN(g.slot)}</span><div class="sub">${gearTxt(g)}</div></div><button class="btn sm gd" ${G.gold>=g.v?'':'disabled'} onclick="buyGear(${i})">${g.v} 金</button></div>`).join('')||'<div class="sub">今天賣完了。</div>'}</div></div>`}
 function shopRow(k,mul){const p=Math.round(ITEM[k].p*(mul||1));return `<div class="row"><span style="font-size:24px">${ITEM[k].ic}</span><div class="gr"><b>${ITEM[k].n}</b> <span class="sub">持有 ${G.inv[k]||0}</span><div class="sub">${ITEM[k].d}</div></div><button class="btn sm gd" ${G.gold>=p?'':'disabled'} onclick="buyItem('${k}',${p})">${p} 金</button></div>`}
-function buyItem(k,p){if(G.gold<p)return;G.gold-=p;addItem(k);save();if($('#modal'))merchantModal();else render()}
-function buyGear(i){const g=G.shop.list[i];if(G.gold<g.v)return;G.gold-=g.v;g.v=Math.round(g.v/1.6);G.gear.push(g);G.shop.list.splice(i,1);toast(`購入 ${g.n}`);save();render()}
+function buyItem(k,p){if(G.gold<p)return;sfx('coin');G.gold-=p;addItem(k);save();if($('#modal'))merchantModal();else render()}
+function buyGear(i){const g=G.shop.list[i];if(G.gold<g.v)return;sfx('coin');G.gold-=g.v;g.v=Math.round(g.v/1.6);G.gear.push(g);G.shop.list.splice(i,1);toast(`購入 ${g.n}`);save();render()}
 
 /* ============ 鍛造（爐邊工坊） ============ */
 const FT=[6,11,17,23,29],FISTN=['皮拳套','鐵拳套','祕銀拳套','星鐵拳套','天隕拳套','蒼穹拳套'],DAGN=['銅匕首','鋼匕首','祕銀匕首','星鐵匕首','天隕匕首','天風匕首'];
@@ -2089,7 +2118,7 @@ function vDungeon(){
 function dBag(){const its=Object.keys(G.inv).filter(k=>G.inv[k]>0&&ITEM[k].use&&ITEM[k].use!=='rev');modal(`<div class="ttl">使用道具</div>${its.length?`<div class="list">${its.map(k=>`<div class="row"><span style="font-size:24px">${ITEM[k].ic}</span><div class="gr"><b>${ITEM[k].n}</b> ×${G.inv[k]}<div class="sub">${ITEM[k].d}</div></div><button class="btn sm gd" onclick="useMenu('${k}')">使用</button></div>`).join('')}</div>`:'<div class="sub">沒有可用的道具。</div>'}`)}
 function retreatAsk(){modal(`<div class="ttl">撤退</div><p>要帶著目前的收穫返回城鎮嗎？</p><button class="btn gd wd" style="margin-top:10px" onclick="closeModal();backTown('你們平安回到了城鎮。')">確定撤退</button>`)}
 function roomPick(i){const o=G.run.opts[i];G.run.opts=null;if(o.ty==='pq')return rPq(o.id);const f={battle:rBattle,elite:rElite,boss:rBoss,event:rEvent,treasure:rTreasure,rest:rRest,merchant:rMerchant};if(o.ty==='boss'&&runD().id!=='abyss')return maybe('pre_'+runD().id,()=>{save();rBoss()});f[o.ty]()}
-function advance(){
+function advance(){setTimeout(()=>{if(G&&G.run&&DV&&DV.m==='msg'&&/階梯/.test(DV.t||''))sfx('stairs')},30);
  const r=G.run,d=runD();r.rm++;r.opts=null;
  if(r.rm<r.rooms){save();return dchoose()}
  let ab='';if(d.id==='abyss'){G.best=Math.max(G.best,r.fl);if(r.fl%10===0&&r.fl>(G.abR||0)){G.abR=r.fl;const g=300+r.fl*20;G.gold+=g;r.gold+=g;addItem('m0s',2);ab=`<p class="gdtx">首次踏過第 ${r.fl} 層！公會測量組在這裡架了繩梯，下次可以直接從第 ${r.fl+1} 層出發。</p><p>測量組的謝禮：${g} 金、🗝️ 守門者之證 ×2。</p>`}}
@@ -2123,7 +2152,7 @@ function pool(){const d=runD();if(d.id!=='abyss')return d;return DG[Math.min(4,M
 function rBattle(amb){const L=runL(),p=pool();let n=L<3?R(1,2):R(2,3);if(G.run.mod==='horde')n++;n=Math.min(3,n);if(L<5)n=Math.min(n,G.party.length);const es=[];for(let i=0;i<n;i++)es.push(mkEnemy(pick(p.en),L));startBattle(es,{amb})}
 function rElite(){const L=runL(),p=pool(),es=[mkEnemy(p.el,L)];if(L>6)es.push(mkEnemy(pick(p.en),L));startBattle(es,{elite:1})}
 function rBoss(){const L=runL(),p=pool(),b=mkEnemy(p.bs,L+1,1);if(runD().id==='abyss')b.n='守門者・'+b.n;startBattle([b],{boss:1})}
-function rTreasure(){const L=runL(),g=giveGold(R(20,40)+L*5);let h=`<p>角落裡有一只積滿灰塵的寶箱。</p><p>獲得 <b class="gdtx">${g} 金</b></p>`;
+function rTreasure(){sfx('chest');const L=runL(),g=giveGold(R(20,40)+L*5);let h=`<p>角落裡有一只積滿灰塵的寶箱。</p><p>獲得 <b class="gdtx">${g} 金</b></p>`;
  if(Math.random()<.6){const ge=giveGear(.1);h+=`<p>獲得 <b class="r${ge.r}">${ge.n}</b> <span class="sub">${gearTxt(ge)}</span></p>`}else{const k=pick(['potion','ether','hipotion','feather']);addItem(k);h+=`<p>獲得 ${ITEM[k].ic} ${ITEM[k].n}</p>`}
  dmsg('💎 寶箱',h,advance)}
 function rRest(){healAll(.35);let h='<p>你們找到一處安全的角落，生起小小的營火。生命與魔力回復了 35%。</p>';const ns=G.party.filter(x=>x!=='hero');
@@ -2167,7 +2196,7 @@ function rEvent(){
   {l:'獻上鮮血',s:'全員失去 20% 生命，換取寶物',f:()=>{hurtAll(.2);const g=giveGear(.35,1);return `<p>祭壇吸收了你們的血，緩緩升起一件物品。</p><p>獲得 <b class="r${g.r}">${g.n}</b> <span class="sub">${gearTxt(g)}</span></p>`}}]})
  ];
  EV.push(...EV2(L));const sp=EVD[pool().id];let ev=null;while(!ev)ev=(sp&&Math.random()<.22?pick(sp(L)):pick(EV))();
- DV={m:'event',ev};render();autoKick()}
+ DV={m:'event',ev};sfx('event');render();autoKick()}
 
 /* ============ 自動模式 ============ */
 let AT=null;
@@ -2245,7 +2274,7 @@ function enemyAct(u){
  if(!B)return;const ts=B.al.filter(alive);if(!ts.length)return nextTurn();
  if(u.p2&&!u.ph2&&u.hp<=u.mhp*.5){u.ph2=1;u.atk=Math.round(u.atk*u.p2.atk);u.mag=Math.round(u.mag*u.p2.atk);u.sk=u.p2.sk;u.int=null;u.chg=null;planEnemy(u);blog(u.p2.say);toast(u.p2.say);sfx('crit');render();return setTimeout(()=>enemyAct(u),window.FAST?1:2200)}
  if(!u.int)planEnemy(u);const I=u.int;u.int=null;const tgU=()=>(I.tg!=null&&B.al.find(a=>a.uid===I.tg&&alive(a)))||pick(ts);
- if(I.k==='charge'){u.chg=I.s;planEnemy(u);blog(`${u.n} 開始蓄力……下次行動：${I.s.n}（強化）`);B.fx.push({uid:u.uid,fx:'roar'});B.fx.push({uid:u.uid,t:'蓄力',c:'lb'});render();sfx('buff');return setTimeout(nextTurn,window.FAST?1:1200)}
+ if(I.k==='charge'){u.chg=I.s;planEnemy(u);blog(`${u.n} 開始蓄力……下次行動：${I.s.n}（強化）`);B.fx.push({uid:u.uid,fx:'roar'});B.fx.push({uid:u.uid,t:'蓄力',c:'lb'});render();sfx('charge');return setTimeout(nextTurn,window.FAST?1:1200)}
  if(I.k==='atk'){const t=tgU();planEnemy(u);return defGame(u,'',[t],()=>exec(u,{n:'',basic:1,ty:u.at,pow:1,tg:'e1',fx:u.fx,mp:0},t))}
  const s=I.s;
  if(s.ty==='heal'){planEnemy(u);return exec(u,{n:s.n,ty:'heal',fix:s.pow,tg:'self',fx:'heal',mp:0},u)}
@@ -2263,7 +2292,7 @@ function tmGame(kind,label,cb){
  const kh=e=>{if(e.code==='Space'||e.key==='Enter'||e.key===' '){e.preventDefault();fin((performance.now()-t0)/Z.d)}};
  function fin(p){if(done)return;done=true;document.removeEventListener('keydown',kh);const r=p>=Z.p[0]&&p<=Z.p[1]?2:p>=Z.g[0]&&p<=Z.g[1]?1:0;
   ov.classList.add('r'+r);ov.querySelector('.tml').textContent=kind==='atk'?['錯過時機','GOOD！骰子 +2','PERFECT！骰子 +4'][r]:['沒擋到','格擋！傷害 −25%','完美格擋！傷害 −50%'][r];
-  cur.style.left=Math.min(100,p*100)+'%';sfx(r===2?'crit':r===1?'buff':'miss');setTimeout(()=>{ov.remove();cb(r)},r?420:300)}
+  cur.style.left=Math.min(100,p*100)+'%';sfx(kind==='def'?(r?'block':'miss'):(r===2?'crit':r===1?'buff':'miss'));setTimeout(()=>{ov.remove();cb(r)},r?420:300)}
  (function fr(){if(done)return;const p=(performance.now()-t0)/Z.d;cur.style.left=Math.min(100,p*100)+'%';if(p>=1.06)fin(p);else requestAnimationFrame(fr)})();
  ov.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();fin((performance.now()-t0)/Z.d)});document.addEventListener('keydown',kh)}
 function pex(u,s,t,item){if(!item&&(s.ty==='phys'||s.ty==='mag')){B.menu='wait';B.pend=null;render();tmGame('atk',`${u.n}：${s===SK.atk?'攻擊':s.n}`,r=>{if(B)exec(u,s,t,item,[0,2,4][r])})}else exec(u,s,t,item)}
@@ -2509,7 +2538,7 @@ function castFx(el,col){const sp=el.querySelector('.art');if(!sp)return;
  fxA(fxE(sp,`left:-10%;right:-10%;bottom:-8%;height:26%;border:3px solid ${col};border-radius:50%;box-shadow:0 0 12px ${col},inset 0 0 10px ${col}`),[{transform:'scaleX(.2) rotate(0deg)',opacity:0},{transform:'scaleX(1)',opacity:1,offset:.3},{transform:'scaleX(1.05)',opacity:1,offset:.8},{transform:'scaleX(1.2)',opacity:0}],720,0);
  for(let i=0;i<8;i++)fxA(fxE(sp,`left:${rnd(10,85)}%;bottom:0;width:4px;height:4px;background:${col};box-shadow:0 0 4px ${col}`),[{transform:'translateY(0)',opacity:1},{transform:`translateY(-${rnd(60,140)}px)`,opacity:0}],rnd(420,700),i*50);
  sp.animate([{filter:'none'},{filter:`drop-shadow(0 0 8px ${col}) brightness(1.3)`,offset:.4},{filter:'none'}],{duration:600,easing:'steps(6)'})}
-function lunge(a){const el=document.querySelector(`[data-u="${a.uid}"]`);if(!el)return 0;const sp=el.querySelector('.art')||el,te=a.tg!=null&&document.querySelector(`[data-u="${a.tg}"]`);
+function lunge(a){const el=document.querySelector(`[data-u="${a.uid}"]`);if(!el)return 0;if(a.ph)sfx('dash');else sfx('magic');const sp=el.querySelector('.art')||el,te=a.tg!=null&&document.querySelector(`[data-u="${a.tg}"]`);
  if(a.ph&&te){const r1=sp.getBoundingClientRect(),t2=(te.querySelector('.art')||te).getBoundingClientRect();let dx=(t2.left+t2.width/2)-(r1.left+r1.width/2),dy=(t2.top+t2.height*.6)-(r1.top+r1.height*.6);dx-=Math.sign(dx)*Math.min(Math.abs(dx),t2.width*.55);dy*=.8;
   const trail=a.ally?'drop-shadow(-14px 0 0 rgba(255,255,255,.35)) drop-shadow(-28px 0 0 rgba(255,255,255,.15))':'drop-shadow(14px 0 0 rgba(255,120,120,.35)) drop-shadow(28px 0 0 rgba(255,120,120,.15))';
   el.style.zIndex=7;poseSet(el,'atk',700);
