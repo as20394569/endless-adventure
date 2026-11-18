@@ -11,8 +11,12 @@ function town(){
   while(bondReady(id)){npcBond(id);if(S.scr==='story')storyEnd()}});
  // party: fill to 3
  npcList().forEach(id=>{if(G.party.length<3&&!G.party.includes(id)&&G.aff[id]>=NPC[id].need)partyToggle(id)});
+ // personal quests
+ npcList().forEach(id=>{if(pqAvail(id)){pqStart(id);while(S.scr==='story')storyEnd();ST.pq=(ST.pq||0)+1}});
+ npcList().filter(id=>G.pq[id].ph===1&&!G.party.includes(id)&&G.aff[id]>=NPC[id].need).forEach(id=>{const out=G.party.find(x=>x!=='hero'&&G.pq[x].ph!==1);if(out){partyToggle(out);partyToggle(id)}});
+ S.scr='town';
  G.party.forEach(id=>{apAuto(id,1);
-  for(const sl of SLOTS){let best=null,bs=-1;G.gear.filter(g=>g.slot===sl&&(!equipped(g.id)||equipped(g.id)===id)).forEach(g=>{const s=gscore(g,id);if(s>bs){bs=s;best=g}});if(best)G.chars[id].eq[sl]=best.id}refit(id)});
+  for(const sl of SLOTS){let best=null,bs=-1;G.gear.filter(g=>g.slot===sl&&(!g.own||g.own===id)&&(!equipped(g.id)||equipped(g.id)===id)).forEach(g=>{const s=gscore(g,id);if(s>bs){bs=s;best=g}});if(best)G.chars[id].eq[sl]=best.id}refit(id)});
  // adv
  G.party.forEach(id=>{const c=G.chars[id];if(!c.adv&&c.lv>=ADV_LV&&G.clear.d3&&G.gold>=ADV_COST){doAdv(id,advOpts(id)[0]);if(S.scr==='story')storyEnd()}});
  // sell junk
@@ -37,6 +41,8 @@ function town(){
 }
 function pickDungeon(){
  const hl=G.chars.hero.lv;let i=DG.findIndex(d=>d.id!=='abyss'&&!G.clear[d.id]);
+ const pd=G.party.map(id=>id!=='hero'&&G.pq[id].ph===1&&pqCh(id)).filter(Boolean).map(c=>DG.findIndex(d=>d.id===c.dg)).filter(j=>dgOpen(j)&&hl>=DG[j].lv+2).sort()[0];
+ if(pd!=null&&(i<0||pd<=i))return pd;
  if(i<0)return 5;
  const fails=ST.runs.filter(r=>r.d===DG[i].id&&r.res!=='clear').length;
  if(hl<DG[i].lv-1+Math.min(4,Math.floor(fails/2))&&i>0)return i-1;
@@ -46,7 +52,7 @@ window.botTick=function(){try{
  if(S.scr==='story'){storyEnd();return}
  if(S.scr==='regist'){doRegist();return}
  if(S.scr==='battle'&&B){
-  if(B.menu==='end'&&!B._c){B._c=1;ST.battles++;if(!B.won){ST.wipes++;endRun('wipe');B=null;backTown()}else if(!G.auto){G.auto=true;B=null;advance()}}
+  if(B.menu==='end'&&!B._c){B._c=1;ST.battles++;if(!B.won){ST.wipes++;endRun('wipe');B=null;backTown()}else if(!G.auto){G.auto=true;afterWin()}}
   else if(B.menu==='main'){G.auto=true;allyAuto(B.cur)}
   return}
  if(S.scr==='dungeon'){

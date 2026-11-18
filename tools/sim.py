@@ -22,7 +22,7 @@ with sync_playwright() as p:
         last=n
         if pg.evaluate("ST.runs.length")>=maxruns:break
     r=pg.evaluate("""JSON.stringify({first:ST.first,runs:ST.runs.length,battles:ST.battles,wipes:ST.wipes,retreats:ST.retreats,errs:ST.errs.slice(0,5),day:G.day,gold:G.gold,best:G.best,lv:G.chars.hero.lv,party:G.party.map(id=>nameOf(id)+G.chars[id].lv+(G.chars[id].adv||'')),gear:G.gear.length,
-      per:ST.runs.reduce((a,r)=>{const k=r.d+':'+r.res;a[k]=(a[k]||0)+1;return a},{}),aff:G.aff,seen:Object.keys(G.seen).length,q:{pts:G.q.pts,rank:G.q.rank,done:G.q.done,fg:G.q.fg},forged:ST.forged,ranked:ST.ranked,mats:Object.keys(G.inv).filter(k=>ITEM[k].mat).map(k=>k+':'+G.inv[k]).join(' '),abyss:ST.runs.filter(r=>r.d==='abyss').map(r=>r.fl+r.res[0]).join(' ')})""")
+      per:ST.runs.reduce((a,r)=>{const k=r.d+':'+r.res;a[k]=(a[k]||0)+1;return a},{}),aff:G.aff,seen:Object.keys(G.seen).length,q:{pts:G.q.pts,rank:G.q.rank,done:G.q.done,fg:G.q.fg},forged:ST.forged,pq:G.pq,pqStarted:ST.pq,ranked:ST.ranked,mats:Object.keys(G.inv).filter(k=>ITEM[k].mat).map(k=>k+':'+G.inv[k]).join(' '),abyss:ST.runs.filter(r=>r.d==='abyss').map(r=>r.fl+r.res[0]).join(' ')})""")
     print(cls,g,json.dumps(json.loads(r),ensure_ascii=False));print('pageerr',errs[:5]);pg.screenshot(path=f'{OUT}/sim_{cls}.png')
     json.dump(json.loads(pg.evaluate("JSON.stringify(G)")),open(f'{OUT}/save_{cls}.json','w',encoding='utf-8'),ensure_ascii=False)
     b.close()

@@ -26,7 +26,7 @@ with sync_playwright() as p:
         pg.evaluate("DV.next()");shot('10choose')
         pg.evaluate("rBattle()");pg.wait_for_function("B&&B.menu==='main'",timeout=20000);shot('11battle')
         pg.evaluate("if(B.menu==='main')cmdSkill()");shot('12skill')
-        pg.evaluate("G.auto=true;window.FAST=1;cmdBack();allyAuto(B.cur)")
+        pg.evaluate("G.auto=true;cmdBack();allyAuto(B.cur)")
         pg.wait_for_function("B&&B.menu==='end'",timeout=60000);pg.evaluate("G.auto=false");shot('13win')
         pg.evaluate("B=null;S.scr='dungeon';rEvent()");shot('14event')
         for extra in sys.argv[2:]:
