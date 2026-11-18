@@ -23,6 +23,6 @@ with sync_playwright() as p:
         last=n
         if pg.evaluate("ST.runs.length")>=maxruns:break
     r=pg.evaluate("""JSON.stringify({first:ST.first,runs:ST.runs.map(r=>r.d+':'+r.res+'@'+r.lv+(r.fl?'F'+r.fl:'')).join(' '),battles:ST.battles,wipes:ST.wipes,errs:ST.errs.slice(0,5),day:G.day,gold:G.gold,best:G.best,clear:Object.keys(G.clear).join(','),party:G.party.map(id=>nameOf(id)+G.chars[id].lv),seen:Object.keys(G.seen).filter(k=>/d6/.test(k)).join(','),forged:ST.forged,mats:Object.keys(G.inv).filter(k=>ITEM[k]&&ITEM[k].mat&&k[1]>'5').map(k=>k+':'+G.inv[k]).join(' ')})""")
-    print(json.dumps(json.loads(r),ensure_ascii=False));print('pageerr',errs[:5]);pg.screenshot(path=f'{OUT}/simsave.png')
+    print(json.dumps(json.loads(r),ensure_ascii=False));print('pageerr',errs[:5]);pg.screenshot(path=f'{OUT}/simsave.png');json.dump(pg.evaluate("({bt:ST.bt,sk:ST.sk,runs:ST.runs,first:ST.first})"),open(f'{OUT}/stat_save.json','w'),ensure_ascii=False)
     json.dump(json.loads(pg.evaluate("JSON.stringify(G)")),open(f'{OUT}/save_after.json','w',encoding='utf-8'),ensure_ascii=False)
     b.close()

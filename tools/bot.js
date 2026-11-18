@@ -30,6 +30,7 @@ function town(){
   const Ts=fgTiers().filter(t=>t.ok);const T=Ts[Ts.length-1];
   for(const id of G.party)for(const [sk] of [['w'],['h'],['a'],['c2']]){for(const r of [3,2,1]){const c=fgCost(T,r);if(!canPay(c)||G.gold-c.gold<300)continue;const g=fgMake(T,r,sk,id);const cur=G.chars[id].eq[g.slot]&&gearOf(G.chars[id].eq[g.slot]);if(gscore(g,id)>(cur?gscore(cur,id):0)*1.1){S.fg={id,ti:T.i,r,say:''};doForge(sk);closeModal();const ng=G.gear[G.gear.length-1];G.chars[id].eq[ng.slot]=ng.id;ST.forged=(ST.forged||0)+1;break}}}
   for(const id of G.party)for(const sl of SLOTS){const g=G.chars[id].eq[sl]&&gearOf(G.chars[id].eq[sl]);if(g&&g.r<3&&!g.uq&&canPay(rkCost(g))&&G.gold-rkCost(g).gold>300){doRankUp(g.id);closeModal();ST.ranked=(ST.ranked||0)+1}}
+  if(typeof afCost==='function')for(const id of G.party)for(const sl of SLOTS){const g=G.chars[id].eq[sl]&&gearOf(G.chars[id].eq[sl]);if(g&&g.r>=1&&!g.uq&&!g.af&&canPay(afCost(g))&&G.gold-afCost(g).gold>300){doAf(g.id);closeModal();ST.af=(ST.af||0)+1}}
   S.scr='town'}
  G.gear.filter(g=>!equipped(g.id)&&!g.uq).forEach(g=>{sellGear(g.id)});
  // supplies

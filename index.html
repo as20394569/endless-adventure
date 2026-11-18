@@ -360,7 +360,7 @@ matk:{n:'攻擊',mp:0,ty:'mag',pow:.5,tg:'e1',basic:1},
  bash:{n:'盾擊',mp:4,ty:'phys',pow:1.2,tg:'e1',eff:{k:'stun',t:1,ch:.35},d:'機率擊暈'},
  wall:{n:'守護',mp:6,ty:'buff',tg:'aa',eff:{k:'defUp',t:3,ch:1},d:'全隊防禦上升'},
  judge:{n:'重擊',mp:9,ty:'phys',pow:1.95,tg:'e1',d:'重擊單體'},
- stab:{n:'偷襲',mp:4,ty:'phys',pow:1.4,tg:'e1',cr:5,d:'極高爆擊率'},
+ stab:{n:'偷襲',mp:4,ty:'phys',pow:1.45,tg:'e1',cr:5,amb:1,d:'極高爆擊率；目標中毒、暈眩或能力下降時傷害 ×1.6'},
  fang:{n:'毒刃',el:'poison',mp:5,ty:'phys',pow:1.1,tg:'e1',eff:{k:'poison',t:4,ch:1},d:'必定中毒'},
  smoke:{n:'煙幕',mp:7,ty:'buff',tg:'ea',eff:{k:'atkDn',t:3,ch:.85},d:'敵全體攻擊下降'},
  iai:{n:'居合',mp:5,ty:'phys',pow:1.75,tg:'e1',d:'拔刀一閃'},
@@ -388,12 +388,12 @@ matk:{n:'攻擊',mp:0,ty:'mag',pow:.5,tg:'e1',basic:1},
  a_smite:{n:'天罰之光',el:'holy',mp:10,ty:'mag',pow:2,tg:'e1',d:'降下神聖的制裁'},
  a_iron:{n:'鐵壁陣',mp:10,ty:'buff',tg:'aa',eff:{k:'defUp',t:5,ch:1},d:'全隊長時間防禦上升'},
  a_hammer:{n:'審判之槌',mp:12,ty:'phys',pow:2.3,tg:'e1',eff:{k:'stun',t:1,ch:.4},d:'重擊並機率擊暈'},
- a_shadow:{n:'影襲・無月',el:'dark',mp:9,ty:'phys',pow:2.1,tg:'e1',cr:7,d:'幾乎必定爆擊的暗殺'},
+ a_shadow:{n:'影襲・無月',el:'dark',mp:9,ty:'phys',pow:2.1,tg:'e1',cr:7,amb:1,d:'幾乎必定爆擊的暗殺；趁破綻時傷害 ×1.6'},
  a_mist:{n:'毒霧',el:'poison',mp:13,ty:'phys',pow:1.1,tg:'ea',eff:{k:'poison',t:4,ch:1},d:'全體敵人必定中毒'},
  a_kasumi:{n:'居合・霞',mp:9,ty:'phys',pow:2.3,tg:'e1',d:'看不見的拔刀'},
  a_moon:{n:'月華亂斬',mp:15,ty:'phys',pow:1.65,tg:'ea',d:'月光般的全體斬擊'},
  b_friend:{n:'約定的搖籃曲',mp:14,ty:'heal',pow:1.6,tg:'aa',rev:1,d:'羈絆技：全隊大回復並喚醒倒下的同伴'},
- b_vel:{n:'不落之盾',mp:10,ty:'buff',tg:'aa',eff:{k:'defUp',t:5,ch:1},d:'羈絆技：全隊長時間防禦上升'},
+ b_vel:{n:'不落之盾',mp:10,ty:'buff',tg:'aa',eff:{k:'defUp',t:5,ch:1},endure:3,d:'羈絆技：全隊防禦上升；3 回合內受到致命傷時以 1 生命撐住一次'},
  b_koro:{n:'貓步・千手',mp:9,ty:'phys',pow:2.3,tg:'e1',cr:6,steal:1,d:'羈絆技：重擊並順手摸走金幣'},
  b_sain:{n:'禁書・零式',el:'dark',mp:16,ty:'mag',pow:1.8,tg:'ea',d:'羈絆技：全體大魔法'},
  b_noa:{n:'星矢・穿雲',mp:10,ty:'phys',pow:2.5,tg:'e1',cr:4,d:'羈絆技：貫穿一切的一箭'},
@@ -676,10 +676,10 @@ M('ink','墨水史萊姆','⚫',[1.3,.9,1,1,.7,4],['holy'],['dark','poison'],'qu
 M('bknight','禁書騎士','🛡️',[1.3,1.1,.6,1.7,.7,5],['fire'],['ice'],'slash','phys',[P('書頁斬',1.4,.35,'cross'),Bf('守勢','defUp',.2)]);
 M('banshee','冰晶女妖','🧊',[2.6,.8,1.45,1.1,1.3,7],['fire'],['ice'],'frost','mag',[Mg('凍哭',.8,.35,'wave',Object.assign({all:1},ef('stun',.25,1))),Mg('冰晶之槍',1.5,.3,'ice',{el:'ice'})]);
 M('boss4','緘默館長','📚',[6.5,1,1.4,1.3,1.1,7],['fire'],['ice','dark'],'dark','mag',[Mg('禁止喧嘩',.9,.35,'wave',Object.assign({all:1},ef('atkDn',.7))),Mg('判決之書',1.6,.25,'dark',{el:'dark'}),Hl('歸檔',.08,.15)]);
-M('puppet','星屑傀儡','⭐',[1.2,1.1,.6,1.3,.9,5],['dark'],['holy'],'pierce','phys',[P('突刺',1.3,.35,'pierce'),P('亂舞',.7,.25,'flurry',{all:1})]);
-M('eye','虛空之眼','👁️',[.8,.5,1.4,.7,1.3,8],['holy'],['dark'],'gaze','mag',[Mg('凝視',.7,.3,'gaze',ef('stun',.4,1)),Mg('虛空光線',1.4,.3,'beam',{el:'dark'})]);
-M('meteor','隕石獸','☄️',[1.4,1.2,.8,1.4,.8,4],['ice'],['fire'],'claw','phys',[P('隕石衝撞',1.4,.35,'rock'),Mg('灼熱咆哮',.8,.25,'flame',{all:1,el:'fire'})]);
-M('astro','天球術士','🔮',[.9,.5,1.35,.8,1.2,7],['dark'],['holy'],'spark','mag',[Mg('星爆',.8,.35,'star',{all:1}),Mg('重力',.6,.25,'dark',ef('defDn',.8))]);
+M('puppet','星屑傀儡','⭐',[1.2,1.05,.6,1.3,.9,5],['dark'],['holy'],'pierce','phys',[P('突刺',1.3,.35,'pierce'),P('亂舞',.7,.25,'flurry',{all:1})]);
+M('eye','虛空之眼','👁️',[.8,.5,1.4,.7,1.3,8],['holy'],['dark'],'gaze','mag',[Mg('凝視',.7,.3,'gaze',ef('stun',.3,1)),Mg('虛空光線',1.4,.3,'beam',{el:'dark'})]);
+M('meteor','隕石獸','☄️',[1.4,1.1,.8,1.4,.8,4],['ice'],['fire'],'claw','phys',[P('隕石衝撞',1.4,.35,'rock'),Mg('灼熱咆哮',.8,.25,'flame',{all:1,el:'fire'})]);
+M('astro','天球術士','🔮',[.9,.5,1.25,.8,1.2,7],['dark'],['holy'],'spark','mag',[Mg('星爆',.8,.35,'star',{all:1}),Mg('重力',.6,.25,'dark',ef('defDn',.8))]);
 M('twins','雙子星衛','♊',[3,1.4,.9,1.4,1.3,8],['dark'],['holy'],'slash','phys',[P('雙星連斬',1.6,.4,'cross'),Bf('星光護盾','defUp',.2)]);
 M('boss5','星隕之王','👑',[7.5,1.45,1.45,1.4,1.2,8],['dark'],['fire','holy'],'cross','phys',[Mg('天墜',1,.35,'star',Object.assign({all:1},ef('defDn',.5))),P('王權之劍',1.7,.25,'cross'),Mg('星之重壓',.8,.15,'dark',Object.assign({all:1},ef('stun',.2,1)))]);
 M('swift','崖燕','🐦',[.75,1.2,.5,.6,1.8,9],['poison'],[],'pierce','phys',[P('俯衝',1.35,.35,'pierce'),P('亂啄',.7,.25,'flurry',{all:1})]);
@@ -2099,7 +2099,7 @@ function pay(c){for(const k in c){if(k==='gold')G.gold-=c.gold;else G.inv[k]-=c[
 function costHtml(c){return `<div class="need">${Object.keys(c).map(k=>k==='gold'?`<span class="${G.gold>=c.gold?'':'no'}">💰 ${c.gold} 金</span>`:`<span class="${(G.inv[k]||0)>=c[k]?'':'no'}">${ITEM[k].ic} ${ITEM[k].n} ${G.inv[k]||0}/${c[k]}</span>`).join('')}</div>`}
 function wName(cls,ti){const i={sword:0,knight:0,ranger:1,samurai:2}[cls];return i!=null?WA[ti][i]:cls==='monk'?FISTN[ti]:cls==='thief'?DAGN[ti]:WM[ti]}
 function fgMake(T,r,sk,id){const cls=clsOf(id),ti=Math.min(6,Math.floor((T.t-1)/5)),mg=cls==='mage'||cls==='healer';
- const g=genGear(T.t,r,sk[0]==='c'?'c':sk,mg?'mag':'atk',{nm:sk==='w'?wName(cls,ti):null,ks:sk==='c1'?['spd','luk']:sk==='c2'?['mhp','mmp']:null});g.fg=1;return g}
+ const g=genGear(T.t,r,sk[0]==='c'?'c':sk,mg?'mag':'atk',{nm:sk==='w'?wName(cls,ti):null,ks:sk==='c1'?['spd','luk']:sk==='c2'?['mhp','mmp']:null});g.fg=1;delete g.af;return g}
 function fgIds(){return ['hero',...npcList().filter(id=>G.aff[id]>=NPC[id].need)]}
 function openForge(){if(fgOpen()){if(!G.seen.fg_open)return play('fg_open',()=>{save();openForge()});if(G.clear.d5&&!G.seen.fg_leo)return play('fg_leo',()=>{save();openForge()})}S.fg=null;S.scr='forge';render();$('#main').scrollTop=0}
 function fgSet(k,v){S.fg[k]=v;render()}
@@ -2118,18 +2118,25 @@ function vForge(){
  <div class="list">${FSL.map(([sk,nm])=>{const g=fgMake(T,f.r,sk,f.id),cur=ch.eq[g.slot]&&gearOf(ch.eq[g.slot]);return `<div class="row"><div class="gr"><b class="r${g.r}">${g.n}</b> <span class="tag">${nm}</span><div class="sub">${gearTxt(g)}</div><div class="sub">${cur?'與裝備中的相比　'+(gDiff(g,cur)||'相同'):'目前這個部位是空的'}</div></div><button class="btn sm gd" ${ok?'':'disabled'} onclick="doForge('${sk}')">打造</button></div>`}).join('')}</div>
  <div class="sub" style="margin-top:8px">未踏破的迷宮，素材還不能用。無盡迴廊的素材要抵達第 20 層後才打得動，等級隨最深紀錄提高。</div></div>
  <div class="pn"><div class="ttl">升階</div><div class="sub">把手上的裝備回爐，品質提高一級（普通→精良→稀有→傳說）。強化等級保留。</div><button class="btn wd" style="margin-top:8px" onclick="rankMenu()">選擇要升階的裝備</button></div>
+ <div class="pn"><div class="ttl">重鑄詞綴</div><div class="sub">精良以上的裝備，可以把詞綴敲掉重打成另一個（依部位抽選），沒有詞綴的也能刻上一個。用掉的是同等級迷宮的素材。</div><button class="btn wd" style="margin-top:8px" onclick="afMenu()">選擇要重鑄的裝備</button></div>
  <div class="pn"><div class="ttl">持有素材</div>${own.length?`<div class="mats">${own.map(k=>`<div>${ITEM[k].ic} ${ITEM[k].n} <span class="gdtx">×${G.inv[k]}</span></div>`).join('')}</div>`:'<div class="sub">還沒有素材。魔物有機會掉落，精英與迷宮之主必定掉落。</div>'}</div>
  <button class="btn wd" onclick="go('town')">返回城鎮</button>`}
-function doForge(sk){const f=S.fg,T=fgTiers()[f.ti],c=fgCost(T,f.r);if(!T.ok||!canPay(c))return;pay(c);const g=fgMake(T,f.r,sk,f.id);G.gear.push(g);G.q.fg=(G.q.fg||0)+1;sfx('buff');save();render();
+function doForge(sk){const f=S.fg,T=fgTiers()[f.ti],c=fgCost(T,f.r);if(!T.ok||!canPay(c))return;pay(c);const g=fgMake(T,f.r,sk,f.id);if(g.r>=2&&Math.random()<(g.r===3?1:.6))g.af=pick(AFS[g.slot]);G.gear.push(g);G.q.fg=(G.q.fg||0)+1;sfx('buff');save();render();
  const cur=G.chars[f.id].eq[g.slot]&&gearOf(G.chars[f.id].eq[g.slot]);
  modal(`<div class="ttl">打造完成</div><p>赫妲把還帶著餘溫的成品放上檯子。</p><div class="pn" style="margin-top:8px"><b class="r${g.r}">${g.n}</b> <span class="tag">${slotN(g.slot)}</span><div class="sub">${gearTxt(g)}</div><div class="sub">${cur?gDiff(g,cur):''}</div></div><button class="btn gd wd" onclick="doEquip('${f.id}','${g.slot}','${g.id}')">讓 ${nameOf(f.id)} 裝備</button>`)}
+const AQ=[5,5,1,0,25];
+function afCost(g){return mkCost(upTier(g),AQ,g.t)}
+function afMenu(){
+ const gs=G.gear.filter(g=>g.r>=1&&!g.uq).sort((a,b)=>(!!equipped(b.id))-(!!equipped(a.id))||b.v-a.v).slice(0,24);
+ modal(`<div class="ttl">重鑄詞綴　<span class="sub">持有 ${G.gold} 金</span></div><div class="sub">赫妲：「紋路不是我決定的，是鐵自己長的。敲幾次都行，料你出。」</div>${gs.length?`<div class="list">${gs.map(g=>{const c=afCost(g),e=equipped(g.id);return `<div class="row" style="align-items:flex-start"><div class="gr"><b class="r${g.r}">${gName(g)}</b> <span class="tag">${slotN(g.slot)}</span>${e?`<span class="tag">${nameOf(e)}</span>`:''}<div class="sub">${g.af&&AFX[g.af]?`<span class="gdtx">【${AFX[g.af].n}】</span>${AFX[g.af].d}`:'（沒有詞綴）'}</div>${costHtml(c)}</div><button class="btn sm gd" ${canPay(c)?'':'disabled'} onclick="doAf('${g.id}')">${g.af?'重鑄':'刻紋'}</button></div>`}).join('')}</div>`:'<div class="sub">沒有精良以上的裝備。</div>'}<button class="btn wd" style="margin-top:8px" onclick="closeModal()">關閉</button>`)}
+function doAf(gid){const g=gearOf(gid);if(!g||g.r<1||g.uq)return;const c=afCost(g);if(!canPay(c))return;pay(c);const ks=AFS[g.slot].filter(k=>k!==g.af);g.af=pick(ks);G.q.fg=(G.q.fg||0)+1;sfx('buff');save();render();afMenu();toast(`${g.n}：【${AFX[g.af].n}】${AFX[g.af].d}`)}
 function upTier(g){const Ts=fgTiers();return Ts.find(T=>T.i<5&&g.t<=T.t)||Ts.find(T=>T.i>5&&T.ok&&g.t>=T.t-10&&g.t<=T.t+2)||Ts[5]}
 function rkCost(g){return mkCost(upTier(g),RQ[g.r],g.t)}
 function rankMenu(){
  const gs=G.gear.filter(g=>g.r<3&&!g.uq).sort((a,b)=>(!!equipped(b.id))-(!!equipped(a.id))||b.v-a.v).slice(0,24);
  modal(`<div class="ttl">升階　<span class="sub">持有 ${G.gold} 金</span></div>${gs.length?`<div class="list">${gs.map(g=>{const c=rkCost(g),e=equipped(g.id);return `<div class="row" style="align-items:flex-start"><div class="gr"><b class="r${g.r}">${gName(g)}</b> <span class="tag">${slotN(g.slot)}</span>${e?`<span class="tag">${nameOf(e)}</span>`:''}<div class="sub">${gearTxt(g)}　→　<span class="r${g.r+1}">${RN[g.r+1].replace('的','')}</span>（數值 ×${(RM[g.r+1]/RM[g.r]).toFixed(2)}）</div>${costHtml(c)}</div><button class="btn sm gd" ${canPay(c)?'':'disabled'} onclick="doRankUp('${g.id}')">升階</button></div>`}).join('')}</div>`:'<div class="sub">沒有可以升階的裝備。</div>'}`)}
 function doRankUp(gid){const g=gearOf(gid);if(!g||g.r>=3||g.uq)return;const c=rkCost(g);if(!canPay(c))return;pay(c);const o=RM[g.r],n=RM[g.r+1];
- for(const k in g.st)g.st[k]=Math.round(g.st[k]*n/o);g.n=RN[g.r+1]+(RN[g.r]&&g.n.startsWith(RN[g.r])?g.n.slice(RN[g.r].length):g.n);g.v=Math.round(g.v*n*n/(o*o));g.r++;
+ for(const k in g.st)g.st[k]=Math.round(g.st[k]*n/o);g.n=RN[g.r+1]+(RN[g.r]&&g.n.startsWith(RN[g.r])?g.n.slice(RN[g.r].length):g.n);g.v=Math.round(g.v*n*n/(o*o));g.r++;if(!g.af&&g.r>=2&&Math.random()<(g.r===3?1:.6))g.af=pick(AFS[g.slot]);
  const e=equipped(gid);if(e)refit(e);sfx('buff');save();render();rankMenu();toast(`${g.n} 升階完成`)}
 
 /* ============ 公會委託 ============ */
@@ -2288,7 +2295,7 @@ function check(stat,dc){sfx('dice');
 function hasCls(c){return G.party.find(id=>clsOf(id)===c)}
 /* 房間 */
 const EPW=L=>L<4?[1,1]:[Math.min(1.5,1+(L-3)*.07),Math.min(1.35,1+(L-3)*.05)];
-function mkEnemy(t,L,boss){const r=G.run,ew=EPW(L),fod=!boss&&t.h<=2&&L>=3,ra=(r&&r.mod==='rage'?1.2:1)*(L<5?.75+L*.05:1)*(boss?1+(ew[0]-1)*.5:ew[0]*(t.h>2?1:1.08))*(fod?1.15:1),b=7+L*2.4+L*L*.08,hp=Math.round((20+L*10+L*L*.4)*t.h*ew[1]*(fod?1.35:1)*(boss?.88:t.h>2?1:1.05)),tier=boss?6:t.h>2?3:1,el=!boss&&t.h>2,eb=boss&&L>=7&&L<=12?1.1:1;
+function mkEnemy(t,L,boss){const r=G.run,ew=EPW(L).slice(),abF=r&&DG[r.di]&&DG[r.di].id==='abyss'&&!boss?r.fl:0;if(abF){ew[0]*=1+Math.min(.15,abF*.004);ew[1]*=1+Math.min(.5,abF*.012)}const fod=!boss&&t.h<=2&&L>=3,ra=(r&&r.mod==='rage'?1.2:1)*(L<5?.75+L*.05:1)*(boss?1+(ew[0]-1)*.5:ew[0]*(t.h>2?1:1.08))*(fod?1.15:1),b=7+L*2.4+L*L*.08,hp=Math.round((20+L*10+L*L*.4)*t.h*ew[1]*(fod?1.35:1)*(boss?.88:t.h>2?1:1.05)),tier=boss?6:t.h>2?3:1,el=!boss&&t.h>2,eb=boss&&L>=7&&L<=12?1.1:1;
  return{n:t.n,e:t.e,k:t.k,mt:t.mt,key:'enemy_'+t.k,lv:L,ally:false,boss:!!boss,mhp:Math.round(hp*(el?1.1:1)),hp:Math.round(hp*(el?1.1:1)),atk:Math.round(b*t.a*ra*(el?1.2:1)*eb),mag:Math.round(b*t.m*ra*(el?1.2:1)*eb),def:Math.round((3+L*1.5)*t.d),spd:Math.round((5+L*.9)*t.s),luk:Math.round(t.l+L*.3),wk:t.wk||[],rs:t.rs||[],at:t.at||'phys',fx:t.fx||'claw',st:{},sk:t.sk||[],p2:boss?t.p2:null,exp:Math.round((8+L*4)*tier),gold:Math.round((4+L*1.5)*tier)}}
 function pool(){const d=runD();if(d.id!=='abyss')return d;return DG[Math.min(4,Math.floor((G.run.fl-1)/4)%5)]}
 function rBattle(amb){const L=runL(),p=pool();let n=L<3?R(1,2):R(2,3);if(G.run.mod==='horde')n++;n=Math.min(3,n);if(L<5)n=Math.min(n,G.party.length);const es=[];for(let i=0;i<n;i++)es.push(mkEnemy(pick(p.en),L));startBattle(es,{amb})}
@@ -2367,6 +2374,8 @@ function allyAuto(u){if(!B||B.cur!==u||!alive(u)||B.menu==='end')return;const al
  if(fireE&&stunK&&!fireE.boss&&Math.random()<.8)return exec(u,SK[stunK],fireE);
  if(fireE&&(fireE.int.s.all||fireE.int.tg===u.uid)&&u.hp<u.mhp*.75&&!u.sk.some(k=>SK[k].ty==='heal'&&can(k)&&low.length))return cmdGuard();
  const tough=B.o.boss||B.o.elite;B.used=B.used||{};
+ const en2=u.sk.find(k=>SK[k].endure&&can(k));if(en2&&tough&&!B.al.some(a=>a.st.endure>0)&&(fireE||al.some(a=>a.hp<a.mhp*.5)))return exec(u,SK[en2],null);
+ const amb=u.sk.find(k=>SK[k].amb&&can(k)),opn=en.filter(e=>e.st.poison>0||e.st.stun>0||e.st.defDn>0||e.st.atkDn>0).sort((a,b)=>b.hp-a.hp)[0];if(amb&&opn&&Math.random()<.7)return exec(u,SK[amb],opn);
  if(tough&&B.rd<=2){const bf=u.sk.find(k=>SK[k].ty==='buff'&&can(k)&&!B.used[u.uid+k]);if(bf){B.used[u.uid+bf]=1;return exec(u,SK[bf],null)}}
  const tg=(fireE&&fireE.hp<u.atk*3)?fireE:en.slice().sort((a,b)=>a.hp-b.hp)[0],atk=u.sk.filter(k=>(SK[k].ty==='phys'||SK[k].ty==='mag')&&can(k));
  const aoe=atk.filter(k=>SK[k].tg==='ea').sort((a,b)=>SK[b].pow-SK[a].pow)[0],one=atk.filter(k=>SK[k].tg==='e1').sort((a,b)=>SK[b].pow-SK[a].pow)[0];
@@ -2395,7 +2404,7 @@ function nextTurn(){
  if(u.st.poison>0){const d=Math.max(1,Math.round(u.mhp*.06));u.hp=Math.max(0,u.hp-d);u.st.poison--;B.fx.push({uid:u.uid,fx:'poison'});B.fx.push({uid:u.uid,t:'-'+d,c:'p',sh:1,r:.06,tint:'#c070ff'});if(u.hp<=0){u.koT=Date.now()+300;B.fx.push({uid:u.uid,ko:1})}blog(`${u.n} 受到毒的侵蝕，失去 ${d} 生命`);if(!alive(u)){blog(`${u.n} 倒下了`);render();return setTimeout(nextTurn,600)}}
  if(u.st.stun>0){u.st.stun--;if(!u.ally&&u.int&&(u.int.k==='fire'||u.int.k==='charge')){u.int=null;planEnemy(u);blog(`${u.n} 的蓄力被打斷了！`);B.fx.push({uid:u.uid,t:'打斷！',c:'lb'})}else blog(`${u.n} 動彈不得！`);B.menu='wait';render();return setTimeout(nextTurn,650)}
  if(u.ally){if(G.auto){B.menu='wait';render();setTimeout(()=>{if(B&&B.cur===u&&B.menu==='wait')allyAuto(u)},window.FAST?1:750)}else{B.menu='main';render()}}else{B.menu='wait';render();setTimeout(()=>enemyAct(u),window.FAST?1:600)}}
-function tick(u){for(const k of['atkUp','defUp','defDn','atkDn'])if(u.st[k]>0)u.st[k]--}
+function tick(u){for(const k of['atkUp','defUp','defDn','atkDn','endure'])if(u.st[k]>0)u.st[k]--}
 function planEnemy(u){if(!B||!alive(u))return;const ts=B.al.filter(alive);if(!ts.length)return;
  if(u.chg){const c=u.chg;u.chg=null;u.int={k:'fire',s:c,tg:c.all?null:pick(ts).uid};return}
  let s=null,r=Math.random();for(const k of u.sk||[]){if(k.ty==='heal'&&u.hp>u.mhp*.6)continue;if(k.ty==='buff'&&k.self&&u.st[k.eff.k]>0)continue;if((r-=k.ch)<0){s=k;break}}
@@ -2478,11 +2487,14 @@ function exec(u,sk,t,item,bon){
    if(u.ally&&sk.mp&&G.run&&G.run.mod==='mana')dm*=1.2;
    let em=0;if(sk.el&&x.wk&&x.wk.includes(sk.el)){dm*=1.5;em=1}else if(sk.el&&x.rs&&x.rs.includes(sk.el)){dm*=.6;em=-1}
    const af=u.ally&&u.af||{};if(em>0&&af.weak)dm*=1.25;if(af.tough&&(x.boss||(B.o&&B.o.elite)))dm*=1.12;if(af.tox&&(x.st.poison>0||x.st.stun>0))dm*=1.3;
-   if(crit)dm*=1.7;if(x.guard)dm*=.5;dm=Math.max(1,Math.round(dm));
+   if(crit)dm*=1.7;if(x.guard)dm*=.5;
+   if(sk.amb&&(x.st.poison>0||x.st.stun>0||x.st.atkDn>0||x.st.defDn>0)){dm*=1.6;B.fx.push({uid:x.uid,t:'破綻',c:'lb'})}
+   dm=Math.max(1,Math.round(dm));
    if(crit&&af.crmp){const mm=Math.round(u.mmp*.08);u.mp=Math.min(u.mmp,u.mp+mm);B.fx.push({uid:u.uid,t:'迴魔 +'+mm,c:'s'})}
    if(basic&&af.vamp){const hh=Math.round(dm*.15);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
    if(!u.ally&&x.af&&x.af.thorn&&sk.ty==='phys'&&alive(u)){const th=Math.max(1,Math.round(dm*.15));u.hp=Math.max(1,u.hp-th);B.fx.push({uid:u.uid,t:'荊棘 '+th,c:'d'})}
-   const was=x.hp;x.hp=Math.max(0,x.hp-dm);anyHit=true;if(crit)anyCrit=true;const tn=TINT[sk.el]||TINT[fxk]||'#fff';B.fx.push({uid:x.uid,fx:fxk,from:u.uid});if(crit)B.fx.push({uid:x.uid,t:'CRITICAL',c:'lb'});if(em)B.fx.push({uid:x.uid,t:em>0?'WEAK':'RESIST',c:'lb '+(em>0?'w':'r')});B.fx.push({uid:x.uid,t:String(dm),c:crit?'c':em>0?'w':em<0?'r':sk.ty==='mag'?'m':'d',sh:1,r:dm/x.mhp,crit,tint:tn});if(was>0&&x.hp<=0){x.koT=Date.now()+480;B.fx.push({uid:x.uid,ko:1})}if(sk.drain){const hh=Math.round(dm*.5);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
+   if(sk.drain&&!u.ally&&alive(u)){const h=Math.max(1,Math.round(dm*.5));u.hp=Math.min(u.mhp,u.hp+h);B.fx.push({uid:u.uid,t:'+'+h,c:'h'})}
+   const was=x.hp;x.hp=Math.max(0,x.hp-dm);if(x.hp<=0&&x.ally&&x.st.endure>0){x.st.endure=0;x.hp=1;B.fx.push({uid:x.uid,t:'撐住了！',c:'lb'});blog(`${x.n} 咬牙撐住了！`)}anyHit=true;if(crit)anyCrit=true;const tn=TINT[sk.el]||TINT[fxk]||'#fff';B.fx.push({uid:x.uid,fx:fxk,from:u.uid});if(crit)B.fx.push({uid:x.uid,t:'CRITICAL',c:'lb'});if(em)B.fx.push({uid:x.uid,t:em>0?'WEAK':'RESIST',c:'lb '+(em>0?'w':'r')});B.fx.push({uid:x.uid,t:String(dm),c:crit?'c':em>0?'w':em<0?'r':sk.ty==='mag'?'m':'d',sh:1,r:dm/x.mhp,crit,tint:tn});if(was>0&&x.hp<=0){x.koT=Date.now()+480;B.fx.push({uid:x.uid,ko:1})}if(sk.drain){const hh=Math.round(dm*.5);u.hp=Math.min(u.mhp,u.hp+hh);B.fx.push({uid:u.uid,t:'+'+hh,c:'h'})}
    blog(`🎲${roll}　${crit?'爆擊！':''}${em>0?'命中弱點！':em<0?'被抵抗了…':''}${x.n} 受到 ${dm} 傷害${x.hp<=0?'，倒下了！':''}`);
    if(sk.steal&&u.ally){const g=giveGold(10+runL()*3);blog(`順手摸走了 ${g} 金`)}
   }else if(sk.ty==='heal'){
@@ -2490,6 +2502,7 @@ function exec(u,sk,t,item,bon){
    const h=Math.round((sk.fix?x.mhp*sk.fix:u.mag*sk.pow+x.mhp*.08)*(.95+Math.random()*.1));
    if(x.hp<=0)x.koT=0;x.hp=Math.min(x.mhp,x.hp+h);B.fx.push({uid:x.uid,fx:'heal',from:u.uid});B.fx.push({uid:x.uid,t:'+'+h,c:'h'});
   }else if(sk.ty==='mpheal'){const h=Math.round(x.mmp*sk.fix);x.mp=Math.min(x.mmp,x.mp+h);B.fx.push({uid:x.uid,t:'魔力 +'+h,c:'s'})}
+  if(sk.endure&&alive(x)&&x.ally){x.st.endure=sk.endure+(x===u?1:0);B.fx.push({uid:x.uid,t:'不屈',c:'s'})}
   if(sk.eff&&alive(x)&&Math.random()<sk.eff.ch&&!(x.boss&&sk.eff.k==='stun'&&Math.random()<.6)){
    x.st[sk.eff.k]=Math.max(x.st[sk.eff.k]||0,sk.eff.t+(x===u?1:0));if(sk.ty==='buff')B.fx.push({uid:x.uid,from:u.uid,fx:['buff','guard','smoke','debuff','roar','bell','wave'].includes(fxk)?fxk:/Up/.test(sk.eff.k)?'buff':'debuff'});
    B.fx.push({uid:x.uid,t:{stun:'暈眩',poison:'中毒',atkUp:'攻擊↑',defUp:'防禦↑',defDn:'防禦↓',atkDn:'攻擊↓'}[sk.eff.k],c:'s'})}
@@ -2516,7 +2529,7 @@ function tgt(uid){
  if(B.menu==='tgE'&&!x.ally&&alive(x))pex(curU(),p.sk,x);
  else if(B.menu==='tgA'&&x.ally&&alive(x)){if(p.item){const it=ITEM[p.item];G.inv[p.item]--;exec(curU(),it.use==='hp'?{ty:'heal',fix:it.v,tg:'a1'}:{ty:'mpheal',fix:it.v,tg:'a1'},x,it.n)}else exec(curU(),p.sk,x)}
  else if(B.menu==='tgD'&&x.ally&&!alive(x)){const it=ITEM[p.item];G.inv[p.item]--;exec(curU(),{ty:'heal',fix:it.v,tg:'a1',rev:1},x,it.n)}}
-function stTxt(u){const m={stun:'暈',poison:'毒',atkUp:'攻↑',defUp:'防↑',defDn:'防↓',atkDn:'攻↓'};return Object.keys(m).filter(k=>u.st[k]>0).map(k=>`<span class="tag">${m[k]}</span>`).join('')}
+function stTxt(u){const m={stun:'暈',poison:'毒',atkUp:'攻↑',defUp:'防↑',defDn:'防↓',atkDn:'攻↓',endure:'屈'};return Object.keys(m).filter(k=>u.st[k]>0).map(k=>`<span class="tag">${m[k]}</span>`).join('')}
 function vBattle(){
  const d=runD(),u=B.cur,m=B.menu;let cmd='';
  if(m==='main')cmd=`<div class="sub" style="margin-bottom:4px"><b class="gdtx">${u.n}</b> 的回合　<span class="mt">點魔物可查看情報</span></div><div class="cmd"><button class="btn gd" onclick="cmdAtk()">⚔️ 攻擊</button><button class="btn" onclick="cmdSkill()">✨ 技能</button><button class="btn" onclick="cmdItem()">🧪 道具</button><button class="btn" onclick="cmdGuard()">🛡️ 防禦<small>傷害減半・回魔</small></button><button class="btn" onclick="cmdFlee()">💨 逃跑</button></div>`;
